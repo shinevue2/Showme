@@ -1,0 +1,37 @@
+{
+ "gouge": {
+  "x": 3,
+  "y": 3,
+  "note": "三角刀 V-gouge, tip at the hotspot (carved block)"
+ },
+ "baren": {
+  "x": 16,
+  "y": 19,
+  "note": "馬楝 baren: pad and twisted sheath knot (peelable sheet corner, take-a-print)"
+ },
+ "hand": {
+  "x": 16,
+  "y": 15,
+  "note": "open hand (byōbu)"
+ },
+ "direct": {
+  "x": 4,
+  "y": 3,
+  "note": "Illustrator direct-selection arrow (kumiko strips)"
+ },
+ "rake": {
+  "x": 12,
+  "y": 27,
+  "note": "rake: tines at the hotspot (sand)"
+ },
+ "brush": {
+  "x": 4,
+  "y": 28,
+  "note": "筆 brush, tip at the hotspot (marbling tray)"
+ },
+ "seal": {
+  "x": 16,
+  "y": 28,
+  "note": "印材 seal stone, face down at the hotspot (seal stones, send)"
+ }
+}

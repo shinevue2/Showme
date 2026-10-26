@@ -1,0 +1,129 @@
+/* ===== src/styles/type.css — typography (DESIGN §3.3). Owner: WP-00 =====
+   Faces are loaded by public/fonts/fonts-{lang}.css + fonts-shared.css (WP-02) or, with FONT_SOURCE=google,
+   by one Google Fonts CSS2 link per page. This file only names families and sets the per-section voice. */
+
+/* Latin fallback with metric overrides — WP-02 tunes size-adjust/ascent-override for ≤ 2 % reflow on swap. */
+@font-face {
+  font-family: "Plex Fallback";
+  src: local("Arial"), local("Helvetica Neue"), local("Liberation Sans");
+  size-adjust: 100.86%;
+  ascent-override: 101.63%;
+  descent-override: 27.27%;
+  line-gap-override: 0%;
+}
+
+:root {
+  --f-body-ja: "IBM Plex Sans JP", "Hiragino Sans", "Yu Gothic UI", "Noto Sans JP", sans-serif;
+  --f-body-zh: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --f-body-en: "IBM Plex Sans", "IBM Plex Sans JP", "Noto Sans SC", "Plex Fallback", Arial, sans-serif;
+  --f-mono: "Martian Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --f-code: "IBM Plex Mono", ui-monospace, monospace;
+  --f-serif-ja: "Hiragino Mincho ProN", "Yu Mincho", serif;
+  --f-serif-zh: "Noto Serif SC", "Songti SC", "SimSun", serif;
+  /* chrome / HUD: Martian Mono + the body face for CJK glyphs */
+  --f-chrome: var(--f-mono);
+}
+
+/* ---- CJK CSS (verbatim from aesth §4.5) ---- */
+:lang(ja)      { font-family: var(--f-body-ja); line-height: 1.85; line-break: strict; }
+:lang(zh-Hans) { font-family: var(--f-body-zh); line-height: 1.8;  line-break: strict; }
+:lang(en)      { font-family: var(--f-body-en); line-height: 1.55; }
+:lang(ja) :is(h1,h2,h3), :lang(zh-Hans) :is(h1,h2,h3) { font-feature-settings: "palt" 1; }
+:lang(ja), :lang(zh-Hans) { text-spacing-trim: trim-start; text-autospace: normal; }
+:lang(ja) :is(h1,h2,h3,.takeaway,.tate,.cap__headline,figcaption) { word-break: auto-phrase; }
+.display { text-box: trim-both cap alphabetic; }
+ruby rt { font-size: .5em; }
+/* faces without palt (Shippori, Zen *, Kaisei *, Yuji): add tracking .04–.12em on display sizes */
+
+/* `:lang(ja)` matches every element of a ja page, so the verbatim rules above would reset the font of each
+   nested element (a <ruby> inside a display heading, a <span> inside a caption title) to the body face.
+   Only the outermost element of a language run takes the body face; everything nested inside a run of the
+   same language inherits. Same specificity as `:lang(x)` (0,1,0) and declared after it, so any component
+   rule with a class (.display, .mono, section styles) still wins. */
+:lang(ja) :where(:lang(ja)), :lang(zh-Hans) :where(:lang(zh-Hans)), :lang(en) :where(:lang(en)) {
+  font-family: inherit;
+  line-height: inherit;
+}
+
+:lang(ja) { --f-chrome: "Martian Mono", "IBM Plex Sans JP", "Hiragino Sans", sans-serif; --f-mono: "Martian Mono", "IBM Plex Sans JP", ui-monospace, monospace; --f-code: "IBM Plex Mono", "IBM Plex Sans JP", ui-monospace, monospace; }
+:lang(zh-Hans) { --f-chrome: "Martian Mono", "Noto Sans SC", "PingFang SC", sans-serif; --f-mono: "Martian Mono", "Noto Sans SC", ui-monospace, monospace; --f-code: "IBM Plex Mono", "Noto Sans SC", ui-monospace, monospace; }
+
+:root :is(code, kbd, samp, pre) { font-family: var(--f-code); font-size: .94em; }
+.mono { font-family: var(--f-chrome); font-variant-numeric: tabular-nums; }
+
+/* ---- vertical writing (§3.3 rules) ---- */
+.tate { writing-mode: vertical-rl; text-orientation: mixed; font-feature-settings: "vpal" 1; line-height: 1.9; }
+.tcy { text-combine-upright: all; }
+:lang(ja) em, :lang(zh-Hans) em { font-style: normal; text-emphasis: filled sesame; }
+/* zh body stays horizontal (CLREQ); `.tate` is only used on short display text in zh */
+
+/* ---- headings and leads ---- */
+h2.display { font-size: var(--fs-h2); line-height: 1.15; }
+h3 { font-size: var(--fs-h3); line-height: 1.3; font-weight: 500; }
+.takeaway { font-size: var(--fs-lead); line-height: 1.6; }
+:lang(en) .takeaway { max-width: 40ch; }
+:lang(ja) .takeaway, :lang(zh-Hans) .takeaway { max-width: 26em; }
+.stage-line { color: var(--ink-2); font-size: var(--fs-small); }
+:lang(en) .stage-line, .stage-line:lang(en) {
+  font-family: var(--f-mono);
+  font-variant-caps: all-small-caps;
+  letter-spacing: .06em;
+  font-size: var(--fs-caption);
+  line-height: 1.6;
+}
+
+/* ---- display voice per section (§3.3 table): one voice per section ---- */
+.display {
+  font-family: var(--f-display, inherit);
+  font-weight: var(--fw-display, 700);
+  font-style: var(--fst-display, normal);
+  font-variation-settings: var(--fvs-display, normal);
+  letter-spacing: var(--ls-display, normal);
+}
+
+[data-section="cover"]:lang(ja)        { --f-display: "Shippori Mincho B1", var(--f-serif-ja); --fw-display: 800; --ls-display: .06em; }
+[data-section="cover"]:lang(en)        { --f-display: "Bodoni Moda", Georgia, serif; --fw-display: 600; --fst-display: italic; --fvs-display: "opsz" 96; }
+[data-section="cover"]:lang(zh-Hans)   { --f-display: "Noto Serif SC", var(--f-serif-zh); --fw-display: 900; }
+
+[data-section="summary"]:lang(ja)      { --f-display: "IBM Plex Sans JP", var(--f-body-ja); --fw-display: 700; }
+[data-section="summary"]:lang(en)      { --f-display: "Schibsted Grotesk", var(--f-body-en); --fw-display: 700; }
+[data-section="summary"]:lang(zh-Hans) { --f-display: "Noto Sans SC", var(--f-body-zh); --fw-display: 700; }
+
+[data-section="road"]:lang(ja)         { --f-display: "Zen Antique", var(--f-serif-ja); --fw-display: 400; --ls-display: .08em; }
+[data-section="road"]:lang(en)         { --f-display: "Big Shoulders", "Arial Narrow", sans-serif; --fw-display: 700; --fvs-display: "opsz" 72; }
+[data-section="road"]:lang(zh-Hans)    { --f-display: "ZCOOL XiaoWei", var(--f-serif-zh); --fw-display: 400; }
+
+[data-section="works"]:lang(ja)        { --f-display: "Dela Gothic One", var(--f-body-ja); --fw-display: 400; }
+[data-section="works"]:lang(en)        { --f-display: "Bricolage Grotesque", var(--f-body-en); --fw-display: 700; --fvs-display: "wdth" 75, "opsz" 96; }
+[data-section="works"]:lang(zh-Hans)   { --f-display: "Noto Sans SC", var(--f-body-zh); --fw-display: 900; }
+
+[data-section="skills"]:lang(ja)       { --f-display: "DotGothic16", var(--f-body-ja); --fw-display: 400; }
+[data-section="skills"]:lang(en)       { --f-display: "Handjet", var(--f-mono); --fw-display: 600; }
+[data-section="skills"]:lang(zh-Hans)  { --f-display: "ZCOOL QingKe HuangYou", var(--f-body-zh); --fw-display: 400; }
+
+[data-section="principles"]:lang(ja)   { --f-display: "Zen Old Mincho", var(--f-serif-ja); --fw-display: 700; --ls-display: .06em; }
+[data-section="principles"]:lang(en)   { --f-display: "Newsreader", Georgia, serif; --fw-display: 300; --fvs-display: "opsz" 72; }
+[data-section="principles"]:lang(zh-Hans) { --f-display: "Noto Serif SC", var(--f-serif-zh); --fw-display: 300; }
+
+[data-section="achievements"]:lang(ja) { --f-display: "Kaisei Tokumin", var(--f-serif-ja); --fw-display: 800; --ls-display: .04em; }
+[data-section="achievements"]:lang(en) { --f-display: "Gloock", Georgia, serif; --fw-display: 400; }
+[data-section="achievements"]:lang(zh-Hans) { --f-display: "Noto Serif SC", var(--f-serif-zh); --fw-display: 900; }
+
+[data-section="writing"]:lang(ja)      { --f-display: "Yuji Mai", var(--f-serif-ja); --fw-display: 400; --ls-display: .06em; }
+[data-section="writing"]:lang(en)      { --f-display: "Newsreader", Georgia, serif; --fw-display: 400; --fst-display: italic; }
+[data-section="writing"]:lang(zh-Hans) { --f-display: "Ma Shan Zheng", var(--f-serif-zh); --fw-display: 400; }
+
+[data-section="testimonials"]:lang(ja) { --f-display: "Kaisei HarunoUmi", var(--f-serif-ja); --fw-display: 700; --ls-display: .04em; }
+[data-section="testimonials"]:lang(en) { --f-display: "Newsreader", Georgia, serif; --fw-display: 400; --fst-display: italic; --fvs-display: "opsz" 24; }
+[data-section="testimonials"]:lang(zh-Hans) { --f-display: "Noto Serif SC", var(--f-serif-zh); --fw-display: 400; }
+
+[data-section="contact"]:lang(ja)      { --f-display: "Klee One", var(--f-serif-ja); --fw-display: 600; }
+[data-section="contact"]:lang(en)      { --f-display: "Bodoni Moda", Georgia, serif; --fw-display: 500; --fst-display: italic; --fvs-display: "opsz" 48; }
+[data-section="contact"]:lang(zh-Hans) { --f-display: "Long Cang", var(--f-serif-zh); --fw-display: 400; }
+
+[data-section="colophon"]:lang(ja)     { --f-display: "Shippori Antique B1", var(--f-serif-ja); --fw-display: 400; --ls-display: .06em; }
+[data-section="colophon"]:lang(en)     { --f-display: "IBM Plex Mono", var(--f-code); --fw-display: 500; }
+[data-section="colophon"]:lang(zh-Hans) { --f-display: "Noto Serif SC", var(--f-serif-zh); --fw-display: 300; }
+
+/* Japanese colour names inside zh UI fall back to Noto Serif SC (§3.3) */
+:lang(zh-Hans) [lang="ja"] { font-family: "Noto Serif SC", var(--f-serif-zh); }

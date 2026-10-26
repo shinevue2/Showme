@@ -1,0 +1,103 @@
+/* Principles — 枯山水 The Garden (DESIGN §6.6). Owner: WP-08. The emptiest artboard.
+   Desktop: two sticky layers over one scroll range — the garden placeholder (a direct artboard child, so it and the
+   mist inside it sit below the canvas) and the transparent text stage pulled over it (z 2). Below 1024 px the stage
+   dissolves (display: contents) so header, list, garden and legend flow in reading order. */
+[data-section="principles"] {
+  --garden-h: 72lvh;
+  display: flex; flex-direction: column; min-height: 130vh; padding-top: 0;
+  > .ma { margin-top: auto; order: 9; }
+
+  > .principles__stage { display: contents; }
+  .artboard__head { order: 1; margin: calc(var(--chrome-top) + var(--s-4)) 0 var(--s-6); }
+  .principles__list { order: 2; list-style: none; margin: 0 0 var(--s-6); padding: 0; display: grid; gap: var(--s-6); }
+  .principles__view { order: 3; height: 60svh; margin-inline: calc(-1 * var(--artboard-pad)); touch-action: pan-y; user-select: none; -webkit-user-select: none; }
+  .principles__view[data-raking] { touch-action: none; }
+  .principles__legend { order: 4; }
+  .principles__mist { display: none; margin: 0; pointer-events: none; }
+
+  .principle { margin: 0; }
+  .principle__title { font-size: var(--fs-h3); line-height: 1.35; margin: 0 0 var(--s-2); color: var(--ink); }
+  .principle__body { margin: 0; font-size: var(--fs-small); color: var(--ink-2); }
+  &:lang(ja) .principle__body { font-family: "Zen Old Mincho", var(--f-serif-ja); letter-spacing: .04em; }
+  &:lang(zh-Hans) .principle__body { font-family: "Noto Serif SC", var(--f-serif-zh); font-weight: 300; }
+
+  .principles__legend { position: relative; display: grid; gap: var(--s-3); padding: var(--s-4) 0 var(--s-5); font-size: var(--fs-caption); line-height: 1.6; max-width: 36em; }
+  .principles__legend-text, .principles__slo { margin: 0; }
+  .principles__legend-text { color: var(--ink); }
+  /* the legend key: a strip of the stencil's undulating lines (waveforms), like the rows they stand for */
+  .principles__legend::before {
+    content: ""; display: block; height: 22px;
+    background: var(--accent-principles-text); opacity: .7;
+    mask: url("/img/gen/mask-undulating.png") left 38% / 340px auto repeat-x;
+  }
+  .principles__slo { color: var(--ink-2); }
+  .principles__k { font-family: var(--f-chrome); color: var(--accent-principles-text); margin-inline-end: .4em; }
+  .principles__buttons { display: flex; flex-wrap: wrap; gap: var(--s-2); align-items: start; }
+  .principles__btn {
+    display: inline-flex; align-items: center; gap: var(--s-2); min-height: 32px; padding: var(--s-2) var(--s-3);
+    background: var(--panel); color: var(--ink); font: var(--fs-small)/1 var(--f-chrome); cursor: pointer; list-style: none;
+  }
+  .principles__btn::-webkit-details-marker { display: none; }
+  .principles__btn svg { width: 18px; height: 18px; }
+  .principles__rake { display: none; }
+  :is(.principles__rake[aria-pressed="true"], .principles__data[open] > summary) { background: var(--ink); color: var(--paper); }
+  .principles__tables { max-height: min(58lvh, 34em); overflow: auto; margin-top: var(--s-3); padding: var(--s-4); background: var(--panel); overscroll-behavior: contain; }
+  .principles__table { border-collapse: collapse; font: var(--fs-caption)/1.5 var(--f-chrome); font-variant-numeric: tabular-nums; margin-bottom: var(--s-5); }
+  .principles__table caption { text-align: start; font: 500 var(--fs-small)/1.5 var(--f-body-en); margin-bottom: var(--s-2); color: var(--ink); }
+  &:lang(ja) .principles__table caption { font-family: var(--f-body-ja); }
+  &:lang(zh-Hans) .principles__table caption { font-family: var(--f-body-zh); }
+  .principles__table th { text-align: end; font-weight: 400; color: var(--ink-2); padding: 0 0 var(--s-1) var(--s-4); }
+  .principles__table td { text-align: end; padding: 1px 0 1px var(--s-4); }
+  .principles__table :is(th, td):first-child { padding-inline-start: 0; }
+  .principles__table td.t { text-align: start; }
+  .principles__table tr.is-sev td { color: var(--instruct-text); }
+}
+@media (pointer: coarse) {
+  html.js [data-section="principles"] .principles__rake { display: inline-flex; }
+}
+/* poster capture: the sand alone */
+html[data-poster="principles-garden"] [data-section="principles"] :is(.principles__stage, .principles__mist) { visibility: hidden; }
+
+@media (min-width: 1024px) {
+  [data-section="principles"] {
+    > .principles__stage { display: block; align-self: stretch; pointer-events: none; }
+    .principles__stage > * { position: absolute; margin: 0; pointer-events: auto; }
+    /* same static position and sticky range as the stage: pulled up under it */
+    > .principles__view { position: sticky; top: 0; height: 100lvh; margin: -100lvh calc(-1 * var(--artboard-pad)) 0; }
+    .principles__mist { display: block; position: absolute; top: var(--chrome-top); right: 0; width: 62%; opacity: .2;
+      mask: radial-gradient(ellipse 50% 46% at 56% 44%, #000 42%, transparent 100%); }
+    .principles__mist img { width: 100%; height: auto; display: block; clip-path: inset(8% 1.5% 10% 1.5%); }
+    .artboard__head { top: calc(var(--chrome-top) + var(--s-5)); left: 0; width: min(23%, 18em); grid-template-columns: minmax(0, 1fr) auto; column-gap: var(--s-5); }
+    .artboard__head .takeaway { font-size: var(--fs-body); max-width: 15em; }
+    .principles__list { inset: 0; display: block; pointer-events: none; }
+    .principle {
+      position: absolute; bottom: calc(var(--garden-h) * .79 + var(--s-3)); pointer-events: auto;
+      left: var(--px, calc(-1 * var(--artboard-pad) + (100% + 2 * var(--artboard-pad)) * var(--fx)));
+      transform: translateX(-50%); max-height: calc(100lvh - var(--chrome-top) - var(--garden-h) * .79 - var(--s-8));
+    }
+    &:lang(ja) .principle { writing-mode: vertical-rl; display: flex; gap: var(--s-3); }
+    &:lang(ja) .principle__title { margin: 0; font-size: clamp(20px, 1.2vw + 8px, 28px); }
+    &:lang(ja) .principle__body { line-height: 1.95; max-height: inherit; }
+    &:lang(zh-Hans) .principle { display: flex; flex-direction: row-reverse; align-items: flex-end; gap: var(--s-3); }
+    &:lang(zh-Hans) .principle__title { margin: 0; font-size: clamp(20px, 1.2vw + 8px, 28px); max-height: inherit; }
+    &:lang(zh-Hans) .principle__body { width: min(7.5em, calc(var(--pw, 160px) - 44px)); }
+    &:lang(en) .principle { width: var(--pw, 10em); }
+    &:lang(en) .principle__title { font-size: clamp(20px, .9vw + 10px, 28px); line-height: 1.1; }
+    &:lang(en) .principle__body { font-size: 13px; line-height: 1.5; }
+    .principles__legend { left: 0; bottom: var(--s-6); width: min(31%, 27em); padding: var(--s-4); background: var(--paper); }
+    .principles__data { position: static; }
+    .principles__tables { position: absolute; left: 0; right: 0; bottom: calc(100% + var(--s-2)); margin: 0; }
+  }
+  html[data-proof] [data-section="principles"] {
+    > .principles__stage { display: contents; }
+    .principles__stage > * { position: static; }
+    .principle { transform: none; }
+  }
+}
+@media (max-width: 1023px) {
+  [data-section="principles"] { min-height: 0; }
+  [data-section="principles"] :is(.principle__title, .principle__body).tate { writing-mode: horizontal-tb; }
+}
+@media (min-width: 768px) and (max-width: 1023px) {
+  [data-section="principles"] .principles__list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}

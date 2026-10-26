@@ -1,0 +1,160 @@
+/* ===== Proof mode (校正刷り) + print stylesheet = the two-page A4 CV (DESIGN §4.3, §11.2, §13 WP-11 CV PDFs).
+   Owner: WP-04.
+   Proof (`?proof=1` or the Proof button → html[data-proof]): the recruiter view. Boot skips the stage and the
+   film player; here every artboard is set text-first in one column with its crop marks — a key-block
+   impression: no colour plates, no grain, no 3D, vertical stage lines set horizontally, figures small.
+   Print (any page mode): main pages print only the CV sheet that src/chrome/render.ts writes (.cv-sheet,
+   display:none on screen): two A4 pages, always in 本摺 (day) colours. Case pages print the case article. */
+
+.cv-sheet { display: none; }
+
+/* ------------------------------------------------------------------ Proof on screen */
+html[data-proof] .artboard::before,
+html[data-proof] [data-print]::before, html[data-proof] [data-print]::after { content: none !important; }
+html[data-proof] main :is(svg, canvas)[aria-hidden="true"], html[data-proof] main .plate-layer, html[data-proof] main .view { display: none !important; }
+html[data-proof] .artboard > .ma { display: block; height: 0 !important; margin-top: var(--s-6) !important; }
+html[data-proof] .artboard {
+  padding: var(--s-9) var(--artboard-pad) var(--s-8);
+  margin-bottom: var(--s-7);
+}
+html[data-proof] .artboard > :not(.artboard__marks) { max-width: 46rem; }
+html[data-proof] main :is(.artboard__stage, [class*="__stage"]) { position: relative !important; height: auto !important; min-height: 0 !important; top: auto !important; }
+html[data-proof] main .artboard__stage * { position: static; transform: none !important; }
+html[data-proof] main :is(.artboard, .artboard *):not(dl > div):not(table, table *) {
+  grid-template-columns: minmax(0, 1fr) !important;
+  grid-template-areas: none !important;
+  grid-auto-flow: row !important;
+}
+html[data-proof] main .artboard * { grid-column: auto !important; grid-row: auto !important; }
+html[data-proof] main .artboard [data-section], html[data-proof] main .artboard section { height: auto !important; min-height: 0 !important; }
+html[data-proof] main .tate { writing-mode: horizontal-tb !important; max-height: none !important; }
+/* the name comes first: whatever block holds the page's h1 leads its stage, at its natural height */
+html[data-proof] main .artboard__stage { display: flex !important; flex-direction: column; gap: var(--s-5); }
+html[data-proof] main .artboard__stage > :has(h1) { order: -2; align-self: flex-start !important; justify-self: start !important; margin: 0 !important; height: auto !important; aspect-ratio: auto !important; max-height: none !important; padding: 0 !important; background: none !important; }
+html[data-proof] main .artboard__stage > :has(h1)::before, html[data-proof] main .artboard__stage > :has(h1)::after { content: none !important; }
+html[data-proof] main .artboard__stage > .stage-line { order: -3; }
+html[data-proof] main .artboard__head { display: grid; gap: var(--s-3); margin-bottom: var(--s-6); }
+html[data-proof] main .artboard__head .stage-line { order: -1; color: var(--instruct-text); }
+html[data-proof] main figure.print { max-width: 22rem; }
+html[data-proof] main .display { animation: none !important; }
+html[data-proof] main [hidden-in-proof] { display: none !important; }
+html[data-proof] main video { display: none !important; }
+html[data-proof] main .kyokaku[data-fold] { background-image: none !important; }
+/* the proof is pulled in one ink: section accents fall back to the key block */
+html[data-proof] main [data-section] { --accent-text: var(--ink); }
+
+/* ------------------------------------------------------------------ print */
+@page { size: A4; margin: 12mm 14mm 11mm; }
+
+@media print {
+  /* 本摺 colours whatever the screen theme (prints are never inverted) */
+  :root:not(#hanmoto-print) {
+    color-scheme: light;
+    --pasteboard: #FFFFFF; --paper: #FFFFFF; --paper-print: #FFFFFF; --panel: #FFFFFF; --mat: #EBF6F7;
+    --ink: #0F2540; --ink-2: #566C73; --link: #006284; --rule: #566C73; --guide: #33A6B8; --guide-label: #0D5661;
+    --instruct: #EB6101; --instruct-text: #C73E3A; --seal: #CB1B45;
+  }
+  html, body { background: #FFFFFF !important; color: var(--ink) !important; }
+  body { padding: 0 !important; margin: 0 !important; }
+  .chrome, .skip-link, #stage, .view, .ma, .sel, .sguide, .peek-anchor, .peek, .outline-film, video, .js-only { display: none !important; }
+  a { color: inherit !important; text-decoration: none !important; }
+  main#main { padding: 0 !important; }
+
+  /* ---- main pages: the CV sheet only ---- */
+  html[data-page="main"] main#main { display: none !important; }
+  html[data-page="main"] .cv-sheet { display: block !important; }
+
+  /* ---- case pages / 404: the article, plainly ---- */
+  html:not([data-page="main"]) .artboard { margin: 0 !important; padding: 0 !important; background: none !important; outline: 0 !important; }
+  html:not([data-page="main"]) .artboard::before, html:not([data-page="main"]) [data-print]::before { content: none !important; }
+  html:not([data-page="main"]) .artboard__marks { display: none !important; }
+  html:not([data-page="main"]) figure.print { max-width: 70mm; break-inside: avoid; }
+  html:not([data-page="main"]) h1, html:not([data-page="main"]) h2, html:not([data-page="main"]) h3 { break-after: avoid; }
+}
+
+/* ------------------------------------------------------------------ the CV sheet (print layout) */
+@media print {
+  .cv-sheet {
+    font-size: 9pt;
+    line-height: 1.52;
+    color: var(--ink);
+    font-family: var(--f-body-en);
+    font-variant-numeric: tabular-nums;
+  }
+  .cv-sheet:lang(ja) { font-family: var(--f-body-ja); line-height: 1.66; font-size: 8.6pt; }
+  .cv-sheet:lang(zh-Hans) { font-family: var(--f-body-zh); line-height: 1.66; font-size: 8.8pt; }
+  .cv-sheet h2, .cv-sheet h3, .cv-sheet p, .cv-sheet ul, .cv-sheet dl, .cv-sheet dd { margin: 0; padding: 0; }
+  .cv-sheet ul { list-style: none; }
+  .cv-sheet b { font-weight: 500; }
+
+  .cv__head {
+    display: grid; grid-template-columns: minmax(0, 1fr) auto 12mm; column-gap: 7mm; align-items: end;
+    padding-bottom: 3.2mm; margin-bottom: 3.6mm;
+    border-bottom: 2.2pt solid var(--rule);
+    position: relative;
+  }
+  .cv__head::after {        /* 子持ち罫: the thin companion of the thick rule */
+    content: ""; position: absolute; left: 0; right: 0; bottom: -4.2pt; height: .6pt; background: var(--rule);
+  }
+  .cv__name { font-size: 27pt; line-height: 1.05; letter-spacing: .02em; }
+  .cv-sheet:lang(ja) .cv__name { font-family: "Shippori Mincho B1", var(--f-serif-ja); font-weight: 800; letter-spacing: .12em; }
+  .cv-sheet:lang(en) .cv__name { font-family: "Bodoni Moda", Georgia, serif; font-style: italic; font-weight: 600; font-variation-settings: "opsz" 96; }
+  .cv-sheet:lang(zh-Hans) .cv__name { font-family: "Noto Serif SC", var(--f-serif-zh); font-weight: 900; letter-spacing: .1em; }
+  .cv__alt { margin-top: 1mm !important; font-size: 7.4pt; color: var(--ink-2); }
+  .cv__alt span:lang(ja) { font-family: var(--f-body-ja); }
+  .cv__alt span:lang(zh-Hans) { font-family: var(--f-body-zh); }
+  .cv__alt span:lang(en) { font-family: var(--f-body-en); }
+  .cv__role { margin-top: 1.6mm !important; font-size: 9pt; font-weight: 500; }
+  .cv__contact { display: grid; grid-template-columns: auto auto; gap: .5mm 3mm; font-size: 7.4pt; }
+  .cv__contact > div { display: contents; }
+  .cv__contact dt { color: var(--ink-2); font-family: var(--f-chrome); font-size: 6.6pt; letter-spacing: .04em; text-align: end; }
+  .cv__contact dd { font-family: var(--f-code); }
+  .cv__contact > div:last-child dd { font-family: inherit; }
+  .cv__crest { width: 12mm; height: 12mm; color: var(--ink); }
+  .cv__avail { font-size: 7.8pt; color: var(--ink-2); margin: 1.6mm 0 3.4mm !important; }
+
+  .cv__block { margin-bottom: 4.2mm; break-inside: avoid-page; }
+  .cv__block h2 {
+    font-family: var(--f-chrome); font-size: 6.8pt; font-weight: 500; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--ink-2); padding-bottom: .8mm; margin-bottom: 1.6mm !important; border-bottom: .5pt solid var(--guide);
+    display: flex; align-items: center; gap: 2mm;
+  }
+  .cv-sheet:lang(ja) .cv__block h2, .cv-sheet:lang(zh-Hans) .cv__block h2 { letter-spacing: .2em; font-size: 7.2pt; }
+  .cv__block h2::before { content: ""; width: 2.2mm; height: 2.2mm; background: var(--ink); flex: none; }
+  .cv__block > p + p { margin-top: 1.2mm !important; }
+
+  .cv__results { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); column-gap: 4mm; }
+  .cv__results li { display: grid; gap: .4mm; align-content: start; border-left: .5pt solid var(--guide); padding-left: 2mm; }
+  .cv__num { font-family: var(--f-chrome); font-size: 11pt; font-weight: 400; font-variation-settings: "wdth" 75; letter-spacing: -.01em; white-space: nowrap; }
+  .cv__results .cv__num { font-size: 12.5pt; }
+  .cv__lab { font-size: 7.4pt; line-height: 1.35; }
+  .cv__per { font-family: var(--f-chrome); font-size: 6.6pt; color: var(--ink-2); }
+
+  .cv__emp { margin-bottom: 2.8mm; break-inside: avoid; }
+  .cv__emp h3 { font-size: 8.8pt; font-weight: 500; display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 2mm; margin-bottom: .8mm !important; }
+  .cv__emp h3 span { font-weight: 400; color: var(--ink-2); font-size: 7.4pt; }
+  .cv__emp h3 .cv__dates { margin-left: auto; }
+  .cv__rows { display: grid; gap: .5mm; }
+  .cv__rows li { display: grid; grid-template-columns: 22mm minmax(0, 1fr); column-gap: 3mm; }
+  .cv-sheet:lang(en) .cv__rows li { grid-template-columns: 29mm minmax(0, 1fr); }
+  .cv__rows--ch { margin-top: .9mm !important; padding-top: .9mm; border-top: .4pt dotted var(--guide); }
+  .cv__rows--ch li { color: var(--ink); }
+  .cv__dates { font-family: var(--f-chrome); font-size: 6.8pt; color: var(--ink-2); white-space: nowrap; font-variation-settings: "wdth" 87.5; padding-top: .3mm; }
+
+  .cv__page2 { break-before: page; }
+  .cv__cases { display: grid; grid-template-columns: 1fr 1fr; gap: 1.8mm 6mm; }
+  .cv__cases li { break-inside: avoid; }
+  .cv__skills { display: grid; gap: .9mm; }
+  .cv__skills > div { display: grid; grid-template-columns: 38mm minmax(0, 1fr); column-gap: 3mm; }
+  .cv__skills dt { font-weight: 500; }
+  .cv__y { font-family: var(--f-chrome); font-size: 6.4pt; color: var(--ink-2); }
+  .cv__more { display: grid; grid-template-columns: 1fr 1fr; gap: .8mm 6mm; }
+  .cv__more .cv__num { font-size: 8.6pt; margin-right: 1.2mm; }
+  .cv__plain { display: grid; gap: .7mm; }
+  .cv__misc { display: grid; grid-template-columns: 1fr 1fr; column-gap: 6mm; }
+  .cv__foot {
+    margin-top: 4mm; padding-top: 1.4mm; border-top: .5pt solid var(--guide);
+    display: flex; justify-content: space-between; gap: 6mm;
+    font-family: var(--f-chrome); font-size: 6.4pt; color: var(--ink-2);
+  }
+}

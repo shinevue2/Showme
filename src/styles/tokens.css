@@ -1,0 +1,166 @@
+/* ===== src/styles/tokens.css — bare :root = DAY (本摺). data-theme="dark" = NIGHT (石摺). ===== */
+:root {
+  color-scheme: light;
+  /* grounds */
+  --pasteboard: #C1E4E9;   /* 白藍 WD — canvas around artboards */
+  --paper: #F7FCFE;        /* 卯の花 WD — artboards */
+  --paper-print: #FFFFFB;  /* 胡粉 NC — cover print sheet, letter paper, seal paper */
+  --panel: #EBF6F7;        /* 藍白 WD — chrome panels */
+  --mat: #EBF6F7;          /* 藍白 WD — mats behind artworks */
+  /* inks */
+  --ink: #0F2540;          /* 紺 NC — 14.95:1 */
+  --ink-2: #566C73;        /* 藍鼠 NC — 5.36; never small text on --pasteboard (4.10) */
+  --link: #006284;         /* 縹 NC — 6.59 */
+  --rule: #566C73;         /* 藍鼠 NC — structural frames (匡郭) */
+  --guide: #33A6B8;        /* 浅葱 NC — guides; decorative only (2.79) */
+  --guide-label: #0D5661;  /* 藍 NC — guide labels, measurements (8.06) */
+  --select: #E03C8A;       /* 躑躅 NC — focus, selection, smart guides (3.92, UI only) */
+  --select-text: #C1328E;  /* 牡丹 NC — selection labels as text (4.94) */
+  --instruct: #EB6101;     /* 朱 WD — designer's red notes (fills, marks) */
+  --instruct-text: #C73E3A;/* 銀朱 NC — red notes as text (4.86) */
+  --seal: #CB1B45;         /* 紅 NC — seals only; at most once per artboard except Achievements (5.37) */
+  --gilt: #FFB11B;         /* 山吹 NC — fills only, never text */
+  --on-gilt: #0F2540;      /* text on gold (8.50) */
+  --wood: #E1A679;         /* 赤白橡 NC — cherry block face */
+  --wood-2: #B35C37;       /* 樺茶 NC — cherry grain, cut walls */
+  --gravel: #BDC0BA;       /* 白鼠 NC — 白川砂, cool grey */
+  --season: #E2943B;       /* 朽葉 NC (霜降); JS overrides per 二十四節気; non-text */
+  --grain-opacity: .05;
+  /* career plates — fills (one per year; Separations panel toggles decorative uses) */
+  --plate-1: #0F2540;      /* 壱 主版 紺 NC — 2018 日本橋 */
+  --plate-2: #5DAC81;      /* 弐 若竹 NC — 2019 箱根 */
+  --plate-3: #91989F;      /* 参 銀鼠 NC — 2020 三島 */
+  --plate-4: #F4A7B9;      /* 肆 一斤染 NC — 2021 原 */
+  --plate-5: #A5DEE4;      /* 伍 瓶覗 NC — 2022 島田 */
+  --plate-6: #205C81;      /* 陸 ベロ藍 (sampled from 39-okazaki) — 2023 岡崎 */
+  --plate-7: #656765;      /* 漆 鈍 NC — 2024–25 庄野 */
+  --plate-8: #FFB11B;      /* 捌 金 山吹 NC — 2026, gold last */
+  /* career plates — text-safe */
+  --plate-1-text: #0F2540; --plate-2-text: #26453D; --plate-3-text: #566C73; --plate-4-text: #9F353A;
+  --plate-5-text: #006284; --plate-6-text: #205C81; --plate-7-text: #656765; --plate-8-text: #0F2540;
+  /* Illustrator layer-colour cycle → traditional colours (aesth §2.2); used for each section's selection box */
+  --layer-cover: #5383C3;        /*  1 Light Blue → 薄群青 WD */
+  --layer-summary: #E95464;      /*  2 Red → 韓紅 WD */
+  --layer-road: #5DAC81;         /*  3 Green → 若竹 NC */
+  --layer-works: #005CAF;        /*  4 Blue → 瑠璃 NC */
+  --layer-skills: #E03C8A;       /*  5 Magenta → 躑躅 NC */
+  --layer-principles: #33A6B8;   /*  6 Cyan → 浅葱 NC */
+  --layer-achievements: #E9CD4C; /*  7 Yellow → 刈安 NC */
+  --layer-writing: #656765;      /*  8 Gray → 鈍 NC */
+  --layer-testimonials: #1C1C1C; /*  9 Black → 墨 NC */
+  --layer-contact: #F05E1C;      /* 10 Orange → 黄丹 NC */
+  --layer-colophon: #42602D;     /* 11 Dark Green → 松葉 NC */
+  --layer-motion: #268785;       /* 12 Teal → 青碧 NC (the Motion control layer) */
+  /* section accents: fill/graphic, then text-safe */
+  --accent-cover: #205C81;        --accent-cover-text: #205C81;
+  --accent-summary: #EB6101;      --accent-summary-text: #C73E3A;
+  --accent-road: #5DAC81;         --accent-road-text: #26453D;
+  --accent-works: #E1A441;        --accent-works-text: #1A6343;   /* gold ground / malachite, both sampled from korin-irises (6.94) */
+  --accent-skills: #D8A373;       --accent-skills-text: #255359;  /* 伽羅 WD wood / 鉄御納戸 NC (8.2) */
+  --accent-principles: #BDC0BA;   --accent-principles-text: #656765;
+  --accent-achievements: #CB1B45; --accent-achievements-text: #CB1B45;
+  --accent-writing: #77428D;      --accent-writing-text: #77428D; /* 江戸紫 NC (6.85) */
+  --accent-testimonials: #8A6BBE; --accent-testimonials-text: #70649A; /* 藤紫 NC / 二藍 NC (5.11) */
+  --accent-contact: #C27B65;      --accent-contact-text: #9F353A; /* Kyoto red (sampled 55-kyoto) / 臙脂 NC */
+  --accent-colophon: #42602D;     --accent-colophon-text: #42602D;
+  /* film chapter caption rules — sampled print pigments (manifest accentColors) */
+  --ch-1: #335B6A; --ch-2: #B4C085; --ch-3: #38465D; --ch-4: #D4A486; --ch-5: #376E84; --ch-6: #205C81; --ch-7: #656765;
+}
+
+/* NIGHT (石摺) — the two blocks below MUST be byte-identical apart from their selectors. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --pasteboard: #566C73;   /* 藍鼠 NC, L 0.139 */
+    --paper: #005CAF;        /* 瑠璃 NC, L 0.107 — moonlit lapis */
+    --paper-print: #1E50A2;  /* 瑠璃 WD, L 0.086 */
+    --panel: #006284;        /* 縹 NC, L 0.104 */
+    --mat: #C1E4E9;          /* 白藍 WD — prints sit on LIGHT mats at night; never inverted */
+    --ink: #EAF4FC;          /* 月白 WD — 6.03 */
+    --ink-2: #C1E4E9;        /* 白藍 WD — 4.95 */
+    --link: #A5DEE4;         /* 瓶覗 NC — 4.51; links always underlined */
+    --rule: #A5DEE4;
+    --guide: #78C2C4;        /* 白群 NC */
+    --guide-label: #A5DEE4;
+    --select: #F596AA;       /* 桃 NC — 3.13 UI */
+    --select-text: #FEDFE1;  /* 桜 NC — 5.35 */
+    --instruct: #F4A7B9;     /* 一斤染 NC */
+    --instruct-text: #FEDFE1;
+    --seal: #EEA9A9;         /* 鴇 NC */
+    --gilt: #E9CD4C;         /* 刈安 NC */
+    --on-gilt: #0F2540;
+    --wood: #E1A679; --wood-2: #B35C37;   /* materials are relit in WebGL, not recoloured */
+    --gravel: #91989F;
+    --grain-opacity: .07;
+    --plate-1: #EAF4FC; --plate-2: #A8D8B9; --plate-3: #AFAFB0; --plate-4: #F4A7B9;
+    --plate-5: #A5DEE4; --plate-6: #51A8DD; --plate-7: #A3A3A2; --plate-8: #E9CD4C;
+    --plate-1-text: var(--ink); --plate-2-text: var(--ink); --plate-3-text: var(--ink); --plate-4-text: var(--ink);
+    --plate-5-text: var(--ink); --plate-6-text: var(--ink); --plate-7-text: var(--ink); --plate-8-text: #0F2540;
+    --layer-cover: #A5DEE4; --layer-summary: #EEA9A9; --layer-road: #A8D8B9; --layer-works: #78C2C4;
+    --layer-skills: #F596AA; --layer-principles: #C1E4E9; --layer-achievements: #E9CD4C; --layer-writing: #BDC0BA;
+    --layer-testimonials: #BBC8E6; --layer-contact: #F9BF45; --layer-colophon: #AACF53; --layer-motion: #E9DFE5;
+    --accent-cover: #A5DEE4; --accent-summary: #F4A7B9; --accent-road: #A8D8B9; --accent-works: #E9CD4C;
+    --accent-skills: #E1A679; --accent-principles: #BDC0BA; --accent-achievements: #EEA9A9; --accent-writing: #B28FCE;
+    --accent-testimonials: #BBC8E6; --accent-contact: #EEA9A9; --accent-colophon: #AACF53;
+    --accent-cover-text: var(--ink); --accent-summary-text: var(--ink); --accent-road-text: var(--ink);
+    --accent-works-text: var(--ink); --accent-skills-text: var(--ink); --accent-principles-text: var(--ink);
+    --accent-achievements-text: var(--ink); --accent-writing-text: var(--ink); --accent-testimonials-text: var(--ink);
+    --accent-contact-text: var(--ink); --accent-colophon-text: var(--ink);
+  }
+}
+:root[data-theme="dark"] {
+    color-scheme: dark;
+    --pasteboard: #566C73;   /* 藍鼠 NC, L 0.139 */
+    --paper: #005CAF;        /* 瑠璃 NC, L 0.107 — moonlit lapis */
+    --paper-print: #1E50A2;  /* 瑠璃 WD, L 0.086 */
+    --panel: #006284;        /* 縹 NC, L 0.104 */
+    --mat: #C1E4E9;          /* 白藍 WD — prints sit on LIGHT mats at night; never inverted */
+    --ink: #EAF4FC;          /* 月白 WD — 6.03 */
+    --ink-2: #C1E4E9;        /* 白藍 WD — 4.95 */
+    --link: #A5DEE4;         /* 瓶覗 NC — 4.51; links always underlined */
+    --rule: #A5DEE4;
+    --guide: #78C2C4;        /* 白群 NC */
+    --guide-label: #A5DEE4;
+    --select: #F596AA;       /* 桃 NC — 3.13 UI */
+    --select-text: #FEDFE1;  /* 桜 NC — 5.35 */
+    --instruct: #F4A7B9;     /* 一斤染 NC */
+    --instruct-text: #FEDFE1;
+    --seal: #EEA9A9;         /* 鴇 NC */
+    --gilt: #E9CD4C;         /* 刈安 NC */
+    --on-gilt: #0F2540;
+    --wood: #E1A679; --wood-2: #B35C37;   /* materials are relit in WebGL, not recoloured */
+    --gravel: #91989F;
+    --grain-opacity: .07;
+    --plate-1: #EAF4FC; --plate-2: #A8D8B9; --plate-3: #AFAFB0; --plate-4: #F4A7B9;
+    --plate-5: #A5DEE4; --plate-6: #51A8DD; --plate-7: #A3A3A2; --plate-8: #E9CD4C;
+    --plate-1-text: var(--ink); --plate-2-text: var(--ink); --plate-3-text: var(--ink); --plate-4-text: var(--ink);
+    --plate-5-text: var(--ink); --plate-6-text: var(--ink); --plate-7-text: var(--ink); --plate-8-text: #0F2540;
+    --layer-cover: #A5DEE4; --layer-summary: #EEA9A9; --layer-road: #A8D8B9; --layer-works: #78C2C4;
+    --layer-skills: #F596AA; --layer-principles: #C1E4E9; --layer-achievements: #E9CD4C; --layer-writing: #BDC0BA;
+    --layer-testimonials: #BBC8E6; --layer-contact: #F9BF45; --layer-colophon: #AACF53; --layer-motion: #E9DFE5;
+    --accent-cover: #A5DEE4; --accent-summary: #F4A7B9; --accent-road: #A8D8B9; --accent-works: #E9CD4C;
+    --accent-skills: #E1A679; --accent-principles: #BDC0BA; --accent-achievements: #EEA9A9; --accent-writing: #B28FCE;
+    --accent-testimonials: #BBC8E6; --accent-contact: #EEA9A9; --accent-colophon: #AACF53;
+    --accent-cover-text: var(--ink); --accent-summary-text: var(--ink); --accent-road-text: var(--ink);
+    --accent-works-text: var(--ink); --accent-skills-text: var(--ink); --accent-principles-text: var(--ink);
+    --accent-achievements-text: var(--ink); --accent-writing-text: var(--ink); --accent-testimonials-text: var(--ink);
+    --accent-contact-text: var(--ink); --accent-colophon-text: var(--ink);
+  }
+
+/* ===== type scale (§3.3), spacing and frame (§3.4, §3.5), easing and durations (§5.3) — theme-independent ===== */
+:root {
+  --fs-chrome: 10px; --fs-caption: 12px; --fs-small: 14px; --fs-body: 16px;
+  --fs-lead: clamp(18px, 1.1vw + 12px, 22px); --fs-h3: clamp(20px, 1vw + 14px, 26px);
+  --fs-h2: clamp(28px, 2.4vw + 12px, 52px); --fs-display: clamp(48px, 6vw + 16px, 128px);
+  --fs-hero: clamp(64px, 9vw, 152px);
+  --s-1: 4px; --s-2: 8px; --s-3: 12px; --s-4: 16px; --s-5: 24px; --s-6: 32px; --s-7: 48px; --s-8: 64px;
+  --s-9: 96px; --s-10: 128px; --s-11: 192px;
+  --radius: 0;
+  --ease-jo: cubic-bezier(.45, 0, .2, 1);                                  /* 序: slow, airy */
+  --ease-ha: linear(0, .03 15%, .10 35%, .35 60%, .60 80%, .85 93%, 1);   /* 序破急 curve (aesth §3.10) */
+  --ease-kyu: cubic-bezier(.2, .9, .1, 1);                                 /* 急: decisive */
+  --ease-register: linear(0, .133 7.1%, .403 14.3%, .676 21.4%, .886 28.6%, 1.015 35.7%, 1.074 42.9%,
+    1.086 50%, 1.071 57.1%, 1.047 64.3%, 1.024 71.4%, 1.007 78.6%, .998 85.7%, .993 92.9%, 1);
+    /* damped spring k=380, c=24, m=1 sampled over 420 ms: 8.6 % overshoot → ≤ 0.5 px on a 6 px offset */
+  --dur-micro: 140ms; --dur-kyu: 220ms; --dur-register: 420ms; --dur-ha: 600ms; --dur-jo: 1200ms;
+}

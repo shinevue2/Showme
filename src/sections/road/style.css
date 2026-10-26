@@ -1,0 +1,588 @@
+/* Road — 道中 The Road (DESIGN §6.3, §7.5, §2.2 road-works; video §4.1/§4.5). Owner: WP-06.
+
+   Two layouts from one markup:
+   - BASE = static tier: seven chapters in normal flow (no JS, reduced motion, Motion layer off, Proof,
+     ?film=static). Decided at first paint, so the page height never jumps.
+   - FILM = scroll film: html.js, motion on, not Proof, not data-film-tier="static". Every film rule carries
+     the prefix  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"])
+     inside @media (prefers-reduced-motion: no-preference).
+   Nothing over the video uses backdrop-filter, mix-blend-mode or filters; caption plates are opaque. */
+
+[data-section="road"] {
+  --film-paper: #F7FCFE;                                   /* 卯の花 WD — the film's own paper (= day --paper), both themes */
+  --film-gold: color-mix(in srgb, #FFB11B 50%, #F7FCFE);   /* 捌 山吹 NC at 50 % over the film paper = #FBD78D (film P_8 tint) */
+  --rain-1: #0F2540;                                       /* 紺 NC — plate 1 (day value: the film is never relit) */
+  --rain-7: #656765;                                       /* 鈍 NC — plate 7 (day value) */
+  --film-veil: 0;                                          /* 石摺 night: lapis veil over the film (§6.3) */
+  --ref-w: 240px;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) [data-section="road"] { --film-veil: .22; } }
+:root[data-theme="dark"] [data-section="road"] { --film-veil: .22; }
+/* no veil by day: not even an empty full-stage layer */
+@media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) [data-section="road"] .film__veil { visibility: hidden; } }
+:root[data-theme="light"] [data-section="road"] .film__veil { visibility: hidden; }
+
+/* ---------------------------------------------------------------- skip link (before the section) */
+.skip-film {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  width: max-content;
+  min-height: 24px;
+  margin: 0 0 var(--s-2) calc(var(--chrome-left) + var(--pb-x) + var(--s-1));
+  font-family: var(--f-chrome);
+  font-size: var(--fs-caption);
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.skip-film .icon { width: 16px; height: 16px; flex: none; }
+
+/* =================================================================== BASE — static tier */
+[data-section="road"] .film__anchor,
+[data-section="road"] .film__frames,
+[data-section="road"] .film__rain,
+[data-section="road"] .film__veil,
+[data-section="road"] .film__grain,
+[data-section="road"] .road-clouds { display: none; }
+
+/* paper tooth like every other artboard (layout.css leaves #road out because of the film) */
+[data-section="road"]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url("/img/gen/grain-day-256.webp") repeat;
+  background-size: 256px 256px;
+  opacity: var(--grain-opacity);
+  pointer-events: none;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) [data-section="road"]::before { background-image: url("/img/gen/grain-night-256.webp"); } }
+:root[data-theme="dark"] [data-section="road"]::before { background-image: url("/img/gen/grain-night-256.webp"); }
+
+[data-section="road"] .film__direction { display: flex; align-items: center; gap: var(--s-2); font-size: var(--fs-small); color: var(--ink-2); }
+[data-section="road"] .film__direction .icon { width: 20px; height: 20px; flex: none; color: var(--accent-text); }
+
+[data-section="road"] .film__captions { display: grid; gap: var(--s-9); margin: 0; padding: 0; list-style: none; }
+[data-section="road"] .cap { display: grid; gap: var(--s-5); align-items: start; }
+[data-section="road"] .cap__still { display: block; position: relative; overflow: clip; background: var(--film-paper); }
+[data-section="road"] .cap__still img { display: block; width: 100%; height: auto; }
+/* at night the stills sit under the same lapis veil as the film (§6.3), so they do not glare off the page */
+[data-section="road"] .cap__still::after { content: ""; position: absolute; inset: 0; background: var(--paper); opacity: var(--film-veil); pointer-events: none; }
+[data-section="road"] .cap__rain { position: absolute; inset: 0; overflow: clip; opacity: .5; }
+[data-section="road"] .cap__rain .rain { position: absolute; inset: 0; width: 100%; height: 100%; }
+@media (min-width: 1024px) {
+  [data-section="road"] .cap { grid-template-columns: minmax(0, 1fr) auto; column-gap: var(--s-7); align-items: center; }
+  [data-section="road"] .cap__plate { width: min(400px, 34vw); }
+  [data-section="road"]:lang(ja) .cap__plate { width: auto; }
+}
+html[data-proof] [data-section="road"] .cap__still { display: none; }
+
+/* ---------------------------------------------------------------- the caption plate (every tier) */
+[data-section="road"] .cap__plate {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-4);
+  padding: var(--s-5) var(--s-5) var(--s-5);
+  background: var(--paper);
+  color: var(--ink);
+  --kento-inset: 8px;
+}
+/* the chapter rule: 3 px of the print's own pigment (--ch-N), top edge (en/zh) or right edge (ja) — 摺る:
+   it waits a few px off register and springs in when its station arrives (index.ts seeds --mx/--my/--mr) */
+[data-section="road"] .cap__plate::before {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; top: 0;
+  height: 3px;
+  background: var(--ch);
+  pointer-events: none;
+}
+[data-section="road"]:lang(ja) .cap__plate::before { left: auto; bottom: 0; width: 3px; height: auto; }
+
+[data-section="road"] .cap__text { display: flex; flex-direction: column; gap: var(--s-3); }
+[data-section="road"] .cap__body { display: flex; flex-direction: column; gap: var(--s-2); }
+[data-section="road"] .cap__body p, [data-section="road"] .cap__body ul { margin: 0; }
+[data-section="road"] :is(.cap__body p, .cap__outcomes li, .cap__credit) { text-wrap: pretty; }
+
+/* chapter heading: year + station + subtitle in the road voice (Zen Antique / Big Shoulders / ZCOOL XiaoWei) */
+[data-section="road"] .cap__title { margin: 0; color: var(--ink); line-height: 1; }
+[data-section="road"]:lang(en) .cap__title,
+[data-section="road"]:lang(zh-Hans) .cap__title {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-rows: auto auto;
+  column-gap: var(--s-4);
+  align-items: end;
+}
+[data-section="road"] .cap__year { grid-row: 1 / span 2; font-size: 56px; line-height: .82; font-variant-numeric: lining-nums; }
+[data-section="road"] .cap__station { grid-column: 2; font-size: 24px; line-height: 1.05; }
+[data-section="road"] .cap__sub { grid-column: 2; font-size: 14px; line-height: 1.3; color: var(--ink-2); }
+[data-section="road"]:lang(en) .cap__station { text-transform: uppercase; letter-spacing: .05em; }
+[data-section="road"]:lang(en) .cap__sub { font-family: var(--f-body-en); font-weight: 400; font-style: italic; letter-spacing: 0; font-variation-settings: normal; }
+[data-section="road"]:lang(zh-Hans) .cap__year { font-size: 46px; line-height: .9; }
+[data-section="road"]:lang(zh-Hans) .cap__station { font-size: 26px; }
+[data-section="road"]:lang(zh-Hans) .cap__sub { font-size: 16px; }
+
+/* ja: the heading is always a vertical 詞書 column — year small, then the station large with its subtitle */
+[data-section="road"]:lang(ja) .cap__title {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+  font-feature-settings: normal;
+  letter-spacing: .1em;
+}
+[data-section="road"]:lang(ja) .cap__year { font-size: 15px; letter-spacing: .14em; color: var(--ink-2); line-height: 1.2; }
+[data-section="road"]:lang(ja) .cap__station { font-size: 34px; line-height: 1.1; letter-spacing: .08em; }
+[data-section="road"]:lang(ja) .cap__sub { font-size: 18px; line-height: 1.2; letter-spacing: .12em; color: var(--ink); }
+[data-section="road"]:lang(ja) .cap__station::after { content: none; }
+
+[data-section="road"] .cap__print,
+[data-section="road"] .cap__label {
+  font-family: var(--f-chrome);
+  font-size: var(--fs-chrome);
+  letter-spacing: .04em;
+  color: var(--ink-2);
+  font-variation-settings: "wdth" 87.5;
+}
+[data-section="road"] .cap__label { margin-inline-end: .5em; text-transform: uppercase; }
+[data-section="road"] .cap__employer { font-size: 13px; line-height: 1.45; }
+[data-section="road"] .cap__emp { font-weight: 500; }
+[data-section="road"] .cap__desc { color: var(--ink-2); }
+[data-section="road"] .cap__role { font-size: 14px; font-weight: 500; line-height: 1.45; color: var(--accent-text); }
+[data-section="road"] .cap__headline { font-size: 17px; font-weight: 500; line-height: 1.4; }
+[data-section="road"]:lang(ja) .cap__headline, [data-section="road"]:lang(zh-Hans) .cap__headline { font-size: 16px; line-height: 1.6; }
+[data-section="road"] .cap__scope { font-size: 13px; line-height: 1.5; color: var(--ink-2); }
+[data-section="road"] .cap__outcomes { display: grid; gap: var(--s-1); padding: 0; list-style: none; font-size: 14px; line-height: 1.45; }
+[data-section="road"] .cap__outcomes li { position: relative; padding-inline-start: 18px; }
+[data-section="road"] .cap__outcomes li::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;
+  inset-block-start: .72em;
+  width: 10px;
+  height: 1px;
+  background: var(--ink);
+}
+[data-section="road"] .cap__plateline { display: flex; align-items: center; gap: var(--s-2); font-size: 12px; line-height: 1.4; }
+[data-section="road"] .cap__plateline .cap__label { margin: 0; }
+[data-section="road"] .cap__numeral { font-family: var(--f-chrome); font-size: 11px; }
+[data-section="road"]:lang(ja) .cap__numeral, [data-section="road"]:lang(zh-Hans) .cap__numeral { font-family: inherit; font-size: 12px; }
+[data-section="road"] .cap__swatch { flex: none; display: inline-block; width: 22px; height: 11px; background: var(--plate-fill); }
+
+/* the real print, small, on its mat */
+[data-section="road"] .cap__ref { margin: 0; display: flex; flex-direction: column; gap: var(--s-2); align-items: flex-start; }
+[data-section="road"] .cap__ref .print__mat { flex: none; width: var(--ref-w); padding: 6px; }
+[data-section="road"] .cap__ref .print__mat img { display: block; }
+[data-section="road"] .cap__credit { margin: 0; font-size: 10px; line-height: 1.5; }
+[data-section="road"] .cap__reflabel { display: block; color: var(--ink); }
+[data-section="road"] .cap__print { margin-inline-start: .8em; color: var(--ink-2); }
+[data-section="road"]:lang(en) .cap__credit { font-size: 10px; }
+[data-section="road"] .cap__refmeta { display: block; }
+[data-section="road"] .cap__refsep { display: none; }
+[data-section="road"]:lang(en) .cap__credit { font-variation-settings: "wdth" 87.5; }
+
+/* ja in the flow / on narrow plates: horizontal lines, heading as a vertical column at the right */
+[data-section="road"]:lang(ja) .cap__text { flex-direction: row-reverse; align-items: flex-start; gap: var(--s-5); }
+[data-section="road"]:lang(ja) .cap__body { flex: 1 1 auto; min-width: 0; }
+[data-section="road"]:lang(ja) .cap__ref { flex-direction: column; align-items: flex-end; }
+[data-section="road"]:lang(ja) .cap__credit { text-align: end; }
+
+/* large screens, static tier, ja: the whole caption is a vertical 詞書 beside its picture */
+@media (min-width: 1024px) {
+  [data-section="road"]:lang(ja) .cap__text { writing-mode: vertical-rl; flex-direction: column; height: 26em; gap: var(--s-5); }
+  [data-section="road"]:lang(ja) .cap__body { gap: var(--s-3); flex: none; }
+  [data-section="road"]:lang(ja) .cap__body p, [data-section="road"]:lang(ja) .cap__outcomes { line-height: 1.75; }
+  [data-section="road"]:lang(ja) .cap__outcomes li { padding-inline-start: 1.1em; }
+  [data-section="road"]:lang(ja) .cap__outcomes li::before { inset-block-start: calc(50% - 2.5px); inset-inline-start: .3em; width: 5px; height: 5px; }
+  [data-section="road"]:lang(ja) .cap__plateline { align-items: center; }
+  [data-section="road"]:lang(ja) .cap__swatch { width: 11px; height: 22px; }
+  [data-section="road"]:lang(ja) .cap__label { text-orientation: mixed; }
+}
+/* vertical-run helpers (format.ts): upright acronyms */
+[data-section="road"] .upr { text-orientation: upright; letter-spacing: 0; }
+
+/* =================================================================== FILM — the scroll film */
+@media (prefers-reduced-motion: no-preference) {
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]) {
+    padding: 0;
+  }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"])::before { content: none; }
+
+  /* the title slip (題簽): overlays the film's first screen at the top left, opposite the caption column */
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]) > .film__head {
+    position: absolute;
+    z-index: 3;
+    top: calc(var(--chrome-top) + var(--s-5));
+    left: var(--artboard-pad);
+    width: min(29em, 34%);
+    margin: 0;
+    padding: var(--s-5) var(--s-5) var(--s-5) var(--s-6);
+    row-gap: var(--s-3);
+    background: var(--paper);
+    border: 3px solid var(--rule);
+    outline: 1px solid var(--rule);
+    outline-offset: -7px;
+  }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]):lang(en) > .film__head { width: min(27em, 34%); }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]) > .film__head .takeaway { font-size: var(--fs-body); max-width: none; }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]) > .film__head .stage-line.tate { max-height: 15em; }
+
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]) .film__body {
+    position: relative;
+    height: 800lvh;
+    view-timeline: --film block;
+    view-timeline-inset: 0;              /* auto would inset by the page's scroll-padding-top (72 px) and put the
+                                            captions out of step with ScrollTrigger's 'top top' → 'bottom bottom' */
+  }
+  /* deep-link targets at each chapter's rest (index.ts moves the #road-N ids here in film mode) */
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]) .film__anchor {
+    display: block;
+    position: absolute;
+    left: 0;
+    top: calc(var(--at) * (100% - 100lvh));
+    width: 1px;
+    height: 1px;
+    pointer-events: none;
+  }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]) .film__stage {
+    position: sticky;
+    top: 0;
+    height: 100lvh;
+    overflow: clip;
+    contain: layout paint;
+    background: var(--film-paper);
+  }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]) .film__frames,
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]) .film__rain,
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]) .film__veil,
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]) .film__grain {
+    display: block;
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]) :is(.film__video, .film__canvas, .film__poster, .film__poster img, .film__still, .film__still img) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 50%;
+  }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]) .film__poster { transition: opacity 240ms ease-out; }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"][data-ready]:not([data-film-tier="static"]) .film__poster { opacity: 0; }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"][data-film-tier="webcodecs"] .film__video,
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"][data-film-tier="stills"] .film__video { display: none; }
+  /* road-works band under way: the film's own clouds hand over to the DOM clouds (index.ts sets data-tail) */
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"][data-tail]:not([data-film-tier="static"]) .film__frames { visibility: hidden; }
+
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]) .film__veil { background: var(--paper); opacity: var(--film-veil); }
+  /* layers only while they show (§10.3: ≤ 8 composited layers in the stage): the veil exists at night, the
+     rain while Shōno is in range (index.ts sets data-rain over exactly the rain's scroll range) */
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]):not([data-rain]) .film__rain { display: none; }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]) .film__grain {
+    background: url("/img/gen/washi-512.avif") center / 512px 512px repeat;
+  }
+
+  /* ---- 白雨: rain over Shōno, under the veil; loops only while ch 7 is in range (index.ts sets data-rain) ---- */
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]) .film__rain { opacity: var(--rain-o, 0); overflow: clip; }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]) .film__rain .rain { position: absolute; }
+  /* each layer overscans by exactly one fall period (rain.ts RAIN_PERIODS: up by dy, right by −dx), the least
+     area that keeps the stage covered through the whole loop — composited layers cost w × h × 4 × DPR² */
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]) .rain--a { top: -290px; left: 0; width: calc(100% + 78px); height: calc(100% + 290px); color: var(--rain-7); opacity: .55; }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]) .rain--b { top: -426px; left: 0; width: calc(100% + 114px); height: calc(100% + 426px); color: var(--rain-1); opacity: .42; }
+  /* falling while the visitor moves through Shōno (index.ts data-rain-move); a moment after they stop the loop is
+     removed and the strokes hang at the phase they reached (whole pixels, set by index.ts), from which the next loop resumes */
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]) .rain--a { translate: var(--rain-ax, 0px) var(--rain-ay, 0px); }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]) .rain--b { translate: var(--rain-bx, 0px) var(--rain-by, 0px); }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"][data-rain][data-rain-move]:not([data-film-tier="static"]) .rain--a { animation: road-rain-a .9s linear var(--rain-delay, 0s) infinite; }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"][data-rain][data-rain-move]:not([data-film-tier="static"]) .rain--b { animation: road-rain-b .9s linear var(--rain-delay, 0s) infinite; }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"][data-eye="off"] .rain { animation: none !important; }
+
+  /* ---- captions over the film: one plate per station, opaque, faded by the --film view timeline ---- */
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]) .film__captions {
+    display: block;
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 100svh;                      /* above any mobile toolbar */
+    pointer-events: none;
+  }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]) .cap {
+    display: block;
+    position: absolute;
+    right: var(--artboard-pad);
+    bottom: max(12svh, calc(var(--status-h, 0px) + var(--s-6)));
+    width: min(408px, calc(100% - 2 * var(--artboard-pad)));
+    /* out of range a caption is fully transparent but stays in the accessibility tree (every chapter is
+       readable with a screen reader); a static opacity-0 box is neither painted nor composited */
+    opacity: 0;
+    pointer-events: none;
+  }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]) .cap__still { display: none; }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]) .cap__plate {
+    --ref-w: clamp(132px, calc(34svh - 96px), 216px);
+    padding: 22px var(--s-5) var(--s-5);
+    gap: var(--s-4);
+  }
+
+  /* ja: a vertical 詞書 column in the right 28 % of the stage from 12 % down, the print beneath it */
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]):lang(ja) .cap {
+    top: 12svh;
+    bottom: auto;
+    width: max-content;
+    max-width: 36%;
+  }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]):lang(ja) .cap__plate {
+    --ref-w: clamp(132px, calc(30svh - 64px), 232px);
+    align-items: flex-end;
+    padding: var(--s-5) 26px var(--s-5) var(--s-5);
+    max-height: 76svh;
+  }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]):lang(ja) .cap__text {
+    writing-mode: vertical-rl;
+    flex-direction: column;
+    height: clamp(260px, calc(76svh - var(--ref-w) * .66 - 120px), 32em);
+    gap: var(--s-4);
+  }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]):lang(ja) .cap__body { gap: 10px; flex: none; font-size: 14px; }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]):lang(ja) .cap__body :is(p, ul) { line-height: 1.68; }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]):lang(ja) .cap__outcomes { gap: 0; }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]):lang(ja) .cap__outcomes li { padding-inline-start: 1.1em; }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]):lang(ja) .cap__outcomes li::before { inset-block-start: calc(50% - 2.5px); inset-inline-start: .3em; width: 5px; height: 5px; }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]):lang(ja) .cap__swatch { width: 11px; height: 22px; }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]):lang(ja) .cap__ref .print__mat { width: var(--ref-w); }
+
+  /* the chapter rule waits off register until its station arrives */
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]) .cap__plate::before {
+    translate: var(--mx, 3px) var(--my, -2px);
+    rotate: var(--mr, .25deg);
+    transition: translate var(--dur-register) var(--ease-register), rotate var(--dur-register) var(--ease-register);
+  }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]) .cap__swatch {
+    translate: var(--sx, -2px) var(--sy, 3px);
+    transition: translate var(--dur-register) var(--ease-register);
+  }
+  html.js [data-section="road"].film:not([data-chapter]) .cap--first,
+  html.js [data-section="road"].film[data-chapter="1"] .cap[data-n="1"],
+  html.js [data-section="road"].film[data-chapter="2"] .cap[data-n="2"],
+  html.js [data-section="road"].film[data-chapter="3"] .cap[data-n="3"],
+  html.js [data-section="road"].film[data-chapter="4"] .cap[data-n="4"],
+  html.js [data-section="road"].film[data-chapter="5"] .cap[data-n="5"],
+  html.js [data-section="road"].film[data-chapter="6"] .cap[data-n="6"],
+  html.js [data-section="road"].film[data-chapter="7"] .cap[data-n="7"] { pointer-events: auto; }
+  html.js [data-section="road"].film[data-chapter="1"] .cap[data-n="1"] .cap__swatch,
+  html.js [data-section="road"].film[data-chapter="2"] .cap[data-n="2"] .cap__swatch,
+  html.js [data-section="road"].film[data-chapter="3"] .cap[data-n="3"] .cap__swatch,
+  html.js [data-section="road"].film[data-chapter="4"] .cap[data-n="4"] .cap__swatch,
+  html.js [data-section="road"].film[data-chapter="5"] .cap[data-n="5"] .cap__swatch,
+  html.js [data-section="road"].film[data-chapter="6"] .cap[data-n="6"] .cap__swatch,
+  html.js [data-section="road"].film[data-chapter="7"] .cap[data-n="7"] .cap__swatch { translate: 0 0; }
+  html.js [data-section="road"].film[data-chapter="1"] .cap[data-n="1"] .cap__plate::before,
+  html.js [data-section="road"].film[data-chapter="2"] .cap[data-n="2"] .cap__plate::before,
+  html.js [data-section="road"].film[data-chapter="3"] .cap[data-n="3"] .cap__plate::before,
+  html.js [data-section="road"].film[data-chapter="4"] .cap[data-n="4"] .cap__plate::before,
+  html.js [data-section="road"].film[data-chapter="5"] .cap[data-n="5"] .cap__plate::before,
+  html.js [data-section="road"].film[data-chapter="6"] .cap[data-n="6"] .cap__plate::before,
+  html.js [data-section="road"].film[data-chapter="7"] .cap[data-n="7"] .cap__plate::before { translate: 0 0; rotate: 0deg; }
+
+  /* ---- road-works band: the gold clouds, fixed to the viewport over the film stage's final rect ---- */
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]) > .ma {
+    margin: 0;
+    view-timeline: --road-works block;
+    view-timeline-inset: 0;
+    /* the band continues the film's sheet (its paper, veil and washi), so at night the film ends where the
+       artboard ends instead of at the stage's bottom edge */
+    background:
+      url("/img/gen/washi-512.avif") center top / 512px 512px repeat,
+      color-mix(in srgb, var(--film-paper), var(--paper) calc(var(--film-veil) * 100%));
+  }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]) .road-clouds {
+    display: block;
+    position: fixed;
+    left: calc(var(--chrome-left) + var(--pb-x));
+    right: var(--pb-x);
+    bottom: 0;
+    height: 100lvh;
+    overflow: clip;
+    pointer-events: none;
+    visibility: hidden;
+  }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"][data-tail]:not([data-film-tier="static"]) .road-clouds { visibility: visible; }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]) .road-cloud {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    fill: color-mix(in srgb, var(--film-gold), var(--paper) calc(var(--film-veil) * 100%));
+  }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]) .road-cloud--p { display: none; }
+
+  /* ---- scroll-driven paths (compositor); index.ts drives the same numbers where unsupported ---- */
+  @supports (animation-timeline: view()) {
+    html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]) .cap {
+      animation: road-cap linear none;          /* no fill: outside its range the base style (transparent) holds */
+      animation-timeline: --film;
+      animation-range: contain var(--c0) contain var(--c1);
+    }
+    html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]) .cap--first { animation-name: road-cap-first; animation-fill-mode: backwards; }
+    html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]) .film__rain {
+      animation: road-rain linear both;
+      animation-timeline: --film;
+      animation-range: contain 80.571% contain 96.571%;
+    }
+    html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]) .film__still:not(:first-child) {
+      animation: road-still linear both;
+      animation-timeline: --film;
+      animation-range: contain var(--s0) contain var(--s1);
+    }
+    html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]) .road-cloud {
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-timeline: --road-works;
+      animation-range: cover 0% cover 100%;
+    }
+    html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]) .road-cloud--a { animation-name: road-cloud-a; }
+    html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]) .road-cloud--b { animation-name: road-cloud-b; }
+    html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]) .road-cloud--c { animation-name: road-cloud-c; }
+  }
+}
+
+/* portrait (the film's portrait variant): captions own the top 30 svh; the header precedes the film */
+@media (prefers-reduced-motion: no-preference) and (max-aspect-ratio: 4/5) {
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]) > .film__head {
+    position: relative;
+    top: auto; left: auto;
+    width: auto;
+    padding: var(--section-pad) var(--artboard-pad) var(--s-7);
+    margin: 0;
+    background: none;
+    border: 0;
+    outline: 0;
+  }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]) .cap,
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]):lang(ja) .cap {
+    top: calc(var(--chrome-top) + var(--s-2));
+    bottom: auto;
+    left: var(--s-4);
+    right: var(--s-4);
+    width: auto;
+    max-width: 560px;
+    margin-inline-start: auto;
+  }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]) .cap__plate,
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]):lang(ja) .cap__plate {
+    padding: 14px var(--s-4) var(--s-3);
+    gap: var(--s-2);
+    max-height: none;
+    align-items: stretch;
+  }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]):lang(ja) .cap__plate { padding-inline-end: 18px; }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]):lang(ja) .cap__text {
+    writing-mode: horizontal-tb;
+    flex-direction: row-reverse;
+    height: auto;
+    gap: var(--s-4);
+  }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]):lang(ja) .cap__body { flex: 1 1 auto; font-size: 14px; }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]):lang(ja) .cap__body :is(p, ul) { line-height: 1.55; }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]):lang(ja) .cap__station { font-size: 26px; }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]):lang(ja) .cap__sub { font-size: 15px; }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]):lang(ja) .cap__outcomes li { padding-inline-start: 18px; }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]):lang(ja) .cap__outcomes li::before { inset-block-start: .72em; width: 10px; height: 1px; inset-inline-start: 0; }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]) .cap__year { font-size: 40px; }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]):lang(ja) .cap__year { font-size: 13px; }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]) .cap__station { font-size: 20px; }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]) .cap__headline { font-size: 15px; line-height: 1.4; }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]) .cap__body { gap: 4px; }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]) .cap__outcomes { font-size: 13px; gap: 0; }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]) .cap__employer { font-size: 12px; }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]) .cap__role { font-size: 13px; }
+  /* the calm paper of a portrait rest frame is only ~30 % tall: print number, scope and plate line stay for
+     screen readers only; the print itself is hidden and its credit line kept (§6.3) */
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]) :is(.cap__print, .cap__scope, .cap__plateline) {
+    position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap;
+  }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]) .cap__ref .print__mat { display: none; }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]) .cap__ref { display: block; }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]) .cap__credit { font-size: 9px; line-height: 1.4; text-align: start; }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]) :is(.cap__credit > span, .cap__refsep) { display: inline; }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]) .cap__desc {
+    position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap;
+  }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]) .road-cloud--l { display: none; }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]) .road-cloud--p { display: block; }
+}
+
+/* laptop-height landscape screens, ja: the vertical column needs the height more than the small print does;
+   the print's credit line stays (as on portrait) */
+@media (prefers-reduced-motion: no-preference) and (min-aspect-ratio: 4/5) and (max-height: 820px) {
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]):lang(ja) .cap__ref .print__mat { display: none; }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]):lang(ja) .cap__text { height: clamp(240px, calc(76svh - 116px), 32em); }
+}
+
+/* short landscape screens (phones on their side): keep the plate inside the stage */
+@media (prefers-reduced-motion: no-preference) and (min-aspect-ratio: 4/5) and (max-height: 620px) {
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]) .cap__ref .print__mat,
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]) :is(.cap__scope, .cap__plateline, .cap__print) { display: none; }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]) .cap,
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]):lang(ja) .cap {
+    top: calc(var(--chrome-top) + var(--s-2)); bottom: auto; width: min(400px, 52%); max-width: none;
+  }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]) .cap__plate,
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]):lang(ja) .cap__plate { padding: 12px var(--s-4); gap: var(--s-2); align-items: stretch; max-height: none; }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]) .cap__year { font-size: 36px; }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]) .cap__headline { font-size: 14px; line-height: 1.4; }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]) .cap__body { gap: 2px; }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]) .cap__credit { font-size: 9px; }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]) :is(.cap__refmeta, .cap__refsep) { display: inline; }
+  /* ja: horizontal lines under a vertical heading column, as on portrait — a vertical column has no height here */
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]):lang(ja) .cap__text { writing-mode: horizontal-tb; flex-direction: row-reverse; height: auto; gap: var(--s-4); }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]):lang(ja) .cap__body { flex: 1 1 auto; font-size: 13px; }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]):lang(ja) .cap__body :is(p, ul) { line-height: 1.5; }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]):lang(ja) .cap__station { font-size: 24px; }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]):lang(ja) .cap__year { font-size: 12px; }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]):lang(ja) .cap__outcomes li { padding-inline-start: 18px; }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]):lang(ja) .cap__outcomes li::before { inset-block-start: .72em; width: 10px; height: 1px; inset-inline-start: 0; }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]):lang(ja) .cap__ref { align-items: flex-start; }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]):lang(ja) .cap__credit { text-align: start; }
+  /* no room for a title slip over a 390 px tall film: the header precedes it, as on portrait */
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="road"]:not([data-film-tier="static"]) > .film__head {
+    position: relative; top: auto; left: auto; width: auto; margin: 0;
+    padding: var(--section-pad) var(--artboard-pad) var(--s-7);
+    background: none; border: 0; outline: 0;
+  }
+}
+
+/* opacity and translate only, so the caption animations stay on the compositor */
+@keyframes road-cap {
+  0%    { opacity: 0; translate: -24px 0; }
+  20%   { opacity: 1; translate: 0 0; }
+  82%   { opacity: 1; translate: 0 0; }
+  100%  { opacity: 0; translate: 32px 0; }
+}
+@keyframes road-cap-first {
+  0%    { opacity: 1; translate: 0 0; }
+  82%   { opacity: 1; translate: 0 0; }
+  100%  { opacity: 0; translate: 32px 0; }
+}
+@keyframes road-still { from { opacity: 0; } to { opacity: 1; } }
+/* rain: timing.ts RAIN_POINTS mapped onto [80.571 %, 96.571 %] of the film */
+@keyframes road-rain {
+  0%     { opacity: 0; }
+  17.86% { opacity: 1; }
+  30.36% { opacity: .86; }
+  42.86% { opacity: .42; }
+  69.64% { opacity: .32; }
+  87.5%  { opacity: .12; }
+  100%   { opacity: 0; }
+}
+/* one pattern period along the 75° fall line (rain.ts: H·(−sin 15°, cos 15°)) */
+@keyframes road-rain-a { from { translate: 0 0; } to { translate: -77.646px 289.778px; } }
+@keyframes road-rain-b { from { translate: 0 0; } to { translate: -113.880px 425.007px; } }
+/* gold clouds: timing.ts cloudMoves sampled at CLOUD_STOPS */
+@keyframes road-cloud-a { 0% { translate: 0% 0%; } 20% { translate: -2.74% 0%; } 40% { translate: -8.31% 0%; } 60% { translate: -15.9% 0%; } 70% { translate: -20.35% -2.81%; } 80% { translate: -25.19% -11.25%; } 90% { translate: -30.42% -25.31%; } 100% { translate: -36% -45%; } }
+@keyframes road-cloud-b { 0% { translate: 0% 0%; } 20% { translate: -1.52% 0%; } 40% { translate: -4.62% 0%; } 60% { translate: -8.83% 0%; } 70% { translate: -4.43% 0%; } 80% { translate: 13.5% 0%; } 90% { translate: 44.98% 0%; } 100% { translate: 90% 0%; } }
+@keyframes road-cloud-c { 0% { translate: 0% 0%; } 20% { translate: -3.2% 0%; } 40% { translate: -9.69% 0%; } 60% { translate: -18.55% 0%; } 70% { translate: -23.74% 2.87%; } 80% { translate: -29.39% 11.5%; } 90% { translate: -35.48% 25.88%; } 100% { translate: -42% 46%; } }

@@ -1,0 +1,244 @@
+/* Summary — 覚書 · 版下 The Drawing (DESIGN §6.2). Owner: WP-05. No WebGL view (GPU rest). */
+[data-section="summary"] { min-height: 110vh; }
+
+/* ------------------------------------------------------------------ the book spread (匡郭, 版心 fold at 54 %) */
+[data-section="summary"] .summary__spread {
+  --sp-pad: var(--s-7);
+  --sp-gap: var(--s-8);
+  /* the 版心 fold line (marks.css --fold) sits exactly in the middle of the column gap */
+  --fold: calc(var(--sp-pad) + (100% - 2 * var(--sp-pad) - var(--sp-gap)) * .54 + var(--sp-gap) / 2);
+  display: grid;
+  grid-template-columns: 54fr 46fr;
+  column-gap: var(--sp-gap);
+  padding: var(--s-8) var(--sp-pad);
+  view-timeline: --sumspread block;
+}
+[data-section="summary"] .summary__page { display: grid; align-content: start; gap: var(--s-5); min-width: 0; }
+[data-section="summary"] .summary__page--left > .artboard__head { margin-bottom: var(--s-4); }
+[data-section="summary"] .artboard__head > .stage-line.tate { max-height: 16em; letter-spacing: .12em; }
+[data-section="summary"] .artboard__head .takeaway { max-width: 24em; }
+[data-section="summary"] .artboard__head:lang(en) .takeaway { max-width: 34ch; }
+[data-section="summary"] .summary__paras { display: grid; gap: var(--s-4); max-width: 36em; }
+[data-section="summary"] .summary__paras:lang(en) { max-width: 64ch; }
+[data-section="summary"] .summary__h3 {
+  font-size: var(--fs-h3);
+  font-weight: 700;
+  margin-top: var(--s-6);
+  color: var(--ink);
+}
+[data-section="summary"] .summary__h3:lang(en) { font-family: "Schibsted Grotesk", var(--f-body-en); }
+[data-section="summary"] .summary__h3--small { font-size: var(--fs-body); margin-top: var(--s-4); }
+
+/* ---- the four dated results: number on a cyan baseline guide (text-box trimmed to the alphabetic baseline) */
+[data-section="summary"] .summary__results { display: grid; gap: var(--s-7); margin-top: var(--s-2); }
+[data-section="summary"] .result { display: grid; gap: var(--s-2); position: relative; }
+[data-section="summary"] .result__num {
+  font-family: var(--f-chrome);
+  font-weight: 500;
+  font-stretch: 75%;              /* Martian Mono's narrow cut (wdth 75): poster numerals that keep to the page */
+  font-size: clamp(44px, 3.6vw + 14px, 96px);
+  line-height: 1;
+  letter-spacing: -.01em;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+  text-box: trim-both cap alphabetic;
+  padding-top: .02em;
+  margin-bottom: var(--s-3);
+  /* the baseline guide: runs the full width of the page to the fold, where the ray to Hokusai's VP turns up */
+  background: linear-gradient(var(--guide), var(--guide)) left bottom / calc(100% + var(--sp-gap) / 2) 1px no-repeat;
+  white-space: nowrap;
+  --plate-inset: auto auto -14px 0;
+}
+[data-section="summary"] .result__num[data-print-shape="band"]::before { width: 38%; height: 5px; }
+[data-section="summary"] .result__label { font-weight: 500; font-size: var(--fs-body); max-width: 30em; }
+[data-section="summary"] .result__period { font-family: var(--f-chrome); font-size: var(--fs-caption); color: var(--guide-label); letter-spacing: .02em; }
+[data-section="summary"] .result__context { font-size: var(--fs-small); color: var(--ink-2); max-width: 34em; }
+[data-section="summary"] .result__context:lang(en), [data-section="summary"] .result__label:lang(en) { max-width: 52ch; }
+/* artboard readout (JS): X/Y of the number's baseline origin in artboard px, like Illustrator's Info panel */
+[data-section="summary"] .result__xy {
+  position: absolute;
+  right: 0;
+  top: 0;
+  font-family: var(--f-mono);
+  font-size: var(--fs-chrome);
+  letter-spacing: .04em;
+  color: var(--guide-label);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  pointer-events: none;
+}
+[data-section="summary"] .summary__now { max-width: 36em; }
+
+/* ---- right page: the figure and the side notes travel with the long left page (sticky) */
+[data-section="summary"] .summary__aside { position: sticky; top: calc(var(--chrome-top) + var(--s-6)); display: grid; gap: var(--s-5); }
+[data-section="summary"] .summary__figure { width: 100%; }
+[data-section="summary"] .summary__figure .print__mat { position: relative; }
+[data-section="summary"] .summary__side {
+  display: grid;
+  gap: var(--s-3);
+  margin-top: var(--s-2);
+  margin-inline-start: 22%;
+}
+[data-section="summary"] .summary__line { font-size: var(--fs-small); color: var(--ink-2); }
+[data-section="summary"] .summary__overlap { display: grid; gap: var(--s-2); font-size: var(--fs-small); }
+[data-section="summary"] .summary__overlap li { display: flex; flex-wrap: wrap; gap: 0 var(--s-3); align-items: baseline; }
+[data-section="summary"] .overlap__hours { color: var(--ink); }
+[data-section="summary"] .overlap__now { color: var(--guide-label); font-size: var(--fs-caption); }
+[data-section="summary"] .overlap__now:empty { display: none; }
+[data-section="summary"] .overlap__now[data-on]::after { content: " · " attr(data-on); color: var(--select-text); }
+
+/* handed to the cover's block while it turns (§2.2): the mat hides, the caption stays; no JS → always visible */
+[data-section="summary"] [data-handoff="hanshita"][data-handoff-state="pending"] .print__mat { background: transparent; }
+[data-section="summary"] [data-handoff="hanshita"][data-handoff-state="pending"] .print__mat > picture { visibility: hidden; }
+
+/* ------------------------------------------------------------------ Hokusai's construction, traced (引く) */
+[data-section="summary"] .summary__guides {
+  position: absolute;
+  inset: var(--s-3);
+  width: calc(100% - 2 * var(--s-3));
+  height: calc(100% - 2 * var(--s-3));
+  pointer-events: none;
+  overflow: visible;
+}
+[data-section="summary"] .sg-line { fill: none; stroke: var(--guide); stroke-width: 1px; vector-effect: non-scaling-stroke; opacity: .9; }
+[data-section="summary"] .sg-mark rect { fill: none; stroke: var(--select); stroke-width: 1px; vector-effect: non-scaling-stroke; }
+[data-section="summary"] .sg-mark text { fill: var(--select-text); font-family: var(--f-chrome); font-size: 38px; letter-spacing: .02em; }
+@media (min-resolution: 2dppx) { [data-section="summary"] .sg-line, [data-section="summary"] .sr-ray, [data-section="summary"] .sr-base { stroke-width: .5px; } }
+
+@supports (animation-timeline: view()) {
+  html:not([data-motion="off"]) [data-section="summary"] .sg-line {
+    stroke-dasharray: 1 1;
+    animation: sum-draw linear both;
+    animation-timeline: --sumspread;
+    animation-range: entry calc(140px + var(--o) * 55px) entry calc(420px + var(--o) * 55px);
+  }
+  html:not([data-motion="off"]) [data-section="summary"] .sg-mark {
+    animation: sum-mark linear both;
+    animation-timeline: --sumspread;
+    animation-range: entry calc(320px + var(--o) * 55px) entry calc(400px + var(--o) * 55px);
+  }
+  html:not([data-motion="off"]) [data-section="summary"] .sr-ray {
+    stroke-dasharray: 1 1;
+    animation: sum-draw linear both;
+    animation-timeline: --sumspread;
+    animation-range: entry var(--a) entry var(--b);
+  }
+  html:not([data-motion="off"]) [data-section="summary"] .sr-mark, html:not([data-motion="off"]) [data-section="summary"] .result__xy {
+    animation: sum-mark linear both;
+    animation-timeline: --sumspread;
+    animation-range: entry var(--b) entry calc(var(--b) + 60px);
+  }
+}
+@supports not (animation-timeline: view()) {
+  html.js:not([data-motion="off"]) [data-section="summary"] .summary__spread:not(.is-drawn) :is(.sg-line, .sr-ray) { stroke-dasharray: 1 1; stroke-dashoffset: 1; }
+  html.js:not([data-motion="off"]) [data-section="summary"] .summary__spread :is(.sg-line, .sr-ray) {
+    stroke-dasharray: 1 1;
+    transition: stroke-dashoffset var(--dur-jo) var(--ease-jo);
+    transition-delay: calc(var(--o, 0) * 90ms);
+  }
+  html.js:not([data-motion="off"]) [data-section="summary"] .summary__spread:not(.is-drawn) :is(.sg-mark, .sr-mark, .result__xy) { opacity: 0; }
+  html.js:not([data-motion="off"]) [data-section="summary"] .summary__spread :is(.sg-mark, .sr-mark, .result__xy) { transition: opacity var(--dur-ha) var(--ease-jo) 900ms; }
+}
+@keyframes sum-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+@keyframes sum-mark { from { opacity: 0; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) {
+  [data-section="summary"] :is(.sg-line, .sg-mark, .sr-ray, .sr-mark, .result__xy) { animation: none !important; transition: none !important; stroke-dashoffset: 0 !important; opacity: 1 !important; }
+}
+
+/* ---- the rays (JS): from each result's baseline at the fold up to Hokusai's vanishing point */
+[data-section="summary"] .summary__rays {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: visible;
+}
+[data-section="summary"] .sr-ray { fill: none; stroke: var(--guide); stroke-width: 1px; vector-effect: non-scaling-stroke; opacity: .85; }
+[data-section="summary"] .sr-mark rect { fill: var(--paper); stroke: var(--select); stroke-width: 1px; }
+[data-section="summary"] .sr-mark text { fill: var(--select-text); font-family: var(--f-chrome); font-size: 10px; letter-spacing: .03em; }
+
+/* ------------------------------------------------------------------ the career ledger */
+[data-section="summary"] .summary__ledger-title { margin-top: var(--s-9); margin-bottom: var(--s-4); }
+[data-section="summary"] .ledger { width: 100%; font-size: var(--fs-small); border-top: 3px solid var(--rule); }
+[data-section="summary"] .ledger thead th {
+  font-family: var(--f-chrome);
+  font-size: var(--fs-caption);
+  font-weight: 400;
+  letter-spacing: .04em;
+  color: var(--ink-2);
+  padding: var(--s-3) var(--s-4) var(--s-3) 0;
+  border-bottom: 1px solid var(--rule);
+}
+[data-section="summary"] .ledger tbody th, [data-section="summary"] .ledger td {
+  padding: var(--s-4) var(--s-5) var(--s-4) 0;
+  vertical-align: top;
+  border-bottom: 1px solid var(--guide);
+}
+[data-section="summary"] .ledger tbody tr:last-child > * { border-bottom: 1px solid var(--rule); }
+[data-section="summary"] .ledger__name { display: block; font-weight: 500; color: var(--ink); }
+[data-section="summary"] .ledger__desc { display: block; font-size: var(--fs-caption); color: var(--ink-2); font-weight: 400; margin-top: 2px; }
+[data-section="summary"] .ledger__dates { white-space: nowrap; color: var(--guide-label); font-size: var(--fs-caption); padding-top: calc(var(--s-4) + 2px); }
+[data-section="summary"] .ledger th:first-child { width: 22%; }
+[data-section="summary"] .ledger td:nth-child(2) { width: 24%; }
+[data-section="summary"] .ledger-dl { display: none; }
+
+/* ------------------------------------------------------------------ tablet: narrower spread */
+@media (max-width: 1023px) {
+  [data-section="summary"] .summary__spread { --sp-pad: var(--s-6); --sp-gap: var(--s-6); padding: var(--s-6) var(--sp-pad); }
+  [data-section="summary"] .summary__side { margin-inline-start: 0; }
+}
+/* ------------------------------------------------------------------ phones: one column, ledger as a <dl> */
+@media (max-width: 767px) {
+  [data-section="summary"] { min-height: 0; }
+  [data-section="summary"] .summary__spread { grid-template-columns: 1fr; row-gap: var(--s-8); padding: var(--s-5) var(--s-4); }
+  [data-section="summary"] .summary__side { margin-inline-start: 0; }
+  [data-section="summary"] .summary__rays, [data-section="summary"] .result__xy { display: none; }
+  [data-section="summary"] .summary__aside { position: static; }
+  [data-section="summary"] .result__num { background-size: 100% 1px; white-space: normal; }
+  [data-section="summary"] .ledger { display: none; }
+  [data-section="summary"] .ledger-dl { display: grid; border-top: 3px solid var(--rule); }
+  [data-section="summary"] .ledger-dl__row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--s-1);
+    padding: var(--s-4) 0;
+    border-bottom: 1px solid var(--guide);
+  }
+  [data-section="summary"] .ledger-dl__row dt { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0 var(--s-3); color: var(--ink); font-size: var(--fs-body); }
+  [data-section="summary"] .ledger-dl__role { font-weight: 500; font-size: var(--fs-small); }
+  [data-section="summary"] .ledger-dl__scope { font-size: var(--fs-small); color: var(--ink-2); }
+}
+
+/* ------------------------------------------------------------------ band summary-road: the 消点 match cut (JS) */
+[data-section="summary"] > .ma[data-band="summary-road"] { z-index: 3; view-timeline: --sumroad block; }
+[data-section="summary"] .match {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  pointer-events: none;
+  overflow: hidden;
+  opacity: 0;
+}
+[data-section="summary"] .match svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+[data-section="summary"] .mc-ray { fill: none; stroke: var(--guide); stroke-width: 1px; vector-effect: non-scaling-stroke; stroke-dasharray: 1 1; }
+[data-section="summary"] .mc-horizon { stroke-dasharray: none; }
+[data-section="summary"] .mc-vp rect { fill: none; stroke: var(--select); stroke-width: 1px; }
+[data-section="summary"] .mc-vp text { fill: var(--select-text); font-family: var(--f-chrome); font-size: 10px; letter-spacing: .03em; }
+[data-section="summary"] .mc-fan { transform-box: view-box; }
+@supports (animation-timeline: view()) {
+  html:not([data-motion="off"]) [data-section="summary"] .match { animation: mc-show linear both; animation-timeline: --sumroad; animation-range: cover 0% cover 100%; }
+  html:not([data-motion="off"]) [data-section="summary"] .mc-fan { animation: mc-fan linear both; animation-timeline: --sumroad; animation-range: cover 0% cover 80%; }
+  html:not([data-motion="off"]) [data-section="summary"] .mc-ray { animation: mc-ray linear both; animation-timeline: --sumroad; animation-range: cover 5% cover 72%; }
+}
+@supports not (animation-timeline: view()) {
+  html:not([data-motion="off"]) [data-section="summary"] .match { opacity: var(--mc-o, 0); }
+  html:not([data-motion="off"]) [data-section="summary"] .mc-fan { transform: scale(var(--mc-s, 1.35)); }
+  html:not([data-motion="off"]) [data-section="summary"] .mc-ray { stroke-dashoffset: var(--mc-d, 1); }
+}
+@keyframes mc-show { 0% { opacity: 0; } 14% { opacity: 1; } 80% { opacity: 1; } 100% { opacity: 0; } }
+@keyframes mc-fan { from { transform: scale(1.35); } to { transform: scale(1); } }
+@keyframes mc-ray { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+html[data-motion="off"] [data-section="summary"] .match, html[data-proof] [data-section="summary"] .match { display: none; }
+@media (prefers-reduced-motion: reduce) { [data-section="summary"] .match { display: none; } }

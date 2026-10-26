@@ -1,0 +1,783 @@
+{
+  "tokaido/01-nihonbashi.jpg": {
+    "w": 1686,
+    "h": 1103,
+    "widths": [
+      128,
+      640,
+      1280,
+      1686
+    ],
+    "dominant": "#444c49",
+    "accent": [
+      "#b38c6a",
+      "#335b6a",
+      "#896b53"
+    ]
+  },
+  "tokaido/02-shinagawa.jpg": {
+    "w": 1686,
+    "h": 1143,
+    "widths": [],
+    "dominant": "#a99675",
+    "accent": [
+      "#355e79",
+      "#263a4e",
+      "#a48c6c"
+    ]
+  },
+  "tokaido/11-hakone.jpg": {
+    "w": 1686,
+    "h": 1116,
+    "widths": [
+      128,
+      640,
+      1280,
+      1686
+    ],
+    "dominant": "#4c5350",
+    "accent": [
+      "#977561",
+      "#b4c085",
+      "#ad9076"
+    ]
+  },
+  "tokaido/12-mishima.jpg": {
+    "w": 1686,
+    "h": 1117,
+    "widths": [
+      128,
+      640,
+      1280,
+      1686
+    ],
+    "dominant": "#7f847c",
+    "accent": [
+      "#38465d"
+    ]
+  },
+  "tokaido/13-numazu.jpg": {
+    "w": 1686,
+    "h": 1144,
+    "widths": [],
+    "dominant": "#b2c0b2",
+    "accent": [
+      "#987256",
+      "#527c92",
+      "#a48d72"
+    ]
+  },
+  "tokaido/14-hara.jpg": {
+    "w": 1686,
+    "h": 1150,
+    "widths": [
+      128,
+      640,
+      1280,
+      1686
+    ],
+    "dominant": "#bfaa8c",
+    "accent": [
+      "#d4a486"
+    ]
+  },
+  "tokaido/16-kanbara.jpg": {
+    "w": 1686,
+    "h": 1111,
+    "widths": [],
+    "dominant": "#d0c5a6",
+    "accent": []
+  },
+  "tokaido/17-yui.jpg": {
+    "w": 1686,
+    "h": 1074,
+    "widths": [],
+    "dominant": "#e3dcc4",
+    "accent": [
+      "#deba90",
+      "#88614b",
+      "#9e7d65"
+    ]
+  },
+  "tokaido/24-shimada.jpg": {
+    "w": 1686,
+    "h": 1118,
+    "widths": [
+      128,
+      640,
+      1280,
+      1686
+    ],
+    "dominant": "#6f9791",
+    "accent": [
+      "#376e84",
+      "#b49e77",
+      "#cab98e"
+    ]
+  },
+  "tokaido/39-okazaki.jpg": {
+    "w": 1686,
+    "h": 1116,
+    "widths": [
+      128,
+      640,
+      1280,
+      1686
+    ],
+    "dominant": "#7a614e",
+    "accent": [
+      "#205c81",
+      "#25455d",
+      "#efcf9d"
+    ]
+  },
+  "tokaido/46-shono.jpg": {
+    "w": 1686,
+    "h": 1139,
+    "widths": [
+      128,
+      640,
+      1280,
+      1686
+    ],
+    "dominant": "#b29c8a",
+    "accent": []
+  },
+  "tokaido/47-kameyama.jpg": {
+    "w": 1686,
+    "h": 1129,
+    "widths": [],
+    "dominant": "#9d9b89",
+    "accent": []
+  },
+  "tokaido/48-seki.jpg": {
+    "w": 1686,
+    "h": 1130,
+    "widths": [
+      128,
+      640,
+      1280,
+      1686
+    ],
+    "dominant": "#467779",
+    "accent": [
+      "#4c8480",
+      "#ba9e7e",
+      "#9a8268"
+    ]
+  },
+  "tokaido/55-kyoto.jpg": {
+    "w": 1884,
+    "h": 1271,
+    "widths": [
+      128,
+      640,
+      1280,
+      1884
+    ],
+    "dominant": "#4c525a",
+    "accent": [
+      "#c27b65",
+      "#cca384",
+      "#405f7a"
+    ]
+  },
+  "rinpa/korin-irises-yatsuhashi.jpg": {
+    "w": 2000,
+    "h": 970,
+    "widths": [
+      128,
+      640,
+      1280,
+      2000
+    ],
+    "dominant": "#276344",
+    "accent": [
+      "#c5985b",
+      "#dfb274",
+      "#1a6343"
+    ]
+  },
+  "rinpa/korin-rough-waves.jpg": {
+    "w": 2000,
+    "h": 1781,
+    "widths": [
+      128,
+      640,
+      1280,
+      2000
+    ],
+    "dominant": "#445141",
+    "accent": [
+      "#a8956e",
+      "#877957"
+    ]
+  },
+  "rinpa/kiitsu-morning-glories.jpg": {
+    "w": 2000,
+    "h": 962,
+    "widths": [
+      128,
+      640,
+      1280,
+      2000
+    ],
+    "dominant": "#1c6e3f",
+    "accent": [
+      "#e1a441",
+      "#c28d31",
+      "#a1761d"
+    ]
+  },
+  "rinpa/fans-upon-waves.jpg": {
+    "w": 1979,
+    "h": 753,
+    "widths": [
+      128,
+      640,
+      1280,
+      1979
+    ],
+    "dominant": "#7f664d",
+    "accent": [
+      "#c09362",
+      "#9d7653",
+      "#705a45"
+    ]
+  },
+  "rinpa/bamboo-grove.jpg": {
+    "w": 2000,
+    "h": 962,
+    "widths": [],
+    "dominant": "#d8a85c",
+    "accent": [
+      "#e9b460",
+      "#c89b55",
+      "#a57942"
+    ]
+  },
+  "rinpa/hoitsu-cherry-maple.jpg": {
+    "w": 2000,
+    "h": 986,
+    "widths": [],
+    "dominant": "#84805f",
+    "accent": [
+      "#e0c47a",
+      "#b69f65",
+      "#8d7d5a"
+    ]
+  },
+  "rinpa/mitsumochi-poppies.jpg": {
+    "w": 1974,
+    "h": 887,
+    "widths": [
+      128,
+      640,
+      1280,
+      1974
+    ],
+    "dominant": "#cca261",
+    "accent": [
+      "#e8b672",
+      "#c89f5d",
+      "#a58650"
+    ]
+  },
+  "rinpa/sotatsu-moon-autumn-grasses.jpg": {
+    "w": 1976,
+    "h": 879,
+    "widths": [
+      128,
+      640,
+      1280,
+      1976
+    ],
+    "dominant": "#7d5816",
+    "accent": [
+      "#a57528",
+      "#865915",
+      "#be8d45"
+    ]
+  },
+  "hokusai/great-wave.jpg": {
+    "w": 2000,
+    "h": 1344,
+    "widths": [],
+    "dominant": "#2c4b6a",
+    "accent": [
+      "#295376",
+      "#52758c"
+    ]
+  },
+  "hokusai/red-fuji.jpg": {
+    "w": 1686,
+    "h": 1138,
+    "widths": [],
+    "dominant": "#c17761",
+    "accent": [
+      "#bc715a",
+      "#3d5b73",
+      "#2c3e57"
+    ]
+  },
+  "hokusai/ejiri-wind.jpg": {
+    "w": 1686,
+    "h": 1148,
+    "widths": [],
+    "dominant": "#465c60",
+    "accent": [
+      "#c08f7a"
+    ]
+  },
+  "hokusai/shower-below-summit.jpg": {
+    "w": 1686,
+    "h": 1167,
+    "widths": [],
+    "dominant": "#674c43",
+    "accent": [
+      "#31475f",
+      "#744e43"
+    ]
+  },
+  "hokusai/ono-falls.jpg": {
+    "w": 1360,
+    "h": 2000,
+    "widths": [],
+    "dominant": "#9ea68d",
+    "accent": [
+      "#b48269",
+      "#d1b090",
+      "#3f5b64"
+    ]
+  },
+  "hokusai/manga-perspective.jpg": {
+    "w": 2000,
+    "h": 1528,
+    "widths": [
+      128,
+      640,
+      1280,
+      2000
+    ],
+    "dominant": "#aa9c83",
+    "accent": [
+      "#816750",
+      "#ae9b7a"
+    ]
+  },
+  "hokusai/manga-pattern-construction.jpg": {
+    "w": 2000,
+    "h": 1544,
+    "widths": [
+      128,
+      640,
+      1280,
+      2000
+    ],
+    "dominant": "#b4a891",
+    "accent": [
+      "#866a50",
+      "#a89778"
+    ]
+  },
+  "hokusai/manga-torii-proportion.jpg": {
+    "w": 2000,
+    "h": 1560,
+    "widths": [],
+    "dominant": "#bbab8f",
+    "accent": [
+      "#8e7e64"
+    ]
+  },
+  "hokusai/manga-pagoda-roof.jpg": {
+    "w": 2000,
+    "h": 1528,
+    "widths": [
+      128,
+      640,
+      1280,
+      2000
+    ],
+    "dominant": "#c0b195",
+    "accent": [
+      "#9b8968"
+    ]
+  },
+  "hokusai/manga-wave-studies.jpg": {
+    "w": 2000,
+    "h": 1585,
+    "widths": [],
+    "dominant": "#948469",
+    "accent": [
+      "#8d7a5b",
+      "#a79575"
+    ]
+  },
+  "hokusai/manga-whirlpools.jpg": {
+    "w": 2000,
+    "h": 1591,
+    "widths": [],
+    "dominant": "#e3d4b5",
+    "accent": [
+      "#8f7f62"
+    ]
+  },
+  "pattern/seiei-arcs-wave.jpg": {
+    "w": 2000,
+    "h": 1335,
+    "widths": [],
+    "dominant": "#9b9382",
+    "accent": [
+      "#aa855b",
+      "#685846"
+    ]
+  },
+  "pattern/seiei-moon-kikko.jpg": {
+    "w": 2000,
+    "h": 1335,
+    "widths": [
+      128,
+      640,
+      1280,
+      2000
+    ],
+    "dominant": "#6b6752",
+    "accent": [
+      "#d2a96b",
+      "#a48e69",
+      "#775c44"
+    ]
+  },
+  "pattern/kosode-pattern-book.jpg": {
+    "w": 2000,
+    "h": 1449,
+    "widths": [],
+    "dominant": "#c9b088",
+    "accent": [
+      "#d84d3a",
+      "#cb9273",
+      "#dec193"
+    ]
+  },
+  "pattern/moronobu-kimono-template.jpg": {
+    "w": 2000,
+    "h": 1335,
+    "widths": [],
+    "dominant": "#b4a68e",
+    "accent": []
+  },
+  "pattern/korin-designs-stream.jpg": {
+    "w": 1787,
+    "h": 1281,
+    "widths": [],
+    "dominant": "#c9b39e",
+    "accent": []
+  },
+  "pattern/stencil-asanoha.jpg": {
+    "w": 2000,
+    "h": 1200,
+    "widths": [
+      640,
+      1280
+    ],
+    "dominant": "#6b5c57",
+    "accent": [
+      "#523e36"
+    ]
+  },
+  "pattern/stencil-waves.jpg": {
+    "w": 1361,
+    "h": 1826,
+    "widths": [],
+    "dominant": "#e9e4e8",
+    "accent": [
+      "#432314",
+      "#644130"
+    ]
+  },
+  "pattern/stencil-meander.jpg": {
+    "w": 2000,
+    "h": 1530,
+    "widths": [],
+    "dominant": "#6b5950",
+    "accent": [
+      "#5a473c"
+    ]
+  },
+  "pattern/stencil-sayagata.jpg": {
+    "w": 2000,
+    "h": 1377,
+    "widths": [
+      640,
+      1280
+    ],
+    "dominant": "#eef0f1",
+    "accent": []
+  },
+  "pattern/stencil-undulating-lines.jpg": {
+    "w": 1906,
+    "h": 1520,
+    "widths": [
+      640,
+      1280
+    ],
+    "dominant": "#80746c",
+    "accent": [
+      "#483527",
+      "#624d3e"
+    ]
+  },
+  "ukie/toyoharu-dutch-perspective.jpg": {
+    "w": 1686,
+    "h": 1070,
+    "widths": [
+      128,
+      640,
+      1280,
+      1686
+    ],
+    "dominant": "#e1c996",
+    "accent": [
+      "#c1956e",
+      "#e1c894",
+      "#92825d"
+    ]
+  },
+  "ukie/toyoharu-kabuki-perspective.jpg": {
+    "w": 1686,
+    "h": 1157,
+    "widths": [
+      128,
+      640,
+      1280,
+      1686
+    ],
+    "dominant": "#896b51",
+    "accent": [
+      "#c67348",
+      "#c5916d",
+      "#9a7358"
+    ]
+  },
+  "ukie/hokusai-niomon-perspective.jpg": {
+    "w": 1686,
+    "h": 1140,
+    "widths": [],
+    "dominant": "#667153",
+    "accent": [
+      "#e5736a",
+      "#c36356",
+      "#ccb590"
+    ]
+  },
+  "night/star-mandala.jpg": {
+    "w": 1861,
+    "h": 2000,
+    "widths": [],
+    "dominant": "#7b5b3e",
+    "accent": [
+      "#876443",
+      "#664c38"
+    ]
+  },
+  "night/cygnus-photograph.jpg": {
+    "w": 1632,
+    "h": 2000,
+    "widths": [],
+    "dominant": "#382624",
+    "accent": [
+      "#301d1c"
+    ]
+  },
+  "night/hiroshige-cuckoo-moon.jpg": {
+    "w": 1686,
+    "h": 1332,
+    "widths": [],
+    "dominant": "#ded4b1",
+    "accent": [
+      "#164a68",
+      "#46818c",
+      "#183049"
+    ]
+  },
+  "night/yoshitoshi-yasumasa-moon.jpg": {
+    "w": 1686,
+    "h": 879,
+    "widths": [],
+    "dominant": "#817467",
+    "accent": [
+      "#d39f81"
+    ]
+  },
+  "night/hiroshige-ryogoku-moon.jpg": {
+    "w": 1686,
+    "h": 1040,
+    "widths": [
+      128,
+      640,
+      1280,
+      1686
+    ],
+    "dominant": "#859781",
+    "accent": [
+      "#967853",
+      "#d8bb8c",
+      "#bb9f76"
+    ]
+  },
+  "landscape/shonen-aged-pines.jpg": {
+    "w": 2000,
+    "h": 962,
+    "widths": [
+      128,
+      640,
+      1280,
+      2000
+    ],
+    "dominant": "#b58f58",
+    "accent": [
+      "#9c7441",
+      "#b99159",
+      "#775731"
+    ]
+  },
+  "landscape/motonobu-ink-landscape.jpg": {
+    "w": 1686,
+    "h": 1157,
+    "widths": [
+      128,
+      640,
+      1280,
+      1686
+    ],
+    "dominant": "#cfc5a7",
+    "accent": [
+      "#b89f76"
+    ]
+  },
+  "landscape/soami-landscape.jpg": {
+    "w": 2000,
+    "h": 1468,
+    "widths": [],
+    "dominant": "#786959",
+    "accent": [
+      "#9c866e"
+    ]
+  },
+  "landscape/tobun-snowy-fan.jpg": {
+    "w": 2000,
+    "h": 1502,
+    "widths": [],
+    "dominant": "#927c5f",
+    "accent": [
+      "#bfa277",
+      "#977d5a"
+    ]
+  },
+  "writing/gakutei-brush.jpg": {
+    "w": 1686,
+    "h": 1922,
+    "widths": [
+      128,
+      640,
+      1280,
+      1686
+    ],
+    "dominant": "#e3dcc0",
+    "accent": [
+      "#988261",
+      "#796448"
+    ]
+  },
+  "writing/gakutei-paper.jpg": {
+    "w": 1686,
+    "h": 1915,
+    "widths": [
+      128,
+      640,
+      1280,
+      1686
+    ],
+    "dominant": "#dfd6b7",
+    "accent": [
+      "#856644",
+      "#d9d096"
+    ]
+  },
+  "writing/hokkei-first-writing.jpg": {
+    "w": 1686,
+    "h": 1862,
+    "widths": [
+      128,
+      640,
+      1280,
+      1686
+    ],
+    "dominant": "#e9e2d0",
+    "accent": [
+      "#b57640",
+      "#e5d68c",
+      "#bb9a6a"
+    ]
+  },
+  "writing/gakutei-spider-web.jpg": {
+    "w": 1686,
+    "h": 1903,
+    "widths": [
+      128,
+      640,
+      1280,
+      1686
+    ],
+    "dominant": "#6a5f38",
+    "accent": [
+      "#b87851",
+      "#876443",
+      "#c4a580"
+    ]
+  },
+  "writing/gakutei-book-cart.jpg": {
+    "w": 1686,
+    "h": 1936,
+    "widths": [
+      128,
+      640,
+      1280,
+      1686
+    ],
+    "dominant": "#7d6c49",
+    "accent": [
+      "#e09873",
+      "#c18561",
+      "#976d49"
+    ]
+  },
+  "tokaido/12-mishima-detail.jpg": {
+    "w": 1045,
+    "h": 1117,
+    "widths": [
+      128,
+      640,
+      1045
+    ],
+    "dominant": "#7f847c",
+    "accent": [
+      "#38465d"
+    ]
+  },
+  "tokaido/11-hakone-detail.jpg": {
+    "w": 1265,
+    "h": 1116,
+    "widths": [
+      128,
+      640,
+      1265
+    ],
+    "dominant": "#4c5350",
+    "accent": [
+      "#977561",
+      "#b4c085",
+      "#ad9076"
+    ]
+  }
+}

@@ -1,0 +1,131 @@
+/* Skills — 組子 Joinery (DESIGN §6.5). Owner: WP-08.
+   Desktop: header, then the sticky shoji stage (cols 1–8) beside the tool list (cols 9–12).
+   Below 1024 px everything is in flow; below 768 px the shoji turns to 2 × 3. */
+[data-section="skills"] {
+  .skills__grid { display: grid; grid-template-columns: repeat(var(--cols), minmax(0, 1fr)); column-gap: var(--gutter); align-items: start; }
+  .skills__stage { grid-column: 1 / -1; display: flex; flex-direction: column; gap: var(--s-3); }
+  .skills__list { grid-column: 1 / -1; }
+
+  /* ---- the shoji frame box: SVG lattice, view placeholder, DOM diagram share its coordinates ---- */
+  .skills__shoji { margin: 0; display: grid; gap: var(--s-3); }
+  .skills__frame { position: relative; width: 100%; aspect-ratio: 29.2 / 19.7; }
+  .skills__defs { position: absolute; width: 0; height: 0; overflow: hidden; }
+  .skills__lattice, .skills__arch-fig, .skills__arch-fig > svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  .skills__lattice--m, .skills__diagram--m { display: none !important; }
+  .skills__view { position: absolute; inset: 0; pointer-events: none; background: none !important; }
+  .skills__view[data-reach="up"] { top: -120lvh; }
+  .skills__view[data-reach="down"] { bottom: -110lvh; }
+  .skills__shoji.is-live .skills__lattice { visibility: hidden; }
+  .skills__shoji:not(.is-live) .skills__lattice { opacity: calc(1 - var(--dg, 0)); transition: opacity var(--dur-ha) var(--ease-ha); }
+  .skills__arch-fig { opacity: var(--dg, 0); pointer-events: none; }
+
+  /* static lattice (no JS, static/software tier, context loss): the same segments as the 3D */
+  .sk-paper { fill: var(--paper-print); }
+  .sk-frame { fill: color-mix(in srgb, var(--accent-skills) 72%, var(--wood-2)); }
+  .sk-j, .sk-l, .sk-sh, .sk-run, .sk-inlay { fill: none; stroke-linecap: butt; }
+  .sk-j { stroke: var(--accent-skills); stroke-width: .08; }
+  .sk-l { stroke: var(--accent-skills); stroke-width: .066; }
+  .sk-sh { stroke: var(--guide-label); stroke-width: .08; opacity: .22; }
+  .sk-run { stroke: var(--wood-2); stroke-width: .1; }
+  .sk-inlay { stroke: var(--ink); stroke-width: .13; }
+  .sk-run.is-on { stroke: var(--select); }
+
+  /* the stack diagram (DOM SVG over the strips' shadow) */
+  .sk-d-box, .sk-d-edge { fill: none; stroke: var(--ink); stroke-width: .07; }
+  .sk-d-edge { stroke-width: .06; }
+  .sk-d-dash { stroke-dasharray: .5 .35; stroke: var(--guide-label); }
+  .sk-d-name { fill: var(--ink); font-family: var(--f-chrome); dominant-baseline: middle; }
+  .sk-d-role { fill: var(--guide-label); font-family: var(--f-display, var(--f-chrome)); }
+
+  /* ---- readout and the spec caption ---- */
+  .skills__spec { justify-self: end; max-width: 34%; font: var(--fs-caption)/1.5 var(--f-chrome); color: var(--ink-2); text-align: end; }
+  .skills__readout {
+    min-height: 2.6em; margin: 0; display: flex; flex-wrap: wrap; align-items: baseline; column-gap: .5em;
+    font: var(--fs-small)/1.4 var(--f-chrome); color: var(--ink-2);
+  }
+  .ro__name { font-family: var(--f-display, inherit); font-size: var(--fs-body); color: var(--ink); }
+  .ro__n { font-family: "Handjet", var(--f-mono); font-size: 1.6em; line-height: 1; color: var(--accent-text); font-variation-settings: "ELSH" 16; }
+  .ro__u, .ro__k { margin-inline-start: -.3em; }
+  .ro__k { margin-inline-start: .4em; }
+  .ro__s { flex-basis: 100%; color: var(--ink-2); }
+
+  /* ---- the list ---- */
+  .skills__cols, .skt { display: grid; grid-template-columns: minmax(0, 1fr) 52px 52px 56px; column-gap: var(--s-3); align-items: baseline; }
+  .skills__cols { margin: 0 0 var(--s-4); font: var(--fs-chrome)/1.4 var(--f-chrome); letter-spacing: .04em; color: var(--ink-2); text-align: end; }
+  .skills__cols span:first-child { grid-column: 2; }
+  .skills__domain { margin-bottom: var(--s-7); }
+  .skills__domain-title { position: relative; isolation: isolate; display: flex; align-items: center; gap: var(--s-3); font-size: var(--fs-h3); line-height: 1.25; margin: 0 0 var(--s-2); color: var(--accent-text); }
+  .skills__glyph { flex: none; width: 1.3em; height: 1.3em; }
+  .skills__glyph .sk-j, .skills__glyph .sk-l { stroke: var(--accent-text); }
+  .skills__domain--legend .skills__domain-title::before {
+    content: ""; position: absolute; z-index: -1; inset: -.2em -.2em -.2em 46%;
+    background: var(--accent); opacity: .26;
+    mask: var(--legend) left center / 22em auto repeat-x;
+  }
+  .skills__domain--asanoha { --legend: url("/img/gen/mask-asanoha.png"); }
+  .skills__domain--sayagata { --legend: url("/img/gen/mask-sayagata.png"); }
+  .skills__pattern { margin: 0 0 var(--s-4); font-size: var(--fs-caption); color: var(--ink-2); }
+  .skills__pattern-name { font-weight: 500; color: var(--ink); }
+  .skills__tools { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--s-3); }
+  .skt { position: relative; padding-block: 2px; outline: none; }
+  .skt__name { font-weight: 500; overflow-wrap: anywhere; text-decoration: underline 2px transparent; text-underline-offset: .32em; transition: text-decoration-color var(--dur-kyu) var(--ease-kyu); }
+  &:lang(ja) .skt__name { font-family: "DotGothic16", var(--f-body-ja); font-weight: 400; }
+  &:lang(en) .skt__name { font-family: var(--f-mono); font-size: var(--fs-small); font-weight: 400; }
+  .skt__years, .skt__last, .skt__projects { text-align: end; font: var(--fs-caption)/1 var(--f-chrome); color: var(--ink-2); white-space: nowrap; }
+  .skt__n {
+    font-family: "Handjet", var(--f-mono); font-size: 1.9em; font-weight: 500; color: var(--accent-text);
+    font-variation-settings: "ELSH" 2; transition: font-variation-settings var(--dur-ha) var(--ease-ha);
+  }
+  .skt__u { margin-inline-start: .15em; }
+  &:lang(en) .skt__u { margin-inline-start: .3em; }
+  .skt.is-past .skt__last { text-decoration: line-through 1px var(--ink-2); }
+  .skt__scale { grid-column: 1 / -1; font-size: var(--fs-caption); color: var(--ink-2); line-height: 1.5; }
+  .skt.is-on .skt__name { text-decoration-color: var(--dp); }
+  .skt.is-on .skt__n { font-variation-settings: "ELSH" 16; }
+  .skt.is-near .skt__name { text-decoration: underline 1px dotted var(--dp); }
+  .skills__kikko { width: 128px; margin: 0 0 var(--s-4) auto; }
+  .skills__arch { display: grid; gap: var(--s-3); margin: var(--s-6) 0 var(--s-7); }
+  .skills__toggle {
+    justify-self: start; display: inline-flex; align-items: center; gap: var(--s-2); min-height: 32px;
+    padding: var(--s-2) var(--s-3) var(--s-2) var(--s-2); background: var(--panel); color: var(--ink);
+    font: var(--fs-small)/1 var(--f-display, var(--f-chrome));
+  }
+  .skills__toggle svg { width: 18px; height: 18px; }
+  .skills__toggle[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+  .skills__caption { margin: 0; font-size: var(--fs-small); color: var(--ink-2); max-width: 36em; }
+  .skills__learn { max-width: 280px; margin: 0; }
+}
+
+/* without JS the diagram is its own figure under the lattice, and nothing is sticky */
+html.no-js [data-section="skills"] {
+  .skills__stage { position: static; height: auto; }
+  .skills__arch-fig { inset: calc(100% + var(--s-4)) 0 auto; opacity: 1; }
+  .skills__frame { margin-bottom: calc(100% / 1.482 + var(--s-4)); }
+}
+
+@media (min-width: 1024px) {
+  [data-section="skills"] {
+    .skills__stage {
+      --shoji-w: min(100%, calc((100lvh - var(--chrome-top) - 168px) * 1.482));
+      grid-column: 1 / span 8; position: sticky; top: 0; height: 100lvh; justify-content: center;
+      padding: calc(var(--chrome-top) + var(--s-3)) 0 var(--s-5);
+    }
+    .skills__shoji, .skills__readout { width: var(--shoji-w); }
+    .skills__list { grid-column: 9 / span 4; padding-top: calc(var(--chrome-top) + var(--s-3)); padding-bottom: 24lvh; }
+  }
+  html[data-proof] [data-section="skills"] .skills__stage { position: static; height: auto; }
+}
+@media (min-width: 768px) and (max-width: 1023px) {
+  [data-section="skills"] .skills__list { columns: 2; column-gap: var(--gutter); margin-top: var(--s-6); }
+  [data-section="skills"] .skills__domain, [data-section="skills"] .skills__arch { break-inside: avoid; }
+}
+@media (max-width: 767px) {
+  [data-section="skills"] {
+    .skills__frame { aspect-ratio: 19.7 / 29.2; }
+    .skills__lattice--d, .skills__diagram--d { display: none !important; }
+    .skills__lattice--m, .skills__diagram--m { display: block !important; }
+    .skills__spec { max-width: 50%; }
+    .skills__list { margin-top: var(--s-6); }
+  }
+  html.no-js [data-section="skills"] .skills__frame { margin-bottom: calc(148% + var(--s-4)); }
+}

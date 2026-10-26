@@ -1,0 +1,93 @@
+/* ===== src/styles/motion.css — registration snap, theme wipe, reduced motion (DESIGN §5). Owner: WP-00 =====
+   Animate only transform and opacity. No `will-change` here (set from JS only while an animation runs).
+   Key-block text is never animated: only the decorative plate pseudo-elements move. */
+
+/* ---- 摺る registration snap (§5.5) ----
+   Markup: <h2 class="display" data-print data-plate="6" data-print-shape="block">…</h2>
+   ::before (shape "block") = deckled colour area behind the heading at the plate fill, 18–40 % of the box;
+   ::after (shape "band") = a bokashi band. Offsets --mx/--my (±2…6 px) and --mr (±0.3°) are seeded per
+   element by ctx.motion.registerSnap() from ctx.print.seed. */
+[data-print] { position: relative; isolation: isolate; }
+[data-print]::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  /* lower-right offset block that peeks out under the baseline: it overlaps only the bottom ~30 % of the
+     glyphs, so the heading stays legible over every plate fill in both themes (per-heading override:
+     --plate-inset) */
+  inset: var(--plate-inset, 70% -3% -22% 20%);
+  background: var(--plate-fill, var(--plate-1));
+  opacity: .92;
+  clip-path: polygon(0 6%, 9% 0, 31% 3%, 58% 0, 83% 4%, 100% 0, 98% 38%, 100% 71%, 97% 100%, 64% 96%, 37% 100%, 12% 97%, 0 100%, 2% 62%);
+  pointer-events: none;
+}
+[data-print][data-print-shape="band"]::before {
+  inset: var(--plate-inset, auto -2% -10px -2%);
+  height: 6px;
+  clip-path: none;
+  background: linear-gradient(to right, var(--plate-fill, var(--plate-1)), transparent 92%);
+}
+[data-print][data-print-shape="band"]::after { content: none; }
+
+@keyframes hanmoto-print-in {
+  from { opacity: 0; transform: translate(var(--mx, 4px), var(--my, -3px)) rotate(var(--mr, .2deg)); }
+  to   { opacity: .92; transform: none; }
+}
+
+@supports (animation-timeline: view()) {
+  html:not([data-motion="off"]) [data-print] { view-timeline: --print block; }
+  html:not([data-motion="off"]) [data-print]::before {
+    animation: hanmoto-print-in linear both;
+    animation-timing-function: var(--ease-register);
+    animation-timeline: --print;
+    animation-range: entry 20% cover 35%;
+  }
+}
+@supports not (animation-timeline: view()) {
+  html.js:not([data-motion="off"]) [data-print]::before {
+    transition: opacity var(--dur-register) var(--ease-register), transform var(--dur-register) var(--ease-register);
+  }
+  html.js:not([data-motion="off"]) [data-print]:not(.is-printed)::before {
+    opacity: 0;
+    transform: translate(var(--mx, 4px), var(--my, -3px)) rotate(var(--mr, .2deg));
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-print]::before, [data-print]::after { animation: none !important; transition: none !important; opacity: .92 !important; transform: none !important; }
+}
+html[data-motion="off"] [data-print]::before { animation: none; transition: none; opacity: .92; transform: none; }
+
+/* ---- Separations (§3.2): html[data-sep-off~="N"] hides plate N only in decorative layers.
+   Text never disappears; plate 1 cannot be hidden. Decorative = the [data-print] pseudo-elements, SVG
+   descendants carrying data-plate, aria-hidden layers and .plate-layer elements. ---- */
+html[data-sep-off~="2"] [data-plate="2"][data-print]::before, html[data-sep-off~="2"] [data-plate="2"]:not([data-print]):is(svg *, [aria-hidden="true"], .plate-layer),
+html[data-sep-off~="3"] [data-plate="3"][data-print]::before, html[data-sep-off~="3"] [data-plate="3"]:not([data-print]):is(svg *, [aria-hidden="true"], .plate-layer),
+html[data-sep-off~="4"] [data-plate="4"][data-print]::before, html[data-sep-off~="4"] [data-plate="4"]:not([data-print]):is(svg *, [aria-hidden="true"], .plate-layer),
+html[data-sep-off~="5"] [data-plate="5"][data-print]::before, html[data-sep-off~="5"] [data-plate="5"]:not([data-print]):is(svg *, [aria-hidden="true"], .plate-layer),
+html[data-sep-off~="6"] [data-plate="6"][data-print]::before, html[data-sep-off~="6"] [data-plate="6"]:not([data-print]):is(svg *, [aria-hidden="true"], .plate-layer),
+html[data-sep-off~="7"] [data-plate="7"][data-print]::before, html[data-sep-off~="7"] [data-plate="7"]:not([data-print]):is(svg *, [aria-hidden="true"], .plate-layer),
+html[data-sep-off~="8"] [data-plate="8"][data-print]::before, html[data-sep-off~="8"] [data-plate="8"]:not([data-print]):is(svg *, [aria-hidden="true"], .plate-layer) {
+  visibility: hidden;
+}
+
+/* ---- 本摺 ⇄ 石摺 theme switch: ichimonji-bokashi wipe (§4.3). core/theme.ts adds html.theme-wipe and
+   calls document.startViewTransition(); fallback is an instant swap. ---- */
+@property --wipe { syntax: "<percentage>"; inherits: false; initial-value: 0%; }
+@keyframes hanmoto-wipe { from { --wipe: 0%; } to { --wipe: 112%; } }
+html.theme-wipe::view-transition-old(root) { animation: none; }
+html.theme-wipe::view-transition-new(root) {
+  animation: hanmoto-wipe 700ms var(--ease-ha) both;
+  -webkit-mask-image: linear-gradient(to bottom, #000 calc(var(--wipe) - 12%), transparent var(--wipe));
+  mask-image: linear-gradient(to bottom, #000 calc(var(--wipe) - 12%), transparent var(--wipe));
+}
+html.theme-wipe::view-transition-group(root) { animation-duration: 700ms; }
+
+/* ---- reduced motion / Motion layer off (§5.9) ---- */
+@media (prefers-reduced-motion: reduce) {
+  html.theme-wipe::view-transition-new(root) { animation-duration: 1ms; }
+}
+html[data-motion="off"] *, html[data-motion="off"] *::before, html[data-motion="off"] *::after {
+  animation-duration: 1ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 1ms !important;
+}

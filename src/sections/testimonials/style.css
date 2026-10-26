@@ -1,0 +1,80 @@
+/* Testimonials — 暖簾 Goodwill (DESIGN §6.9). Owner: WP-10. Never three equal cards. */
+[data-section="testimonials"] {
+  min-height: 120vh;
+  --q-a: #CB1B45;    /* 紅 NC — overprint plate */
+  --q-b: #5383C3;    /* 薄群青 WD — overprint plate */
+  --q-blend: multiply;
+  --indigo: #0D5661; /* 藍 NC — noren cloth */
+  --kon: #0F2540;    /* 紺 NC — noren hem */
+  --gofun: #FFFFFB;  /* 胡粉 NC — resist-dyed crest */
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) [data-section="testimonials"] { --q-a: #EEA9A9; --q-b: #A5DEE4; --q-blend: normal; } }
+:root[data-theme="dark"] [data-section="testimonials"] { --q-a: #EEA9A9; --q-b: #A5DEE4; --q-blend: normal; }
+
+[data-section="testimonials"] .testimonials__quotes { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); row-gap: var(--s-9); align-items: start; }
+[data-section="testimonials"] .quote { display: grid; gap: var(--s-4); align-content: start; }
+[data-section="testimonials"] .quote--manager { grid-column: 1 / span 6; }
+[data-section="testimonials"] .quote--peer { grid-column: 7 / span 6; margin-top: 64px; }
+[data-section="testimonials"] .quote--report { grid-column: 2 / span 7; }
+[data-section="testimonials"] .quote__body { display: grid; }
+[data-section="testimonials"] .quote__body > p { grid-area: 1 / 1; font-family: var(--f-display); font-weight: 400; font-style: var(--fst-display); font-variation-settings: var(--fvs-display); letter-spacing: var(--ls-display, 0); font-size: clamp(19px, .7vw + 13px, 23px); line-height: 1.75; }
+[data-section="testimonials"] .quote__text { color: var(--accent-text); }
+/* two-plate overprint: 紅 + 薄群青 arrive misregistered, register at the reading line, then lift off */
+[data-section="testimonials"] .quote__plate { opacity: 0; mix-blend-mode: var(--q-blend); color: var(--q-a); pointer-events: none; user-select: none; }
+[data-section="testimonials"] .quote__plate--b { color: var(--q-b); }
+html.js:not([data-motion="off"]) [data-section="testimonials"] .quote:not(.is-done) .quote__plate { opacity: .55; }
+html.js [data-section="testimonials"] .quote__plate { transform: translate(var(--qx, 3px), var(--qy, -2px)) rotate(var(--qr, .4deg)); transition: transform var(--dur-register) var(--ease-register), opacity 300ms linear; }
+html.js [data-section="testimonials"] .quote__plate--b { transform: translate(calc(-1 * var(--qx, 3px)), calc(-1 * var(--qy, -2px))) rotate(calc(-.75 * var(--qr, .4deg))); }
+html.js [data-section="testimonials"] .quote.is-in .quote__plate { transform: none; }
+[data-section="testimonials"] .quote__sig { display: grid; gap: 2px; font-size: var(--fs-caption); color: var(--ink-2); }
+[data-section="testimonials"] .quote__name { font-style: normal; font-weight: 500; font-size: var(--fs-small); color: var(--ink); }
+[data-section="testimonials"]:lang(zh-Hans) .quote__name { font-family: "Zhi Mang Xing", var(--f-serif-zh); font-weight: 400; font-size: 1.7em; line-height: 1.2; }
+
+[data-section="testimonials"] .testimonials__lead { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); row-gap: var(--s-5); margin-top: var(--s-10); }
+[data-section="testimonials"] .lead__title { grid-column: 1 / -1; font: 500 var(--fs-small) var(--f-chrome); color: var(--ink-2); }
+[data-section="testimonials"] .lead__facts { grid-column: 1 / span 7; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s-6) var(--gutter); }
+[data-section="testimonials"] .lead__facts > div { display: flex; flex-direction: column-reverse; justify-content: flex-end; gap: var(--s-1); }
+[data-section="testimonials"] .lead__facts dd { font: 300 clamp(32px, 2vw + 12px, 44px)/1 var(--f-mono); color: var(--ink); font-variant-numeric: tabular-nums; }
+[data-section="testimonials"] .lead__facts dt { font-size: var(--fs-caption); }
+[data-section="testimonials"] .lead__notes { grid-column: 9 / span 4; display: grid; gap: var(--s-3); font-size: var(--fs-small); color: var(--ink-2); align-content: end; }
+
+/* the doorway: wooden lintel and posts drawn as borders, so the canvas shows through the opening */
+[data-section="testimonials"] .testimonials__doorway { margin: var(--s-10) 0 var(--s-8) 25%; height: max(360px, 60vh); border: 12px solid var(--wood-2); border-top-width: 18px; border-bottom: 0; }
+[data-section="testimonials"] .doorway__opening { position: absolute; inset: 0; }
+[data-section="testimonials"] .doorway__print { position: absolute; inset: 0; }
+[data-section="testimonials"] .doorway__print .print__mat { height: 100%; padding: 0; mask-image: none; -webkit-mask-image: none; background: var(--mat); }
+[data-section="testimonials"] .doorway__print picture { display: block; height: 100%; }
+[data-section="testimonials"] .doorway__print img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 62%; }
+[data-section="testimonials"] .doorway__print .print__caption { position: absolute; top: 100%; left: -12px; max-width: 46em; }
+[data-section="testimonials"] .doorway__print.kento::after, [data-section="testimonials"] .doorway__print.kento::before { display: none; }
+[data-section="testimonials"] .doorway__print--night { display: none; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) [data-section="testimonials"] .doorway__print--day { display: none; }
+  :root:not([data-theme="light"]) [data-section="testimonials"] .doorway__print--night { display: block; }
+}
+:root[data-theme="dark"] [data-section="testimonials"] .doorway__print--day { display: none; }
+:root[data-theme="dark"] [data-section="testimonials"] .doorway__print--night { display: block; }
+/* CSS noren (no WebGL, before the cloth is live, context loss): three panels that part on hover */
+[data-section="testimonials"] .noren-css { position: absolute; inset: 0 3% auto; height: 60%; display: flex; gap: 1.4%; }
+[data-section="testimonials"] .noren-css > span { position: relative; flex: 1; background: var(--indigo); border-bottom: 6px solid var(--kon); transform-origin: 50% 0; transition: transform var(--dur-ha) var(--ease-ha); }
+[data-section="testimonials"] .noren-css__mon::after { content: ""; position: absolute; left: 50%; top: 26%; width: min(52%, 22vh); aspect-ratio: 1; transform: translateX(-50%); background: var(--gofun); -webkit-mask: url("/img/gen/crest.svg") center / contain no-repeat; mask: url("/img/gen/crest.svg") center / contain no-repeat; }
+[data-section="testimonials"] .testimonials__doorway:hover .noren-css > span:first-child { transform: translateX(-14%) rotate(2deg); }
+[data-section="testimonials"] .testimonials__doorway:hover .noren-css > span:last-child { transform: translateX(14%) rotate(-2deg); }
+html.js [data-section="testimonials"] .testimonials__doorway[data-live="1"] .noren-css { visibility: hidden; }
+html.gl-lost [data-section="testimonials"] .noren-css { visibility: visible !important; }
+
+@media (min-width: 1024px) {
+  [data-section="testimonials"]:lang(ja) .quote__body { writing-mode: vertical-rl; max-height: 60vh; justify-self: start; }
+  [data-section="testimonials"]:lang(ja) .quote__body > p { line-height: 1.95; }
+  [data-section="testimonials"]:lang(ja) .quote--manager { grid-column: 9 / span 4; }
+  [data-section="testimonials"]:lang(ja) .quote--peer { grid-column: 5 / span 4; grid-row: 1; margin-top: 96px; }
+  [data-section="testimonials"]:lang(ja) .quote--report { grid-column: 1 / span 4; grid-row: 1; margin-top: 32px; }
+}
+@media (max-width: 1023px) {
+  [data-section="testimonials"] { min-height: 0; }
+  [data-section="testimonials"] .testimonials__quotes { display: flex; flex-direction: column; gap: var(--s-8); }
+  [data-section="testimonials"] .quote--peer { margin-top: 0; }
+  [data-section="testimonials"] .testimonials__lead { display: flex; flex-direction: column; }
+  [data-section="testimonials"] .lead__facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  [data-section="testimonials"] .testimonials__doorway { margin-left: 0; height: auto; aspect-ratio: 3 / 2; border-width: 8px; border-top-width: 12px; border-bottom: 0; }
+}

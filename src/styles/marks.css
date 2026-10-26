@@ -1,0 +1,113 @@
+/* ===== src/styles/marks.css — print-production marks replace borders (DESIGN §3.5). Owner: WP-00 =====
+   No border-radius, no box-shadow, no drop-shadow, no backdrop-filter, no glow. */
+
+/* ---- .kento — 鉤見当 L-mark (14 px arms, 2 px) at the lower-right corner + 引付見当 straight mark
+   (2 × 28 px) 120 px to its left on the same edge. Drawn on ::after. --kento-inset moves it
+   (negative = outside the box; artboards draw it inside). ---- */
+.kento { position: relative; }
+.kento::after {
+  content: "";
+  position: absolute;
+  right: var(--kento-inset, -10px);
+  bottom: var(--kento-inset, -10px);
+  width: 162px;
+  height: 14px;
+  pointer-events: none;
+  background:
+    linear-gradient(var(--kento-color, var(--rule)), var(--kento-color, var(--rule))) right bottom / 2px 14px no-repeat,
+    linear-gradient(var(--kento-color, var(--rule)), var(--kento-color, var(--rule))) right bottom / 14px 2px no-repeat,
+    linear-gradient(var(--kento-color, var(--rule)), var(--kento-color, var(--rule))) right 134px bottom 0 / 28px 2px no-repeat;
+}
+.artboard__marks.kento { position: absolute; }
+.artboard__marks.kento::after { --kento-inset: 16px; }
+
+/* ---- .tombo — Japanese double crop marks: two parallel 1 px lines 3 px apart, 24 px long, 10 px outside
+   each corner; eight linear-gradient backgrounds on ::before (inset −10 px). ---- */
+.tombo { position: relative; }
+.tombo::before {
+  content: "";
+  position: absolute;
+  inset: var(--tombo-inset, -10px);
+  pointer-events: none;
+  --tc: var(--tombo-color, var(--rule));
+  --tv: linear-gradient(to right, var(--tc) 0 1px, transparent 1px 3px, var(--tc) 3px 4px);
+  --th: linear-gradient(to bottom, var(--tc) 0 1px, transparent 1px 3px, var(--tc) 3px 4px);
+  background:
+    var(--tv) left top / 4px 24px no-repeat,   var(--th) left top / 24px 4px no-repeat,
+    var(--tv) right top / 4px 24px no-repeat,  var(--th) right top / 24px 4px no-repeat,
+    var(--tv) left bottom / 4px 24px no-repeat, var(--th) left bottom / 24px 4px no-repeat,
+    var(--tv) right bottom / 4px 24px no-repeat, var(--th) right bottom / 24px 4px no-repeat;
+}
+/* artboards: marks sit on the pasteboard just outside the corners; inside on narrow screens */
+.artboard__marks.tombo { position: absolute; }
+@media (max-width: 767px) { .artboard__marks.tombo::before, .tombo::before { --tombo-inset: 6px; } }
+
+/* ---- .kyokaku — 匡郭 frame with 子持ち罫 (3 px + 1 px, 2 px gap) for book spreads; optional 版心 fold ---- */
+.kyokaku {
+  border: 3px solid var(--rule);
+  outline: 1px solid var(--rule);
+  outline-offset: -6px;
+  padding: var(--s-6);
+}
+.kyokaku[data-fold] {
+  --fold: 54%;
+  background-image: linear-gradient(var(--rule), var(--rule));
+  background-size: 1px calc(100% - 12px);
+  background-position: var(--fold) 6px;
+  background-repeat: no-repeat;
+}
+@media (max-width: 767px) { .kyokaku[data-fold] { background-image: none; } .kyokaku { padding: var(--s-4); } }
+/* 魚尾 (fish-tail) mark at the top of the fold */
+.gyobi { display: block; width: 12px; height: 10px; background: var(--rule); clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 60%, 0 100%); }
+
+/* ---- .colorbar — strip of plate swatches named in kanji ---- */
+.colorbar { display: flex; flex-wrap: wrap; gap: 2px; font-family: var(--f-chrome); font-size: var(--fs-chrome); }
+.colorbar__chip { display: inline-flex; align-items: center; gap: var(--s-1); padding-inline-end: var(--s-2); }
+.colorbar__chip::before { content: ""; width: 24px; height: 12px; background: var(--plate-fill, var(--plate-1)); }
+
+/* ---- .deckle — torn paper edge as a mask (WP-02 may swap in its four deckle SVGs) ---- */
+.deckle {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 1000' preserveAspectRatio='none'%3E%3Cpath fill='white' d='M0 5L21 5L42 7L63 6L83 3L104 3L125 2L146 6L167 3L188 6L208 5L229 5L250 4L271 6L292 6L313 2L333 6L354 3L375 4L396 2L417 5L438 4L458 1L479 3L500 2L521 4L542 3L563 5L583 2L604 2L625 3L646 3L667 3L688 5L708 1L729 4L750 4L771 2L792 2L813 2L833 1L854 2L875 1L896 2L917 1L938 6L958 6L979 2L998 0L996 21L996 42L996 63L995 83L998 104L995 125L997 146L995 167L994 188L996 208L999 229L995 250L996 271L994 292L995 313L994 333L999 354L996 375L998 396L997 417L999 438L997 458L998 479L995 500L998 521L995 542L996 563L995 583L996 604L996 625L998 646L998 667L998 688L997 708L997 729L997 750L997 771L997 792L998 813L995 833L997 854L997 875L995 896L998 917L993 938L998 958L997 979L1000 997L979 994L958 995L938 997L917 999L896 997L875 998L854 998L833 997L813 996L792 997L771 998L750 997L729 994L708 998L688 996L667 996L646 998L625 998L604 994L583 997L563 995L542 996L521 999L500 995L479 997L458 998L438 998L417 994L396 995L375 994L354 998L333 994L313 997L292 996L271 997L250 997L229 998L208 998L188 999L167 995L146 997L125 996L104 997L83 996L63 998L42 996L21 995L6 1000L3 979L5 958L5 938L5 917L4 896L6 875L3 854L6 833L6 813L3 792L1 771L5 750L1 729L3 708L2 688L2 667L5 646L5 625L1 604L4 583L6 563L4 542L6 521L4 500L2 479L1 458L3 438L2 417L2 396L3 375L5 354L4 333L6 313L4 292L4 271L3 250L6 229L2 208L4 188L4 167L2 146L1 125L1 104L1 83L4 63L3 42L3 21Z'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 1000' preserveAspectRatio='none'%3E%3Cpath fill='white' d='M0 5L21 5L42 7L63 6L83 3L104 3L125 2L146 6L167 3L188 6L208 5L229 5L250 4L271 6L292 6L313 2L333 6L354 3L375 4L396 2L417 5L438 4L458 1L479 3L500 2L521 4L542 3L563 5L583 2L604 2L625 3L646 3L667 3L688 5L708 1L729 4L750 4L771 2L792 2L813 2L833 1L854 2L875 1L896 2L917 1L938 6L958 6L979 2L998 0L996 21L996 42L996 63L995 83L998 104L995 125L997 146L995 167L994 188L996 208L999 229L995 250L996 271L994 292L995 313L994 333L999 354L996 375L998 396L997 417L999 438L997 458L998 479L995 500L998 521L995 542L996 563L995 583L996 604L996 625L998 646L998 667L998 688L997 708L997 729L997 750L997 771L997 792L998 813L995 833L997 854L997 875L995 896L998 917L993 938L998 958L997 979L1000 997L979 994L958 995L938 997L917 999L896 997L875 998L854 998L833 997L813 996L792 997L771 998L750 997L729 994L708 998L688 996L667 996L646 998L625 998L604 994L583 997L563 995L542 996L521 999L500 995L479 997L458 998L438 998L417 994L396 995L375 994L354 998L333 994L313 997L292 996L271 997L250 997L229 998L208 998L188 999L167 995L146 997L125 996L104 997L83 996L63 998L42 996L21 995L6 1000L3 979L5 958L5 938L5 917L4 896L6 875L3 854L6 833L6 813L3 792L1 771L5 750L1 729L3 708L2 688L2 667L5 646L5 625L1 604L4 583L6 563L4 542L6 521L4 500L2 479L1 458L3 438L2 417L2 396L3 375L5 354L4 333L6 313L4 292L4 271L3 250L6 229L2 208L4 188L4 167L2 146L1 125L1 104L1 83L4 63L3 42L3 21Z'/%3E%3C/svg%3E");
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+
+/* ---- focus ring = kentō: four L corners (10 px arms, 2 px, --select) at 4 px offset (§3.5) ---- */
+:where(a, button, [tabindex], summary, .panel-row, .focus-kento):focus { outline: none; }
+/* position: relative only as a layered default, so any unlayered rule (fixed/absolute/sticky) wins */
+@layer hanmoto-defaults {
+  :where(a, button, [tabindex], summary, .panel-row, .focus-kento):focus-visible { position: relative; }
+}
+:where(a, button, [tabindex], summary, .panel-row, .focus-kento):focus-visible { outline: none; }
+:where(a, button, [tabindex], summary, .panel-row, .focus-kento):focus-visible::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  pointer-events: none;
+  z-index: 1;
+  --fc: var(--select);
+  background:
+    linear-gradient(var(--fc), var(--fc)) left top / 10px 2px no-repeat,
+    linear-gradient(var(--fc), var(--fc)) left top / 2px 10px no-repeat,
+    linear-gradient(var(--fc), var(--fc)) right top / 10px 2px no-repeat,
+    linear-gradient(var(--fc), var(--fc)) right top / 2px 10px no-repeat,
+    linear-gradient(var(--fc), var(--fc)) left bottom / 10px 2px no-repeat,
+    linear-gradient(var(--fc), var(--fc)) left bottom / 2px 10px no-repeat,
+    linear-gradient(var(--fc), var(--fc)) right bottom / 10px 2px no-repeat,
+    linear-gradient(var(--fc), var(--fc)) right bottom / 2px 10px no-repeat;
+}
+#main:focus-visible::after { content: none; }
+:is(input, textarea, select):focus-visible { outline: 2px solid var(--select); outline-offset: 3px; }
+
+/* ---- plate fills for data-plate (used by .colorbar, registration snap, decorative layers) ---- */
+[data-plate="1"] { --plate-fill: var(--plate-1); }
+[data-plate="2"] { --plate-fill: var(--plate-2); }
+[data-plate="3"] { --plate-fill: var(--plate-3); }
+[data-plate="4"] { --plate-fill: var(--plate-4); }
+[data-plate="5"] { --plate-fill: var(--plate-5); }
+[data-plate="6"] { --plate-fill: var(--plate-6); }
+[data-plate="7"] { --plate-fill: var(--plate-7); }
+[data-plate="8"] { --plate-fill: var(--plate-8); }

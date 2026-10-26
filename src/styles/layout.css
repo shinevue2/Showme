@@ -1,0 +1,184 @@
+/* ===== src/styles/layout.css — grid, artboards, stacking, sticky stages, view placeholders, bands
+   (DESIGN §3.4, §5.8, §8.6, §8.7, §2.2). Owner: WP-00 ===== */
+
+:root {
+  /* chrome reservation (§4: the chrome never takes reading width; overlays only) */
+  --chrome-top: 48px;     /* mobile doc bar */
+  --chrome-left: 0px;     /* desktop left ruler */
+  /* pasteboard around artboards (Illustrator artboards on a pasteboard) */
+  --pb-x: 0px;
+  --pb-y: 16px;
+  /* artboard inner margin and grid (§3.4) */
+  --artboard-pad: 16px;
+  --cols: 4;
+  --gutter: 16px;
+  --section-pad: 64px;
+  /* stacking (§8.7) */
+  --z-stage: 1; --z-content: 2; --z-chrome: 20; --z-sheet: 30; --z-dialog: 40;
+}
+@media (min-width: 768px) {
+  :root { --chrome-top: 56px; --pb-x: 16px; --pb-y: 32px; --artboard-pad: 40px; --cols: 8; --gutter: 20px; --section-pad: 80px; }
+}
+@media (min-width: 1024px) {
+  :root { --chrome-top: 60px; --chrome-left: 20px; --pb-x: 28px; --pb-y: 48px; --artboard-pad: 64px; --cols: 12; --gutter: 24px; --section-pad: 112px; }
+}
+
+main#main { padding-top: var(--chrome-top); }
+
+/* ---- the one canvas (§8.6) ---- */
+#stage {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: var(--z-stage);
+  pointer-events: none;
+}
+html[data-proof] #stage, html.no-js #stage { display: none; }
+
+/* ---- artboards ---- */
+.artboard {
+  position: relative;                 /* no z-index: an artboard never creates a stacking context (§8.7) */
+  background: var(--paper);
+  margin: 0 var(--pb-x) var(--pb-y) calc(var(--chrome-left) + var(--pb-x));
+  padding: var(--section-pad) var(--artboard-pad) 0;
+}
+/* every direct child except view placeholders sits above the canvas (§8.7, verbatim rule) */
+.artboard > :not(.view) { position: relative; z-index: 2; }
+/* the marks overlay is absolute (same specificity, declared later) */
+.artboard > .artboard__marks { position: absolute; inset: 0; z-index: 2; pointer-events: none; }
+
+/* DOM paper tooth: pre-tinted transparent tiles, normal blending, nothing over the film (§8.6 Post) */
+.artboard:not(#road)::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url("/img/gen/grain-day-256.webp") repeat;
+  background-size: 256px 256px;
+  opacity: var(--grain-opacity);
+  pointer-events: none;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .artboard:not(#road)::before { background-image: url("/img/gen/grain-night-256.webp"); }
+}
+:root[data-theme="dark"] .artboard:not(#road)::before { background-image: url("/img/gen/grain-night-256.webp"); }
+
+/* sticky stages: `position: sticky; top: 0; height: 100lvh` inside taller sections (§5.8).
+   NB: `position: sticky` always forms a stacking context (CSS Positioned Layout), so the stage cannot stay
+   "z-index: auto" as §8.7 assumes: it is lifted to z-index 2 as a whole, above the canvas, and therefore
+   must stay transparent (no background on the stage itself). Its .view placeholder is transparent while
+   live, so the canvas underneath shows through; text and plates inside the stage sit above the 3D. */
+.artboard > .artboard__stage {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  height: 100lvh;
+  align-self: start;
+  background: none;
+}
+.artboard__stage > :not(.view) { position: relative; z-index: 2; }
+
+/* ---- grid helper ---- */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+  column-gap: var(--gutter);
+}
+
+/* ---- section header (§6 common): h2, stage line (vertical in ja/zh), takeaway ---- */
+.artboard__head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  column-gap: var(--s-6);
+  row-gap: var(--s-5);
+  align-items: start;
+  margin-bottom: var(--s-8);
+}
+.artboard__head > .artboard__title { grid-column: 1; justify-self: start; color: var(--accent-text, var(--ink)); }
+.artboard__head > .stage-line { grid-column: 2; grid-row: 1 / span 3; justify-self: end; }
+.artboard__head > .stage-line.tate { max-height: 22em; }
+.artboard__head > .takeaway { grid-column: 1; }
+/* any extra header content (direction notes, labels) stays in the text column, never under the stage line */
+.artboard__head > :not(.stage-line) { grid-column: 1; }
+:lang(en) .artboard__head > .stage-line { grid-column: 1; grid-row: auto; justify-self: start; order: -1; }
+
+/* section identity: selection-box layer colour and accent pair (§3.1) */
+[data-section="cover"]        { --layer: var(--layer-cover);        --accent: var(--accent-cover);        --accent-text: var(--accent-cover-text); }
+[data-section="summary"]      { --layer: var(--layer-summary);      --accent: var(--accent-summary);      --accent-text: var(--accent-summary-text); }
+[data-section="road"]         { --layer: var(--layer-road);         --accent: var(--accent-road);         --accent-text: var(--accent-road-text); }
+[data-section="works"]        { --layer: var(--layer-works);        --accent: var(--accent-works);        --accent-text: var(--accent-works-text); }
+[data-section="skills"]       { --layer: var(--layer-skills);       --accent: var(--accent-skills);       --accent-text: var(--accent-skills-text); }
+[data-section="principles"]   { --layer: var(--layer-principles);   --accent: var(--accent-principles);   --accent-text: var(--accent-principles-text); }
+[data-section="achievements"] { --layer: var(--layer-achievements); --accent: var(--accent-achievements); --accent-text: var(--accent-achievements-text); }
+[data-section="writing"]      { --layer: var(--layer-writing);      --accent: var(--accent-writing);      --accent-text: var(--accent-writing-text); }
+[data-section="testimonials"] { --layer: var(--layer-testimonials); --accent: var(--accent-testimonials); --accent-text: var(--accent-testimonials-text); }
+[data-section="contact"]      { --layer: var(--layer-contact);      --accent: var(--accent-contact);      --accent-text: var(--accent-contact-text); }
+[data-section="colophon"]     { --layer: var(--layer-colophon);     --accent: var(--accent-colophon);     --accent-text: var(--accent-colophon-text); }
+
+/* ---- WebGL view placeholders (§6 common, §8.6) ----
+   Without JS the inline style shows the day/desktop poster (render/helpers.ts viewSlot). With JS, posters
+   load only near the viewport: core sets data-poster-on and --poster-* (absolute URLs); never under a live
+   view; every poster shows while the context is lost (html.gl-lost). */
+.view {
+  --poster: var(--poster-day);
+  display: block;
+  position: relative;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+@media (max-width: 767px) { .view { --poster: var(--poster-day-m); } }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .view { --poster: var(--poster-night); }
+}
+@media (prefers-color-scheme: dark) and (max-width: 767px) {
+  :root:not([data-theme="light"]) .view { --poster: var(--poster-night-m); }
+}
+:root[data-theme="dark"] .view { --poster: var(--poster-night); }
+@media (max-width: 767px) { :root[data-theme="dark"] .view { --poster: var(--poster-night-m); } }
+/* Layering rule for authors: the canvas (z 1) sits between the artboard paper and every lifted child.
+   DOM that must appear BEHIND a view (a backdrop print) goes inside a .view placeholder that is a DIRECT
+   child of the artboard (render/helpers viewSlot `inner`). Inside a sticky stage (always a stacking
+   context, lifted to z 2) everything paints above the canvas, so keep stage children transparent where
+   the 3D must show through. */
+html.js .view { background-image: none !important; }
+html.js .view[data-poster-on] { background-image: var(--poster, none) !important; }
+html.js:not(.gl-lost) .view[data-live="1"] { background-image: none !important; }
+
+/* ---- prints (§3.6): figure.print on --mat with deckle mask and kentō mark ---- */
+figure.print { position: relative; }
+.print__mat { background: var(--mat); padding: var(--s-3); }
+.print__mat img { width: 100%; height: auto; }
+.print__caption {
+  margin-top: var(--s-3);
+  font-family: var(--f-chrome);
+  font-size: var(--fs-caption);
+  line-height: 1.5;
+  color: var(--ink-2);
+}
+
+/* ---- 間 bands (§2.2, §5.7): DOM, aria-hidden, last child of the outgoing section ---- */
+.artboard > .ma {
+  display: block;
+  height: var(--ma-h, 20vh);
+  margin: var(--section-pad) calc(-1 * var(--artboard-pad)) 0;
+  pointer-events: none;
+}
+[data-band="cover-summary"], [data-band="skills-principles"], [data-band="principles-achievements"],
+[data-band="achievements-writing"], [data-band="writing-testimonials"] { --ma-h: 20vh; }
+[data-band="summary-road"], [data-band="road-works"], [data-band="works-skills"], [data-band="testimonials-contact"] { --ma-h: 25vh; }
+[data-band="contact-colophon"] { --ma-h: 15vh; }
+html[data-proof] .artboard > .ma, html[data-motion="off"] .artboard > .ma { --ma-h: 8vh; }
+@media (prefers-reduced-motion: reduce) { .artboard > .ma { --ma-h: 8vh; } }
+
+/* ---- utility layouts shared by sections ---- */
+/* label column sized by its content but capped, so a long <dt> never squeezes its <dd> to a few glyphs */
+.artboard dl > div { display: grid; grid-template-columns: fit-content(min(40%, 14em)) minmax(0, 1fr); column-gap: var(--s-4); }
+.artboard dt { color: var(--ink-2); font-size: var(--fs-small); }
+
+/* Proof mode (校正刷り, §4.3): text first, one column; WP-04 owns print.css which completes it */
+html[data-proof] .artboard > .artboard__stage { position: relative; height: auto; }
+html[data-proof] .view { display: none; }
+
+/* poster capture mode (?poster=<viewId>, scripts/capture-posters.mjs) hides the chrome */
+html[data-poster] .chrome, html[data-poster] .skip-link { display: none !important; }

@@ -1,0 +1,42 @@
+{
+  "$comment": "DESIGN §10.1 — enforced by scripts/check/budgets.mjs (WP-11). Sizes in bytes, gzip unless noted.",
+  "firstView": { "gzip": 163840, "includes": ["html", "css", "cover-fonts", "js-before-lcp"] },
+  "jsBeforeLcp": { "gzip": 15360 },
+  "appShell": { "gzip": 61440, "includes": ["core", "chrome", "cover", "summary"] },
+  "chunks": {
+    "motion": { "gzip": 56320 },
+    "three": { "gzip": 148480, "includesStage": true },
+    "view": { "gzipMin": 6144, "gzipMax": 25600 },
+    "mediabunny": { "gzip": 56320, "approx": true }
+  },
+  "css": { "gzip": 28672 },
+  "fonts": {
+    "cjkBodyPerLanguage": { "rawMin": 614400, "rawMax": 1048576, "note": "active language only, sliced, over a full scroll" },
+    "displaySubsetsCjkPerLanguage": { "raw": 51200 },
+    "displayLatinEn": { "raw": 225280 }
+  },
+  "images": { "perSection": { "raw": 256000 }, "poster": { "raw": 61440 }, "still": { "raw": 81920 } },
+  "film": { "hd": { "raw": 5242880 }, "sd": { "raw": 2621440 }, "portrait": { "raw": 3145728 } },
+  "totalTransfer": { "desktop": 3145728, "mobile": 2097152, "excludes": ["film"] },
+  "webVitals": { "lcpMs": 2000, "inpMs": 150, "cls": 0.05, "lighthouseMin": 90 },
+  "idle": { "rafCallbacks": 0, "mainThreadPct": 1 },
+  "filmScrub": { "mainThreadPct": 15, "presentedFpsMin": 24, "presentedFpsMinSoftware": 15, "meanLagFrames": 3, "longTasks": 0 },
+  "memory": { "filmOverFileMB": 60, "jsHeapMB": 40, "tabDesktopMB": 350, "tabMobileMB": 200 },
+  "gpu": {
+    "liveViews": 2, "liveViewsInBand": 3, "drawCallsPeak": 20,
+    "vramMB": { "high": 200, "medium": 90, "mobile": 90, "low": 60 },
+    "dprCap": { "desktop": 2, "mobile": 1.5 }, "postRtDprCap": 1.5, "msaaBelowDpr": 1.5
+  },
+  "perView": {
+    "cover-block": { "drawCalls": 3, "vramMB": 25, "cpuMs": 0.3 },
+    "works-byobu": { "drawCalls": 2, "vramMB": 25, "cpuMs": 0.3 },
+    "skills-kumiko": { "drawCalls": 6, "vramMB": 3, "cpuMs": 0.2 },
+    "principles-garden": { "drawCalls": 3, "vramMB": 8, "cpuMs": 0.2 },
+    "achievements-press": { "drawCalls": 5, "vramMB": 20, "cpuMs": 0.2 },
+    "writing-marble": { "drawCalls": 1, "vramMB": 18, "cpuMs": 0.2 },
+    "testimonials-noren": { "drawCalls": 4, "vramMB": 2, "cpuMs": 0.15 },
+    "contact-seal": { "drawCalls": 3, "vramMB": 4 },
+    "colophon-emaki": { "drawCalls": 3, "vramMB": 32 },
+    "post": { "drawCalls": 1, "vramMB": 37 }
+  }
+}

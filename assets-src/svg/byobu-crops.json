@@ -1,0 +1,108 @@
+{
+  "about": "Byōbu art atlas crop boxes (DESIGN §12 #5–6). Boxes are in pixels of the assets-src/images/rinpa/*.jpg masters, inside the painted surface (frame, brocade mount and signatures excluded). Atlas column i (left → right) = 第(i+1)扇 = case panel i+1. Panel crops are 1 : 2.75 (512 × 1408 high/medium, 256 × 704 low). Each crop sits inside one panel of the photographed screen, at least 3 px clear of the paper-hinge seams and the brocade border (checked with edge luminance profiles). Alpha = pigment mask: pixels within ΔE (L weighted ½) of the sampled gold ground go to 0 with a 2 px soft edge; `erase` rects (master pixels) are cleared from the alpha (signatures on the gold). Mobile crops: the same panel at full panel width, 1 : 1.6, top at box.y + mobileY × (box.h − h), opaque, always 560 × 896.",
+  "panel": {
+    "w": 512,
+    "h": 1408
+  },
+  "panels": [
+    {
+      "n": 1,
+      "caseId": "ledger",
+      "file": "rinpa/mitsumochi-poppies.jpg",
+      "box": {
+        "x": 1645,
+        "y": 60,
+        "w": 275,
+        "h": 757
+      },
+      "groundThreshold": 18,
+      "why": "chequered fence and poppies",
+      "ramp": 6,
+      "mobileY": 0.3,
+      "erase": [
+        {
+          "x": 1876,
+          "y": 668,
+          "w": 50,
+          "h": 152,
+          "why": "artist's signature and seal (法眼土佐光茂筆) on the gold cloud"
+        }
+      ]
+    },
+    {
+      "n": 2,
+      "caseId": "tracing",
+      "file": "rinpa/sotatsu-moon-autumn-grasses.jpg",
+      "box": {
+        "x": 366,
+        "y": 50,
+        "w": 286,
+        "h": 787
+      },
+      "groundThreshold": 20,
+      "why": "the silver moon over autumn grasses",
+      "ramp": 6,
+      "mobileY": 0.0
+    },
+    {
+      "n": 3,
+      "caseId": "mapgl",
+      "file": "rinpa/fans-upon-waves.jpg",
+      "box": {
+        "x": 356,
+        "y": 48,
+        "w": 238,
+        "h": 655
+      },
+      "groundThreshold": 12,
+      "why": "fans riding the waves",
+      "ramp": 8,
+      "mobileY": 0.45
+    },
+    {
+      "n": 4,
+      "caseId": "strangler",
+      "file": "rinpa/korin-irises-yatsuhashi.jpg",
+      "box": {
+        "x": 349,
+        "y": 50,
+        "w": 316,
+        "h": 869
+      },
+      "groundThreshold": 18,
+      "why": "the zig-zag plank bridge and irises",
+      "ramp": 6,
+      "mobileY": 1.0
+    },
+    {
+      "n": 5,
+      "caseId": "platform",
+      "file": "rinpa/kiitsu-morning-glories.jpg",
+      "box": {
+        "x": 1329,
+        "y": 30,
+        "w": 317,
+        "h": 872
+      },
+      "groundThreshold": 18,
+      "why": "morning glories on the vine",
+      "ramp": 6,
+      "mobileY": 0.25
+    },
+    {
+      "n": 6,
+      "caseId": "resilience",
+      "file": "rinpa/korin-rough-waves.jpg",
+      "box": {
+        "x": 352,
+        "y": 44,
+        "w": 616,
+        "h": 1694
+      },
+      "groundThreshold": 8,
+      "why": "the great wave held",
+      "ramp": 24,
+      "mobileY": 0.45
+    }
+  ]
+}

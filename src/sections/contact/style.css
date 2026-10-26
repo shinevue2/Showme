@@ -1,0 +1,65 @@
+/* Contact — 京 · 落款 (DESIGN §6.10). Owner: WP-10. */
+#contact.contact { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); align-items: start; min-height: 110vh; }
+#contact > .artboard__head, #contact > .ma { grid-column: 1 / -1; }
+#contact > .contact__kyoto { grid-column: 1 / span 7; display: grid; gap: var(--s-5); transform-origin: 50% 0; }
+/* not lifted above the canvas: the seal stone renders over the letter paper (§8.7) */
+#contact > .contact__side { grid-column: 8 / span 5; z-index: auto; display: grid; gap: var(--s-7); min-width: 0; }
+[data-section="contact"] .contact__arrival { font-family: var(--f-display); font-weight: var(--fw-display); font-style: var(--fst-display); font-variation-settings: var(--fvs-display); font-size: var(--fs-h3); line-height: 1.5; color: var(--accent-text); max-width: 26em; }
+
+/* the letter: ruled 胡粉 paper, handwritten voice */
+[data-section="contact"] .letter { --lh: 40px; position: relative; justify-self: start; max-width: 100%; background-color: var(--paper-print); padding: 28px 32px 88px; outline: 1px solid var(--guide); outline-offset: -12px; }
+[data-section="contact"] .letter__body { background: repeating-linear-gradient(to bottom, transparent 0 calc(var(--lh) - 1px), var(--guide) calc(var(--lh) - 1px) var(--lh)); }
+[data-section="contact"] .letter__body p { font-family: var(--f-display); font-weight: var(--fw-display); font-style: var(--fst-display); font-variation-settings: var(--fvs-display); font-size: 20px; line-height: var(--lh); color: var(--ink); }
+[data-section="contact"] .letter__body p + p { text-indent: 1em; }
+[data-section="contact"] .letter__sign { text-align: end; font-size: 26px !important; padding-inline-end: 1.5em; }
+[data-section="contact"]:lang(zh-Hans) .letter { --lh: 46px; }
+[data-section="contact"]:lang(zh-Hans) .letter__body p { font-size: 25px; }
+/* the seal place: a designer's red note until the visitor stamps */
+[data-section="contact"] .letter__seal { position: absolute; width: 200px; height: 200px; left: var(--sx, calc(100% - 64px)); top: var(--sy, calc(100% - 48px)); margin: -100px 0 0 -100px; pointer-events: none; }
+[data-section="contact"] .letter__guide { position: absolute; left: 50%; top: 50%; width: 46px; height: 56px; transform: translate(-50%, -50%); border: 1px dashed var(--instruct); font: 400 9px/1 var(--f-chrome); color: var(--instruct-text); display: grid; place-items: end center; padding-bottom: 3px; }
+[data-section="contact"] .letter__stamp { position: absolute; left: 50%; top: 50%; width: 46px; height: 56px; transform: translate(-50%, -50%) rotate(var(--seal-rot, 0rad)); background: var(--seal); -webkit-mask: url("/img/gen/seal-minato.svg") center / contain no-repeat; mask: url("/img/gen/seal-minato.svg") center / contain no-repeat; opacity: 0; }
+[data-section="contact"] .letter.is-sealed .letter__stamp { opacity: 1; }
+[data-section="contact"] .letter.is-sealed .letter__guide { visibility: hidden; }
+[data-section="contact"] .letter.is-stamping-2d .letter__stamp { animation: seal-in 160ms var(--ease-kyu) both; }
+@keyframes seal-in { from { opacity: 0; transform: translate(-50%, -50%) rotate(var(--seal-rot, 0rad)) scale(1.04); } }
+/* 摺る: outlines with anchor points, then each phrase fills (JS adds the classes; text stays readable) */
+[data-section="contact"] .letter .ph { position: relative; transition: color 260ms var(--ease-jo), -webkit-text-stroke-color 260ms; }
+[data-section="contact"] .letter.is-outline .ph { color: transparent; -webkit-text-stroke: .7px var(--ink); }
+[data-section="contact"] .letter.is-outline .ph::before { content: ""; position: absolute; left: -3px; top: .2em; width: 5px; height: 5px; border: 1px solid var(--select); background: var(--paper-print); }
+[data-section="contact"] .letter .ph.is-filled { color: var(--ink); -webkit-text-stroke: 0 transparent; }
+[data-section="contact"] .letter .ph.is-filled::before { display: none; }
+
+[data-section="contact"] .contact__details { display: grid; gap: var(--s-3); font-size: var(--fs-small); }
+[data-section="contact"] .contact__details dd { color: var(--ink); }
+[data-section="contact"] .contact__minor { color: var(--ink-2); }
+[data-section="contact"] .contact__copy { font: 400 var(--fs-caption) var(--f-chrome); padding: 3px var(--s-2); background: var(--panel); margin-inline-start: var(--s-2); }
+[data-section="contact"] .contact__cv { display: flex; flex-wrap: wrap; gap: var(--s-1) var(--s-4); }
+[data-section="contact"] .mono { font-family: var(--f-mono); font-size: .92em; }
+[data-section="contact"] .contact__form { display: grid; gap: var(--s-4); }
+[data-section="contact"] .contact__form label { display: grid; gap: var(--s-1); font-size: var(--fs-small); color: var(--ink-2); }
+[data-section="contact"] .contact__form :is(input, textarea) { width: 100%; color: var(--ink); }
+[data-section="contact"] .contact__send-row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-3) var(--s-5); }
+[data-section="contact"] .contact__send { padding: 11px 28px; background: var(--seal); color: var(--paper-print); font-weight: 500; letter-spacing: .04em; }
+[data-section="contact"] .contact__note, [data-section="contact"] .contact__status { font-size: var(--fs-caption); color: var(--ink-2); }
+[data-section="contact"] .contact__status:empty { display: none; }
+
+/* 割印: the two halves of the seal across Contact and Colophon (GSAP-free: scroll position → transform) */
+.wariin { position: absolute; display: block; left: 68%; width: 41px; height: 25px; background: var(--seal); -webkit-mask: center / contain no-repeat; mask: center / contain no-repeat; transform: translateX(var(--wx, 0px)); }
+.wariin--top { bottom: 0; -webkit-mask-image: url("/img/gen/wariin-top.svg"); mask-image: url("/img/gen/wariin-top.svg"); }
+#colophon > .wariin--bottom { position: absolute; display: block; z-index: 2; }
+.wariin--bottom { top: 0; -webkit-mask-image: url("/img/gen/wariin-bottom.svg"); mask-image: url("/img/gen/wariin-bottom.svg"); }
+[data-band="contact-colophon"] { position: relative; }
+
+@media (min-width: 1024px) {
+  [data-section="contact"]:lang(ja) .letter { --lh: 44px; padding: 30px 30px; }
+  [data-section="contact"]:lang(ja) .letter__body { writing-mode: vertical-rl; height: 470px; background: repeating-linear-gradient(to left, transparent 0 calc(var(--lh) - 1px), var(--guide) calc(var(--lh) - 1px) var(--lh)); }
+  [data-section="contact"]:lang(ja) .letter__body p { font-size: 19px; }
+  [data-section="contact"]:lang(ja) .letter__sign { padding-inline-end: 3.6em; }
+  [data-section="contact"]:lang(ja) .letter.is-outline .ph::before { left: .15em; top: -3px; }
+}
+@media (max-width: 1023px) {
+  #contact.contact { display: flex; flex-direction: column; min-height: 0; }
+  #contact > .contact__kyoto, #contact > .contact__side { width: 100%; margin-bottom: var(--s-8); }
+  [data-section="contact"] .letter { padding: 22px 20px 84px; }
+  [data-section="contact"] .letter__body p { font-size: 18px; }
+}

@@ -1,0 +1,510 @@
+/* Cover — 表紙 · 摺上り The Impression (DESIGN §6.1). Owner: WP-05. Scoped under [data-section="cover"].
+   Modes (set by index.ts on the section as data-cover-mode; html.no-js counts as "still"):
+     (none)  JS on, before the stage decides: the sheet alone, exactly as the GL mode looks at rest
+     gl      the WebGL view owns the sheet: .cover__paper[data-gl] makes the DOM sheet transparent (text stays
+             selectable and in the accessibility tree); the canvas draws the identical sheet and peels it
+     css     software tier / context lost / view error: CSS peel over the carved-block still
+     still   static tier, reduced motion, Motion layer off, Proof: the sheet stays, the still sits beside it   */
+
+[data-section="cover"] {
+  /* grid maths shared by the stage children (100% = the stage's width) */
+  --sheet-ratio: 1.47;
+  display: flex;
+  flex-direction: column;
+  min-height: 160vh;
+  padding-top: 0;
+  /* the stage reserves the doc bar itself, so cancel <main>'s reservation: the first screen shows the whole sheet
+     at scroll 0, exactly as it sits once the sticky stage is stuck */
+  margin-top: calc(-1 * var(--chrome-top));
+}
+[data-section="cover"] > .ma { margin-top: auto; }
+
+/* ------------------------------------------------------------------ the stage (desktop ≥ 1024 px) */
+[data-section="cover"] .cover__stage {
+  /* inline-size container: cqw = the stage width, so these lengths work in any property (top/height too) */
+  container-type: inline-size;
+  align-self: stretch;          /* layout.css gives sticky stages align-self: start; contained, it must not shrink */
+  width: 100%;
+  --col: calc((100cqw - 11 * var(--gutter)) / 12);
+  --sheet-w: min(calc(78lvh / var(--sheet-ratio)), calc(6 * var(--col) + 5 * var(--gutter)));
+  --sheet-h: calc(var(--sheet-w) * var(--sheet-ratio));
+  --sheet-x: calc(6 * (var(--col) + var(--gutter)) + (5 * var(--col) + 4 * var(--gutter) - var(--sheet-w)) / 2);
+  --sheet-y: calc(var(--chrome-top) + (100lvh - var(--chrome-top) - 24px - var(--sheet-h)) / 2);
+  display: block;
+  margin: 0;
+  padding: 0;
+}
+[data-section="cover"] .cover__crest {
+  position: absolute;
+  left: 0;
+  top: calc(var(--chrome-top) + var(--s-6));
+  width: 64px;
+  height: 64px;
+  color: var(--ink);
+}
+[data-section="cover"] .cover__facts {
+  /* bottom-aligned at 64 % of the stage, but never above the crest: a long block (en) grows downwards instead */
+  position: absolute;
+  left: 0;
+  top: calc(var(--chrome-top) + var(--s-6) + 64px + var(--s-6));
+  bottom: 36%;
+  width: calc(5 * var(--col) + 4 * var(--gutter));
+  display: flex;
+  flex-direction: column;
+  justify-content: safe flex-end;
+  gap: var(--s-5);
+}
+[data-section="cover"] .cover__role {
+  font-size: var(--fs-lead);
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--accent-text);
+  letter-spacing: .02em;
+}
+[data-section="cover"] .cover__facts .takeaway { max-width: 25em; }
+[data-section="cover"] .cover__facts:lang(en) .takeaway { max-width: 36ch; text-wrap: pretty; }
+[data-section="cover"] .cover__dl {
+  display: grid;
+  gap: 0;
+  font-size: var(--fs-small);
+  max-width: 34em;
+  /* 0.5 px guide hairlines between rows, like ruled index cards on the workbench */
+  background: linear-gradient(var(--guide), var(--guide)) left top / 100% 1px no-repeat;
+}
+[data-section="cover"] .cover__dl > div {
+  grid-template-columns: 7.5em minmax(0, 1fr);
+  padding: 7px 0 8px;
+  background: linear-gradient(var(--guide), var(--guide)) left bottom / 100% 1px no-repeat;
+}
+[data-section="cover"] .cover__dl:lang(ja) > div, [data-section="cover"] .cover__dl:lang(zh-Hans) > div { grid-template-columns: 4.5em minmax(0, 1fr); }
+[data-section="cover"] .cover__dl dt {
+  font-family: var(--f-chrome);
+  font-size: var(--fs-caption);
+  letter-spacing: .04em;
+  color: var(--ink-2);
+  padding-top: .15em;
+}
+[data-section="cover"] .cover__dl dd { color: var(--ink); }
+[data-section="cover"] .jst-clock {
+  font-family: var(--f-mono);
+  font-size: var(--fs-caption);
+  color: var(--guide-label);
+  margin-inline-start: var(--s-2);
+  font-variant-numeric: tabular-nums;
+}
+[data-section="cover"] .cover__express {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--s-2) var(--s-5);
+  font-size: var(--fs-small);
+}
+[data-section="cover"] .cover__express > a { font-weight: 500; }
+[data-section="cover"] .cover__cv { display: inline-flex; flex-wrap: wrap; gap: var(--s-1) var(--s-3); align-items: baseline; color: var(--ink-2); }
+[data-section="cover"] .cover__cv a { color: var(--link); }
+
+/* stage line: a vertical 詞書 to the left of the sheet (ja/zh); small caps under the crest (en) */
+[data-section="cover"] .cover__stage-line.tate {
+  position: absolute;
+  top: var(--sheet-y);
+  left: calc(var(--sheet-x) - 2.6em);
+  max-height: 22em;
+  font-size: var(--fs-small);
+  letter-spacing: .14em;
+  color: var(--ink-2);
+}
+[data-section="cover"] .cover__stage-line:not(.tate) {
+  position: absolute;
+  left: 88px;
+  top: calc(var(--chrome-top) + var(--s-6) + 18px);
+  max-width: 26em;
+  color: var(--ink-2);
+}
+
+/* ------------------------------------------------------------------ the print sheet */
+[data-section="cover"] .cover__sheet {
+  position: absolute;
+  left: var(--sheet-x);
+  top: var(--sheet-y);
+  width: var(--sheet-w);
+  height: var(--sheet-h);
+  --kento-inset: -14px;
+}
+/* the sheet's marks leave with the block once it turns over (index.ts: --marks) */
+[data-section="cover"] .cover__sheet::before, [data-section="cover"] .cover__sheet::after { opacity: var(--marks, 1); }
+/* crop marks always outside the sheet (marks.css moves them inside on phones; here they would show over the canvas) */
+[data-section="cover"] .cover__sheet.tombo::before { --tombo-inset: -12px; }
+[data-section="cover"] .cover__label {
+  position: absolute;
+  left: 0;
+  bottom: calc(100% + 16px);
+  font-family: var(--f-chrome);
+  font-size: var(--fs-chrome);
+  letter-spacing: .06em;
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+[data-section="cover"] .cover__paper {
+  position: absolute;
+  inset: 0;
+  container-type: size;
+  background: var(--paper-print);
+  color: var(--plate-1);
+  -webkit-mask-image: url("/img/gen/deckle-3.svg");
+  mask-image: url("/img/gen/deckle-3.svg");
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+/* the sheet's texts and marks: every glyph is plate 1 (one key block prints one colour) */
+[data-section="cover"] .cover__mon {
+  position: absolute;
+  left: 9cqw;
+  top: 6.4cqh;
+  width: 11cqw;
+  height: 11cqw;
+  fill: currentColor;
+}
+/* the sheet's text sits on transparent composited layers: greyscale antialiasing (no LCD subpixel fringes), the
+   same as canvas text, so the WebGL twin matches it exactly */
+[data-section="cover"] .cover__cols, [data-section="cover"] .kl-labels, [data-section="cover"] .cover__name--en,
+[data-section="cover"] .cover__name-ja { transform: translateZ(0); }
+
+[data-section="cover"] .cover__cols {
+  position: absolute;
+  top: 6.4cqh;
+  right: 13.5cqw;               /* the ruby overhangs the name column to the right */
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: flex-start;
+  gap: 2.6cqw;
+}
+[data-section="cover"] .cover__name.tate {
+  font-size: 16.4cqh;
+  line-height: 1.12;
+  letter-spacing: .07em;
+  font-feature-settings: normal;    /* no vpal: the canvas twin places glyphs on plain em cells */
+  color: var(--plate-1);
+  white-space: nowrap;
+}
+[data-section="cover"] .cover__name ruby { ruby-align: space-around; }
+[data-section="cover"] .cover__name rt {
+  font-family: var(--f-body-ja);
+  font-weight: 500;
+  font-size: .19em;
+  letter-spacing: .32em;
+  font-feature-settings: normal;
+}
+[data-section="cover"] .cover__gap { letter-spacing: 0; }
+[data-section="cover"] .cover__role-v {
+  margin-top: 27cqh;
+  font-size: 2.15cqh;
+  font-weight: 500;
+  letter-spacing: .34em;
+  line-height: 1.2;
+  font-feature-settings: normal;
+  color: var(--plate-1);
+  white-space: nowrap;
+}
+[data-section="cover"]:lang(zh-Hans) .cover__name.tate { letter-spacing: .12em; }
+/* en: two stacked lines of Bodoni Moda italic at the lower left; the ja name small and vertical at top right */
+[data-section="cover"] .cover__name--en {
+  position: absolute;
+  left: 8.5cqw;
+  bottom: 31cqh;
+  display: grid;
+  font-size: 12.4cqh;
+  line-height: .98;
+  letter-spacing: -.01em;
+  font-weight: calc(500 + 200 * var(--press, 0));
+  color: var(--plate-1);
+}
+[data-section="cover"] .cover__name--en .cover__line:last-child { padding-left: .55em; }
+[data-section="cover"] .cover__name-ja {
+  font-family: "Shippori Mincho B1", var(--f-serif-ja);
+  font-weight: 800;
+  font-size: 4.3cqh;
+  letter-spacing: .14em;
+  line-height: 1.1;
+  font-feature-settings: normal;
+  color: var(--plate-1);
+}
+
+/* the Tōkaidō key line (lower third): SVG road + ticks; HTML labels at the same x fractions */
+[data-section="cover"] .cover__keyline {
+  position: absolute;
+  left: 6.5cqw;
+  right: 6.5cqw;
+  bottom: 7cqh;
+  height: 15cqh;
+}
+[data-section="cover"] .kl-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+[data-section="cover"] .kl-road, [data-section="cover"] .kl-tick {
+  fill: none;
+  stroke: currentColor;
+  vector-effect: non-scaling-stroke;
+  stroke-linecap: butt;
+}
+[data-section="cover"] .kl-road { stroke-width: 2.25px; }
+[data-section="cover"] .kl-tick { stroke-width: 1.25px; }
+[data-section="cover"] .kl-labels { position: absolute; inset: 0; }
+[data-section="cover"] .kl-yr, [data-section="cover"] .kl-st {
+  position: absolute;
+  left: calc(var(--x) * 100%);
+  white-space: nowrap;
+  color: var(--plate-1);
+  line-height: 1;
+}
+[data-section="cover"] .kl-yr {
+  top: calc(var(--y) * 100% + 1.1cqh);
+  transform: translateX(-50%);
+  font-family: var(--f-mono);
+  font-size: max(9px, 1.25cqh);
+  font-weight: 400;
+  letter-spacing: 0;
+  font-variant-numeric: tabular-nums;
+}
+[data-section="cover"] .kl-st {
+  bottom: calc((1 - var(--y)) * 100% + 1.3cqh);
+  transform: translateX(-50%);
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  font-size: max(9px, 1.45cqh);
+  font-weight: 500;
+  letter-spacing: .12em;
+  font-feature-settings: normal;
+}
+[data-section="cover"] .kl-st:lang(en) { letter-spacing: .04em; font-weight: 400; }
+
+/* 引く / 摺る on first paint (CSS only): the road draws right → left, ticks print in, misregistered → in register */
+@media (prefers-reduced-motion: no-preference) {
+  html:not([data-motion="off"]) [data-section="cover"] .kl-road {
+    stroke-dasharray: 1 1;
+    animation: cover-draw 1200ms var(--ease-jo) 250ms both;
+  }
+  html:not([data-motion="off"]) [data-section="cover"] .kl-tick {
+    animation: cover-print-in var(--dur-register) var(--ease-register) both;
+    animation-delay: calc(330ms + var(--i) * 125ms);
+  }
+}
+@keyframes cover-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+@keyframes cover-print-in {
+  from { opacity: 0; transform: translate(3px, -4px) rotate(.3deg); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* ------------------------------------------------------------------ crest construction (引く, 1.6 s, CSS only) */
+[data-section="cover"] .cc { overflow: visible; }
+[data-section="cover"] .cc-fill { fill: currentColor; }
+[data-section="cover"] .cc-guide { fill: none; stroke: var(--guide); stroke-width: .75px; vector-effect: non-scaling-stroke; }
+[data-section="cover"] .cc-anchor { fill: var(--paper); stroke: var(--layer); stroke-width: 1px; vector-effect: non-scaling-stroke; }
+[data-section="cover"] .cc-handle { stroke: var(--layer); stroke-width: .75px; vector-effect: non-scaling-stroke; fill: none; }
+[data-section="cover"] .cc-hdot { fill: var(--layer); }
+[data-section="cover"] .cc-int rect { fill: none; stroke: var(--select); stroke-width: 1px; vector-effect: non-scaling-stroke; }
+[data-section="cover"] .cc-int text { fill: var(--select-text); font-family: var(--f-mono); font-size: 13.5px; letter-spacing: .02em; }
+/* final state (no animation, reduced motion, Motion layer off): only the filled crest */
+[data-section="cover"] .cc-guides, [data-section="cover"] .cc-anchors, [data-section="cover"] .cc-ints { opacity: 0; }
+@media (prefers-reduced-motion: no-preference) {
+  html:not([data-motion="off"]) [data-section="cover"] .cc-guides { animation: cc-guides 1750ms linear both; }
+  html:not([data-motion="off"]) [data-section="cover"] .cc-draw { stroke-dasharray: 1 1; animation: cover-draw 460ms var(--ease-jo) both; animation-delay: calc(var(--i) * 110ms); }
+  html:not([data-motion="off"]) [data-section="cover"] .cc-radius { animation-delay: calc(380ms + var(--i) * 90ms); }
+  html:not([data-motion="off"]) [data-section="cover"] .cc-ints { opacity: 1; }
+  html:not([data-motion="off"]) [data-section="cover"] .cc-int { opacity: 0; animation: cc-int 1150ms linear both; animation-delay: calc(680ms + var(--i) * 150ms); }
+  html:not([data-motion="off"]) [data-section="cover"] .cc-int text { animation: cc-label 1150ms linear both; animation-delay: inherit; }
+  html:not([data-motion="off"]) [data-section="cover"] .cc-anchors { animation: cc-anchors 1750ms linear both; }
+  html:not([data-motion="off"]) [data-section="cover"] .cc-fill { animation: cc-fill 1600ms var(--ease-jo) both; }
+}
+@keyframes cc-guides { 0%, 76% { opacity: 1; } 100% { opacity: 0; } }
+@keyframes cc-int { 0% { opacity: 0; } 6%, 62% { opacity: 1; } 76%, 100% { opacity: 0; } }
+@keyframes cc-label { 0%, 30% { opacity: 1; } 34%, 100% { opacity: 0; } }
+@keyframes cc-anchors { 0%, 52% { opacity: 0; } 58%, 76% { opacity: 1; } 100% { opacity: 0; } }
+@keyframes cc-fill { 0%, 70% { opacity: 0; } 100% { opacity: 1; } }
+
+/* ------------------------------------------------------------------ the carved block, the curl, the corner */
+[data-section="cover"] .cover__still {
+  display: none;
+  position: absolute;
+  inset: -2% -2%;
+  background: center / 100% 100% no-repeat;
+}
+[data-section="cover"]:lang(ja) .cover__still { background-image: url("/img/posters/cover-block-carved-ja-day.avif"); }
+[data-section="cover"]:lang(en) .cover__still { background-image: url("/img/posters/cover-block-carved-en-day.avif"); }
+[data-section="cover"]:lang(zh-Hans) .cover__still { background-image: url("/img/posters/cover-block-carved-zh-day.avif"); }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) [data-section="cover"]:lang(ja) .cover__still { background-image: url("/img/posters/cover-block-carved-ja-night.avif"); }
+  :root:not([data-theme="light"]) [data-section="cover"]:lang(en) .cover__still { background-image: url("/img/posters/cover-block-carved-en-night.avif"); }
+  :root:not([data-theme="light"]) [data-section="cover"]:lang(zh-Hans) .cover__still { background-image: url("/img/posters/cover-block-carved-zh-night.avif"); }
+}
+:root[data-theme="dark"] [data-section="cover"]:lang(ja) .cover__still { background-image: url("/img/posters/cover-block-carved-ja-night.avif"); }
+:root[data-theme="dark"] [data-section="cover"]:lang(en) .cover__still { background-image: url("/img/posters/cover-block-carved-en-night.avif"); }
+:root[data-theme="dark"] [data-section="cover"]:lang(zh-Hans) .cover__still { background-image: url("/img/posters/cover-block-carved-zh-night.avif"); }
+
+[data-section="cover"] .cover__curl { display: none; }
+[data-section="cover"] .cover__corner {
+  position: absolute;
+  right: -10px;
+  bottom: -10px;
+  width: 48px;
+  height: 48px;
+  z-index: 3;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+}
+[data-section="cover"] .cover__corner > span {
+  position: absolute;
+  right: calc(100% + 2px);
+  bottom: 14px;
+  font-family: var(--f-chrome);
+  font-size: var(--fs-chrome);
+  letter-spacing: .06em;
+  color: var(--instruct-text);
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity var(--dur-ha) var(--ease-jo);
+}
+[data-section="cover"][data-hint] .cover__corner > span,
+[data-section="cover"] .cover__corner:focus-visible > span { opacity: 1; }
+html.no-js [data-section="cover"] .cover__corner,
+[data-section="cover"][data-cover-mode="still"] .cover__corner { display: none; }
+
+/* the caption that names the shock: beside the block once the sheet is lifted (opacity from index.ts: --cap) */
+[data-section="cover"] .cover__caption {
+  position: absolute;
+  font-size: var(--fs-small);
+  color: var(--ink-2);
+  letter-spacing: .1em;
+  opacity: var(--cap, 0);
+  pointer-events: none;
+}
+[data-section="cover"] .cover__caption.tate { right: calc(100% + 20px); bottom: 0; max-height: 24em; }
+[data-section="cover"] .cover__caption:not(.tate) {
+  left: 0;
+  top: calc(100% + 18px);
+  font-family: var(--f-mono);
+  font-variant-caps: all-small-caps;
+  font-size: var(--fs-caption);
+  letter-spacing: .06em;
+  max-width: 100%;
+}
+
+/* ------------------------------------------------------------------ the WebGL placeholder */
+[data-section="cover"] > .cover__view {
+  position: absolute;
+  top: 0;
+  left: 0;                      /* full width: the lifted flap may sweep past the text column (under the text) */
+  right: 0;
+  /* down past the cover into the summary, so the block flip lands on the summary figure (§2.2 cover-summary) */
+  height: calc(100% + 118lvh);
+  pointer-events: none;
+}
+/* the generic poster is not used: the fallbacks are the DOM sheet and the carved-block still */
+html.js [data-section="cover"] > .cover__view.view[data-poster-on],
+[data-section="cover"] > .cover__view.view { background-image: none !important; }
+
+/* ------------------------------------------------------------------ GL mode: the canvas draws the sheet */
+[data-section="cover"] .cover__paper[data-gl] { background: transparent; }
+[data-section="cover"] .cover__paper[data-gl] * { -webkit-text-fill-color: transparent; }
+[data-section="cover"] .cover__paper[data-gl] svg { opacity: 0; }
+/* while the sheet lies flat, the DOM keeps drawing the fine text (< 24 px) over the canvas twin */
+[data-section="cover"] .cover__paper[data-gl="base"] [data-fine],
+[data-section="cover"] .cover__paper[data-gl="base"] [data-fine] * { -webkit-text-fill-color: currentColor; }
+
+/* ------------------------------------------------------------------ CSS peel (software tier, fallbacks) */
+@property --peel { syntax: "<number>"; inherits: true; initial-value: 0; }
+[data-section="cover"][data-cover-mode="css"] .cover__still { display: block; opacity: min(1, calc(var(--peel) * 60)); }
+[data-section="cover"][data-cover-mode="css"] .cover__paper {
+  /* the corner is trimmed along a line perpendicular to the lift direction (up and a little left); at --peel 1 the
+     line has passed the top-left corner and the whole sheet is off the block */
+  --a: calc(var(--peel) * 390%);
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - var(--a)), calc(100% - var(--a) * .36) 100%, 0 100%);
+}
+[data-section="cover"][data-cover-mode="css"] .cover__curl {
+  display: block;
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  --a: calc(var(--peel) * 390%);
+  /* the flap: the trimmed corner folded back over the sheet, its back lit by a bokashi gradient */
+  clip-path: polygon(100% calc(100% - var(--a)), calc(100% - var(--a) * .36) 100%, calc(100% - var(--a) * .9) calc(100% - var(--a) * .78));
+  background: linear-gradient(200deg, color-mix(in oklab, var(--paper-print), var(--wood-2) 14%) 4%, var(--paper-print) 38%, color-mix(in oklab, var(--paper-print), var(--ink) 9%) 97%);
+  opacity: calc(1 - max(0, var(--peel) - .6) * 2.5);
+}
+@supports (animation-timeline: scroll()) {
+  html.js:not([data-motion="off"]) [data-section="cover"][data-cover-mode="css"] .cover__stage {
+    animation: cover-peel linear both;
+    animation-timeline: scroll(root block);
+    animation-range: 0 40vh;
+  }
+}
+@keyframes cover-peel { from { --peel: 0; } to { --peel: 1; } }
+[data-section="cover"][data-cover-mode="css"] .cover__caption { --cap: var(--peel); }
+
+/* ------------------------------------------------------------------ still: the sheet stays, the block beside it */
+html.no-js [data-section="cover"] .cover__still,
+[data-section="cover"][data-cover-mode="still"] .cover__still {
+  display: block;
+  inset: auto;
+  left: -36%;
+  bottom: -5%;
+  width: 62.4%;
+  height: 62.4%;
+  z-index: -1;
+}
+html.no-js [data-section="cover"] .cover__caption,
+[data-section="cover"][data-cover-mode="still"] .cover__caption { --cap: 1; }
+html.no-js [data-section="cover"] .cover__caption.tate,
+[data-section="cover"][data-cover-mode="still"] .cover__caption.tate { right: calc(136% + 18px); bottom: 2%; }
+
+/* ------------------------------------------------------------------ narrow screens: no sticky stage, sheet first */
+@media (max-width: 1023px) {
+  [data-section="cover"] { min-height: 130vh; --sheet-ratio: 1.25; }
+  [data-section="cover"] > .artboard__stage { position: relative; top: auto; height: auto; }
+  [data-section="cover"] .cover__stage {
+    --sheet-w: min(100cqw, calc(60svh / 1.25));
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-6);
+    padding: calc(var(--chrome-top) + var(--s-6)) 0 var(--s-8);
+  }
+  [data-section="cover"] .cover__crest { display: none; }
+  [data-section="cover"] .cover__sheet {
+    position: relative;
+    left: auto;
+    top: auto;
+    width: var(--sheet-w);
+    height: auto;
+    aspect-ratio: 1 / 1.25;
+    margin: var(--s-5) auto 0 0;
+  }
+  [data-section="cover"] .cover__label { bottom: calc(100% + 14px); }
+  [data-section="cover"] .cover__stage-line.tate,
+  [data-section="cover"] .cover__stage-line:not(.tate) {
+    position: static;
+    order: 1;
+    writing-mode: horizontal-tb;
+    max-height: none;
+    letter-spacing: .06em;
+  }
+  [data-section="cover"] .cover__facts { position: static; order: 2; width: auto; }
+  [data-section="cover"] .cover__caption.tate { right: auto; left: 0; bottom: auto; top: calc(100% + 14px); writing-mode: horizontal-tb; }
+  [data-section="cover"] .cover__caption:not(.tate) { top: calc(100% + 14px); }
+  [data-section="cover"] > .cover__view { left: 0; right: 0; height: 100%; }
+  html.no-js [data-section="cover"] .cover__still,
+  [data-section="cover"][data-cover-mode="still"] .cover__still { left: auto; right: -8%; bottom: -30%; width: 52%; height: 52%; }
+  html.no-js [data-section="cover"] .cover__sheet,
+  [data-section="cover"][data-cover-mode="still"] .cover__sheet { margin-bottom: 22%; }
+  html.no-js [data-section="cover"] .cover__caption,
+  [data-section="cover"][data-cover-mode="still"] .cover__caption { top: auto; bottom: -30%; left: 0; right: auto; max-width: 44%; writing-mode: horizontal-tb; }
+}
+@media (max-width: 767px) {
+  [data-section="cover"] .cover__stage { padding-top: calc(var(--chrome-top) + var(--s-5)); }
+}
+
+/* Proof (校正刷り): text first; the still and the hint are decoration */
+html[data-proof] [data-section="cover"] .cover__still,
+html[data-proof] [data-section="cover"] .cover__corner,
+html[data-proof] [data-section="cover"] .cover__curl,
+html[data-proof] [data-section="cover"] .cover__label { display: none !important; }
+html[data-proof] [data-section="cover"] .cover__caption { opacity: 1; position: static; writing-mode: horizontal-tb; }

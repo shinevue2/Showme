@@ -1,0 +1,15 @@
+/* Native cursors (DESIGN §4.3). Owner: WP-04. Never a cursor follower: sections only add the class.
+   PNGs and hotspots by WP-02 (public/cursors/*.png 32 px, *@2x.png 64 px, hotspots.json). The plain url()
+   line is the fallback for engines without image-set() in cursor; the keyword after it is the last resort.
+   Root-absolute URLs are rewritten to relative ones by the build (dist/ works from any sub-path). */
+.cur-gouge  { cursor: url("/cursors/gouge.png") 3 3, crosshair;   cursor: image-set(url("/cursors/gouge.png") 1x, url("/cursors/gouge@2x.png") 2x) 3 3, crosshair; }
+.cur-baren  { cursor: url("/cursors/baren.png") 16 19, grab;      cursor: image-set(url("/cursors/baren.png") 1x, url("/cursors/baren@2x.png") 2x) 16 19, grab; }
+.cur-hand   { cursor: url("/cursors/hand.png") 16 15, grab;       cursor: image-set(url("/cursors/hand.png") 1x, url("/cursors/hand@2x.png") 2x) 16 15, grab; }
+.cur-direct { cursor: url("/cursors/direct.png") 4 3, default;    cursor: image-set(url("/cursors/direct.png") 1x, url("/cursors/direct@2x.png") 2x) 4 3, default; }
+.cur-rake   { cursor: url("/cursors/rake.png") 12 27, crosshair;  cursor: image-set(url("/cursors/rake.png") 1x, url("/cursors/rake@2x.png") 2x) 12 27, crosshair; }
+.cur-brush  { cursor: url("/cursors/brush.png") 4 28, crosshair;  cursor: image-set(url("/cursors/brush.png") 1x, url("/cursors/brush@2x.png") 2x) 4 28, crosshair; }
+.cur-seal   { cursor: url("/cursors/seal.png") 16 28, pointer;    cursor: image-set(url("/cursors/seal.png") 1x, url("/cursors/seal@2x.png") 2x) 16 28, pointer; }
+/* while dragging a grabbable surface */
+.cur-hand:active, .cur-baren:active { cursor: grabbing; }
+/* touch screens show no cursor; coarse pointers keep the platform default */
+@media (pointer: coarse) { .cur-gouge, .cur-baren, .cur-hand, .cur-direct, .cur-rake, .cur-brush, .cur-seal { cursor: auto; } }

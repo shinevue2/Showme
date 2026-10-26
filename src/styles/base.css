@@ -1,0 +1,65 @@
+/* ===== src/styles/base.css — reset, grounds, links, utilities (DESIGN §3.1 usage, §3.5, §11.1). Owner: WP-00 ===== */
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scroll-padding-top: 72px;          /* focus never hides under the doc bar (§4, §11.1) */
+  overflow-x: clip;                   /* clip, never hidden/auto: keeps sticky alive (§5.8) */
+  /* never `scroll-behavior: smooth` — Lenis owns smoothing (§5.8) */
+}
+
+body {
+  margin: 0;
+  min-height: 100svh;
+  background: var(--pasteboard);
+  color: var(--ink);
+  font-size: var(--fs-body);
+  overflow-x: clip;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+img, picture, video, canvas, svg { display: block; max-width: 100%; }
+img, video { height: auto; }
+svg { overflow: visible; }
+
+h1, h2, h3, h4, p, figure, blockquote, dl, dd, ol, ul { margin: 0; }
+ol, ul { padding: 0; list-style: none; }
+table { border-collapse: collapse; }
+th { text-align: start; font-weight: 500; }
+
+a {
+  color: var(--link);
+  text-decoration: underline;          /* links always underlined (night contrast rule §3.1) */
+  text-decoration-thickness: 1px;
+  text-underline-offset: .2em;
+}
+a:hover { text-decoration-thickness: 2px; }
+
+button, input, textarea, select { font: inherit; color: inherit; border-radius: var(--radius); }
+button { background: none; border: 0; padding: 0; cursor: pointer; }
+input, textarea, select { background: var(--paper-print); border: 1px solid var(--rule); padding: var(--s-2) var(--s-3); }
+
+::selection { background: var(--select); color: var(--paper-print); }
+
+[hidden] { display: none !important; }
+html.no-js .js-only { display: none !important; }
+
+.visually-hidden {
+  position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0;
+}
+
+/* skip link (§4.3) — the first focusable element */
+.skip-link {
+  position: fixed; left: var(--s-2); top: var(--s-2); z-index: 50;
+  padding: var(--s-2) var(--s-4); background: var(--paper-print); color: var(--ink);
+  transform: translateY(-200%);
+}
+.skip-link:focus, .skip-link:focus-visible { transform: none; }
+
+main { display: block; }
+main:focus { outline: none; }
+summary { list-style: none; }
+summary::-webkit-details-marker { display: none; }

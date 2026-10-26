@@ -1,0 +1,468 @@
+{
+ "generated": "2026-10-26T06:17:29.415Z",
+ "langs": {
+  "ja": {
+   "faces": [
+    {
+     "family": "IBM Plex Sans JP",
+     "kind": "body",
+     "files": [
+      "ibm-plex-sans-jp/ibm-plex-sans-jp-400-latin-ext.c90eb0.woff2",
+      "ibm-plex-sans-jp/ibm-plex-sans-jp-400-latin.c67b15.woff2",
+      "ibm-plex-sans-jp/ibm-plex-sans-jp-500-latin-ext.a95a19.woff2",
+      "ibm-plex-sans-jp/ibm-plex-sans-jp-500-latin.2507ca.woff2",
+      "ibm-plex-sans-jp/ibm-plex-sans-jp-400-ja-0.a486706c.woff2",
+      "ibm-plex-sans-jp/ibm-plex-sans-jp-400-ja-1.26aa5f7d.woff2",
+      "ibm-plex-sans-jp/ibm-plex-sans-jp-400-ja-2.3a2d4cda.woff2",
+      "ibm-plex-sans-jp/ibm-plex-sans-jp-400-ja-3.53cfbd32.woff2",
+      "ibm-plex-sans-jp/ibm-plex-sans-jp-400-ja-4.5ece581c.woff2",
+      "ibm-plex-sans-jp/ibm-plex-sans-jp-500-ja-0.644d7b7a.woff2",
+      "ibm-plex-sans-jp/ibm-plex-sans-jp-500-ja-1.1e714aa9.woff2",
+      "ibm-plex-sans-jp/ibm-plex-sans-jp-500-ja-2.69ddb25e.woff2",
+      "ibm-plex-sans-jp/ibm-plex-sans-jp-500-ja-3.5b9fe40f.woff2",
+      "ibm-plex-sans-jp/ibm-plex-sans-jp-500-ja-4.4f1bd7a3.woff2"
+     ],
+     "bytes": 397812
+    },
+    {
+     "family": "IBM Plex Sans JP",
+     "weight": 700,
+     "kind": "text",
+     "chars": 569,
+     "files": [
+      "ibm-plex-sans-jp/ibm-plex-sans-jp-700-ja-0.8d68fb50.woff2",
+      "ibm-plex-sans-jp/ibm-plex-sans-jp-700-ja-1.bd67d88d.woff2"
+     ],
+     "bytes": 73580,
+     "missing": "简"
+    },
+    {
+     "family": "Shippori Mincho B1",
+     "weight": 800,
+     "kind": "text",
+     "chars": 129,
+     "files": [
+      "shippori-mincho-b1/shippori-mincho-b1-800-ja-0.a5eca262.woff2",
+      "shippori-mincho-b1/shippori-mincho-b1-800-ja-1.83050a50.woff2"
+     ],
+     "bytes": 36252,
+     "missing": ""
+    },
+    {
+     "family": "Zen Antique",
+     "weight": 400,
+     "kind": "text",
+     "chars": 141,
+     "files": [
+      "zen-antique/zen-antique-400-ja.15b20831.woff2"
+     ],
+     "bytes": 32292,
+     "missing": ""
+    },
+    {
+     "family": "Dela Gothic One",
+     "weight": 400,
+     "kind": "text",
+     "chars": 164,
+     "files": [
+      "dela-gothic-one/dela-gothic-one-400-ja.8364c57f.woff2"
+     ],
+     "bytes": 18904,
+     "missing": ""
+    },
+    {
+     "family": "Shippori Antique B1",
+     "weight": 400,
+     "kind": "text",
+     "chars": 269,
+     "files": [
+      "shippori-antique-b1/shippori-antique-b1-400-ja.08df3fd3.woff2"
+     ],
+     "bytes": 60936,
+     "missing": ""
+    },
+    {
+     "family": "DotGothic16",
+     "weight": 400,
+     "kind": "text",
+     "chars": 213,
+     "files": [
+      "dotgothic16/dotgothic16-400-ja.ae63ee19.woff2"
+     ],
+     "bytes": 12648,
+     "missing": ""
+    },
+    {
+     "family": "Zen Old Mincho",
+     "weight": 700,
+     "kind": "text",
+     "chars": 122,
+     "files": [
+      "zen-old-mincho/zen-old-mincho-700-ja.f07ec5bb.woff2"
+     ],
+     "bytes": 26264,
+     "missing": ""
+    },
+    {
+     "family": "Zen Old Mincho",
+     "weight": 400,
+     "kind": "text",
+     "chars": 189,
+     "files": [
+      "zen-old-mincho/zen-old-mincho-400-ja.97e2feb6.woff2"
+     ],
+     "bytes": 40368,
+     "missing": ""
+    },
+    {
+     "family": "Kaisei Tokumin",
+     "weight": 800,
+     "kind": "text",
+     "chars": 195,
+     "files": [
+      "kaisei-tokumin/kaisei-tokumin-800-ja.ac846c31.woff2"
+     ],
+     "bytes": 43520,
+     "missing": ""
+    },
+    {
+     "family": "Yuji Mai",
+     "weight": 400,
+     "kind": "text",
+     "chars": 162,
+     "files": [
+      "yuji-mai/yuji-mai-400-ja.62d3e731.woff2"
+     ],
+     "bytes": 62800,
+     "missing": "〜"
+    },
+    {
+     "family": "Kaisei HarunoUmi",
+     "weight": 400,
+     "kind": "text",
+     "chars": 186,
+     "files": [
+      "kaisei-harunoumi/kaisei-harunoumi-400-ja.027ffa80.woff2"
+     ],
+     "bytes": 43520,
+     "missing": ""
+    },
+    {
+     "family": "Kaisei HarunoUmi",
+     "weight": 700,
+     "kind": "text",
+     "chars": 69,
+     "files": [
+      "kaisei-harunoumi/kaisei-harunoumi-700-ja.57130d22.woff2"
+     ],
+     "bytes": 14944,
+     "missing": ""
+    },
+    {
+     "family": "Klee One",
+     "weight": 600,
+     "kind": "text",
+     "chars": 159,
+     "files": [
+      "klee-one/klee-one-600-ja.af82b220.woff2"
+     ],
+     "bytes": 42068,
+     "missing": ""
+    },
+    {
+     "family": "Noto Sans SC",
+     "kind": "foreign",
+     "files": [
+      "noto-sans-sc/noto-sans-sc-400-zh-x-0.4e346d95.woff2",
+      "noto-sans-sc/noto-sans-sc-400-zh-x-1.7eae04aa.woff2",
+      "noto-sans-sc/noto-sans-sc-400-zh-x-2.aca92d8b.woff2",
+      "noto-sans-sc/noto-sans-sc-500-zh-x-0.9ab73091.woff2",
+      "noto-sans-sc/noto-sans-sc-500-zh-x-1.636beae2.woff2",
+      "noto-sans-sc/noto-sans-sc-500-zh-x-2.e47b6897.woff2"
+     ],
+     "bytes": 144140
+    }
+   ],
+   "cjkDisplaySubsetBytes": 508096,
+   "slicedOnDiskBytes": 541952,
+   "cssBytes": 50456
+  },
+  "en": {
+   "faces": [
+    {
+     "family": "Shippori Mincho B1",
+     "weight": 800,
+     "kind": "text",
+     "chars": 66,
+     "files": [
+      "shippori-mincho-b1/shippori-mincho-b1-800-en.26278ff5.woff2"
+     ],
+     "bytes": 14268,
+     "missing": "Ōō"
+    },
+    {
+     "family": "Shippori Antique B1",
+     "weight": 400,
+     "kind": "text",
+     "chars": 50,
+     "files": [
+      "shippori-antique-b1/shippori-antique-b1-400-en.a730cfa0.woff2"
+     ],
+     "bytes": 7928,
+     "missing": ""
+    },
+    {
+     "family": "IBM Plex Sans JP",
+     "kind": "foreign",
+     "files": [
+      "ibm-plex-sans-jp/ibm-plex-sans-jp-400-ja-x-0.e4ce0b8d.woff2",
+      "ibm-plex-sans-jp/ibm-plex-sans-jp-400-ja-x-1.43044e12.woff2",
+      "ibm-plex-sans-jp/ibm-plex-sans-jp-400-ja-x-2.b63f6674.woff2",
+      "ibm-plex-sans-jp/ibm-plex-sans-jp-500-ja-x-0.c03b3ba8.woff2",
+      "ibm-plex-sans-jp/ibm-plex-sans-jp-500-ja-x-1.70650a76.woff2",
+      "ibm-plex-sans-jp/ibm-plex-sans-jp-500-ja-x-2.0f7eece2.woff2"
+     ],
+     "bytes": 96580
+    },
+    {
+     "family": "Noto Sans SC",
+     "kind": "foreign",
+     "files": [
+      "noto-sans-sc/noto-sans-sc-400-zh-x-0.4e346d95.woff2",
+      "noto-sans-sc/noto-sans-sc-400-zh-x-1.7eae04aa.woff2",
+      "noto-sans-sc/noto-sans-sc-400-zh-x-2.aca92d8b.woff2",
+      "noto-sans-sc/noto-sans-sc-500-zh-x-0.9ab73091.woff2",
+      "noto-sans-sc/noto-sans-sc-500-zh-x-1.636beae2.woff2",
+      "noto-sans-sc/noto-sans-sc-500-zh-x-2.e47b6897.woff2"
+     ],
+     "bytes": 144140
+    }
+   ],
+   "cjkDisplaySubsetBytes": 22196,
+   "slicedOnDiskBytes": 240720,
+   "cssBytes": 14945
+  },
+  "zh": {
+   "faces": [
+    {
+     "family": "Noto Sans SC",
+     "kind": "body",
+     "files": [
+      "noto-sans-sc/noto-sans-sc-400-latin-ext.4e7349.woff2",
+      "noto-sans-sc/noto-sans-sc-400-latin.736c6a.woff2",
+      "noto-sans-sc/noto-sans-sc-400-latin-ext.4e7349.woff2",
+      "noto-sans-sc/noto-sans-sc-400-latin.736c6a.woff2",
+      "noto-sans-sc/noto-sans-sc-400-zh-0.de4bd2f4.woff2",
+      "noto-sans-sc/noto-sans-sc-400-zh-1.f92c91d4.woff2",
+      "noto-sans-sc/noto-sans-sc-400-zh-2.ab066488.woff2",
+      "noto-sans-sc/noto-sans-sc-400-zh-3.f8a8e2a9.woff2",
+      "noto-sans-sc/noto-sans-sc-400-zh-4.c2f077e0.woff2",
+      "noto-sans-sc/noto-sans-sc-500-zh-0.fb786299.woff2",
+      "noto-sans-sc/noto-sans-sc-500-zh-1.e411404a.woff2",
+      "noto-sans-sc/noto-sans-sc-500-zh-2.96c138c2.woff2",
+      "noto-sans-sc/noto-sans-sc-500-zh-3.aae916f9.woff2",
+      "noto-sans-sc/noto-sans-sc-500-zh-4.37167b4a.woff2"
+     ],
+     "bytes": 616380
+    },
+    {
+     "family": "Noto Sans SC",
+     "weight": 700,
+     "kind": "text",
+     "chars": 566,
+     "files": [
+      "noto-sans-sc/noto-sans-sc-700-zh-0.7f036e9b.woff2",
+      "noto-sans-sc/noto-sans-sc-700-zh-1.7e328025.woff2"
+     ],
+     "bytes": 81200,
+     "missing": ""
+    },
+    {
+     "family": "Noto Serif SC",
+     "weight": 900,
+     "kind": "text",
+     "chars": 237,
+     "files": [
+      "noto-serif-sc/noto-serif-sc-900-zh-0.f4f27340.woff2",
+      "noto-serif-sc/noto-serif-sc-900-zh-1.d606ff79.woff2"
+     ],
+     "bytes": 43756,
+     "missing": ""
+    },
+    {
+     "family": "Noto Serif SC",
+     "weight": 300,
+     "kind": "text",
+     "chars": 290,
+     "files": [
+      "noto-serif-sc/noto-serif-sc-300-zh.9e2fe44a.woff2"
+     ],
+     "bytes": 50928,
+     "missing": ""
+    },
+    {
+     "family": "Noto Serif SC",
+     "weight": 400,
+     "kind": "text",
+     "chars": 349,
+     "files": [
+      "noto-serif-sc/noto-serif-sc-400-zh.2d03d22e.woff2"
+     ],
+     "bytes": 84240,
+     "missing": ""
+    },
+    {
+     "family": "Noto Sans SC",
+     "weight": 900,
+     "kind": "text",
+     "chars": 165,
+     "files": [
+      "noto-sans-sc/noto-sans-sc-900-zh.f1722188.woff2"
+     ],
+     "bytes": 23380,
+     "missing": ""
+    },
+    {
+     "family": "ZCOOL XiaoWei",
+     "weight": 400,
+     "kind": "text",
+     "chars": 132,
+     "files": [
+      "zcool-xiaowei/zcool-xiaowei-400-zh.083b8cc6.woff2"
+     ],
+     "bytes": 38492,
+     "missing": "·〇覗"
+    },
+    {
+     "family": "ZCOOL QingKe HuangYou",
+     "weight": 400,
+     "kind": "text",
+     "chars": 189,
+     "files": [
+      "zcool-qingke-huangyou/zcool-qingke-huangyou-400-zh.8b7316a5.woff2"
+     ],
+     "bytes": 34932,
+     "missing": "·枡"
+    },
+    {
+     "family": "Ma Shan Zheng",
+     "weight": 400,
+     "kind": "text",
+     "chars": 162,
+     "files": [
+      "ma-shan-zheng/ma-shan-zheng-400-zh.687423c5.woff2"
+     ],
+     "bytes": 55636,
+     "missing": "·"
+    },
+    {
+     "family": "Zhi Mang Xing",
+     "weight": 400,
+     "kind": "text",
+     "chars": 49,
+     "files": [
+      "zhi-mang-xing/zhi-mang-xing-400-zh.c1ce9377.woff2"
+     ],
+     "bytes": 8740,
+     "missing": "·"
+    },
+    {
+     "family": "Long Cang",
+     "weight": 400,
+     "kind": "text",
+     "chars": 142,
+     "files": [
+      "long-cang/long-cang-400-zh.2d820a97.woff2"
+     ],
+     "bytes": 41712,
+     "missing": "·"
+    },
+    {
+     "family": "Shippori Antique B1",
+     "weight": 400,
+     "kind": "text",
+     "chars": 43,
+     "files": [
+      "shippori-antique-b1/shippori-antique-b1-400-zh.013976ce.woff2"
+     ],
+     "bytes": 7052,
+     "missing": "团术约职责问队"
+    },
+    {
+     "family": "IBM Plex Sans JP",
+     "kind": "foreign",
+     "files": [
+      "ibm-plex-sans-jp/ibm-plex-sans-jp-400-ja-x-0.e4ce0b8d.woff2",
+      "ibm-plex-sans-jp/ibm-plex-sans-jp-400-ja-x-1.43044e12.woff2",
+      "ibm-plex-sans-jp/ibm-plex-sans-jp-400-ja-x-2.b63f6674.woff2",
+      "ibm-plex-sans-jp/ibm-plex-sans-jp-500-ja-x-0.c03b3ba8.woff2",
+      "ibm-plex-sans-jp/ibm-plex-sans-jp-500-ja-x-1.70650a76.woff2",
+      "ibm-plex-sans-jp/ibm-plex-sans-jp-500-ja-x-2.0f7eece2.woff2"
+     ],
+     "bytes": 96580
+    }
+   ],
+   "cjkDisplaySubsetBytes": 470068,
+   "slicedOnDiskBytes": 712960,
+   "cssBytes": 53579
+  }
+ },
+ "shared": {
+  "IBM Plex Sans": [
+   "ibm-plex-sans/ibm-plex-sans-300_700i-w85_100-latin-ext.918284.woff2",
+   "ibm-plex-sans/ibm-plex-sans-300_700i-w85_100-latin.268c7d.woff2",
+   "ibm-plex-sans/ibm-plex-sans-300_700-w85_100-latin-ext.8ba17c.woff2",
+   "ibm-plex-sans/ibm-plex-sans-300_700-w85_100-latin.86234d.woff2",
+   "ibm-plex-sans/ibm-plex-sans-300_700i-sym.ea520d1a.woff2",
+   "ibm-plex-sans/ibm-plex-sans-300_700-sym.94dccbd4.woff2"
+  ],
+  "Martian Mono": [
+   "martian-mono/martian-mono-300_600-w75_112.5-latin-ext.4bca8d.woff2",
+   "martian-mono/martian-mono-300_600-w75_112.5-latin.847785.woff2",
+   "martian-mono/martian-mono-300_600-sym.e709edb5.woff2"
+  ],
+  "IBM Plex Mono": [
+   "ibm-plex-mono/ibm-plex-mono-400i-latin-ext.b92344.woff2",
+   "ibm-plex-mono/ibm-plex-mono-400i-latin.ab481d.woff2",
+   "ibm-plex-mono/ibm-plex-mono-400-latin-ext.ae5fc1.woff2",
+   "ibm-plex-mono/ibm-plex-mono-400-latin.7e3d7e.woff2",
+   "ibm-plex-mono/ibm-plex-mono-500-latin-ext.203ce9.woff2",
+   "ibm-plex-mono/ibm-plex-mono-500-latin.eb8890.woff2",
+   "ibm-plex-mono/ibm-plex-mono-400i-sym.217be4e3.woff2",
+   "ibm-plex-mono/ibm-plex-mono-400-sym.479ab41f.woff2",
+   "ibm-plex-mono/ibm-plex-mono-500-sym.b99ed05e.woff2"
+  ],
+  "Bodoni Moda": [
+   "bodoni-moda/bodoni-moda-400_700i-latin.ec86b9.woff2",
+   "bodoni-moda/bodoni-moda-400_700i-sym.32be7be1.woff2"
+  ],
+  "Schibsted Grotesk": [
+   "schibsted-grotesk/schibsted-grotesk-700-latin.b8b464.woff2",
+   "schibsted-grotesk/schibsted-grotesk-700-sym.64170015.woff2"
+  ],
+  "Big Shoulders": [
+   "big-shoulders/big-shoulders-700-latin.3b4d00.woff2",
+   "big-shoulders/big-shoulders-700-sym.4e89e0e4.woff2"
+  ],
+  "Bricolage Grotesque": [
+   "bricolage-grotesque/bricolage-grotesque-700-w75-latin.d87024.woff2",
+   "bricolage-grotesque/bricolage-grotesque-700-sym.3e771950.woff2"
+  ],
+  "Handjet": [
+   "handjet/handjet-100_900-latin.283069.woff2",
+   "handjet/handjet-100_900-sym.f5c04f7d.woff2"
+  ],
+  "Newsreader": [
+   "newsreader/newsreader-400i-latin.6ca225.woff2",
+   "newsreader/newsreader-300-latin.49a4c0.woff2",
+   "newsreader/newsreader-400i-sym.69cbf881.woff2",
+   "newsreader/newsreader-300-sym.8395d968.woff2"
+  ],
+  "Gloock": [
+   "gloock/gloock-400-latin.61aff8.woff2",
+   "gloock/gloock-400-sym.e7bf42e8.woff2"
+  ],
+  "totalBytes": 651180,
+  "cssBytes": 11908
+ }
+}

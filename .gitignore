@@ -1,0 +1,11 @@
+node_modules/
+dist/
+build/film/
+build/qa/
+build/.cache/
+tools/bin/
+.locks/
+assets-src/film/master-*
+*.log
+.DS_Store
+.vite/

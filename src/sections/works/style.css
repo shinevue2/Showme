@@ -1,0 +1,690 @@
+/* ===== Works — 屏風 · 表具 The Mount (DESIGN §6.4). Owner: WP-07 =====
+   Three layouts from one markup, chosen by CSS alone (render.ts):
+     dolly  — html.js, motion on, ≥ 1024 px, not Proof: sticky stage, the camera dollies 第一扇 → 第六扇;
+     list   — otherwise from 768 px: the screen open, six cases listed in reading order;
+     mobile — < 768 px: no WebGL, six tall gold panels with their cases.
+   Text sits on paper, never on gold. Named colours that are not tokens: 墨 sumi (NC #1C1C1C) for the
+   lacquered frame and 弁柄 bengara (NC #9A5034) for the worn ground — materials, identical in both themes. */
+
+[data-section="works"] {
+  --sumi: #1C1C1C;       /* 墨 NC */
+  --bengara: #9A5034;    /* 弁柄 NC */
+  --works-view-h: min(56vw, 62lvh);
+  --kanji-label: "Shippori Antique B1", var(--f-serif-ja);
+}
+[data-section="works"]:lang(zh-Hans) { --kanji-label: "Noto Sans SC", var(--f-body-zh); }
+[data-section="works"]:lang(en) { --kanji-label: "Bricolage Grotesque", var(--f-body-en); }
+
+/* ---------------------------------------------------------------- shared pieces */
+[data-section="works"] .works__run,
+[data-section="works"] .works__after { display: none; }
+[data-section="works"] .works__head .stage-line { color: var(--ink-2); }
+[data-section="works"] .works__direction { font-size: var(--fs-small); color: var(--ink-2); }
+[data-section="works"] .works__direction:lang(en),
+:lang(en) [data-section="works"] .works__direction {
+  display: flex; align-items: center; gap: var(--s-2);
+  font-family: var(--f-mono); font-size: var(--fs-caption); font-variant-caps: all-small-caps; letter-spacing: .06em;
+}
+[data-section="works"] .works__direction-icon svg { width: 18px; height: 18px; }
+[data-section="works"] .works__direction.tate { max-height: 14em; letter-spacing: .12em; }
+
+/* the frame holds the view placeholder and the panel labels (labels sit on paper below each panel) */
+[data-section="works"] .works__frame { position: relative; }
+[data-section="works"] .works__view { width: 100%; height: 100%; }
+html[data-poster] [data-section="works"] .byobu__labels,
+html[data-poster] [data-section="works"] .works__keys { visibility: hidden; }
+
+[data-section="works"] .byobu__labels {
+  position: absolute;
+  inset: auto 0 0 0;
+  display: flex;
+  flex-direction: row-reverse;              /* 第一扇 at the right: the real reading order */
+  flex-wrap: wrap-reverse;
+  justify-content: space-around;
+  align-items: flex-end;
+  padding: 0 var(--artboard-pad) var(--s-1);
+  pointer-events: none;
+}
+[data-section="works"] .byobu__label {
+  pointer-events: auto;
+  display: inline-flex;
+  align-items: baseline;
+  gap: .5em;
+  padding: var(--s-1) var(--s-2);
+  min-height: 24px;
+  font-family: var(--f-chrome);
+  font-size: var(--fs-caption);
+  line-height: 1.4;
+  color: var(--ink);
+  text-decoration: none;
+  white-space: nowrap;
+  background: var(--paper);
+  transition: opacity var(--dur-kyu) var(--ease-kyu), color var(--dur-micro) linear;
+}
+[data-section="works"] .byobu__label:hover .byobu__short { text-decoration: underline; text-underline-offset: .2em; }
+[data-section="works"] .byobu__n { font-family: var(--kanji-label); letter-spacing: .08em; color: var(--accent-text); }
+:lang(en) [data-section="works"] .byobu__n { font-family: var(--f-mono); font-variant-caps: all-small-caps; letter-spacing: .04em; }
+[data-section="works"] .byobu__short { font-family: var(--f-body-ja); }
+:lang(en) [data-section="works"] .byobu__short { font-family: var(--f-body-en); }
+:lang(zh-Hans) [data-section="works"] .byobu__short { font-family: var(--f-body-zh); }
+/* the focused panel: a gilt registration rule over its label (a fill, never text) */
+[data-section="works"] .byobu__label::before {
+  content: "";
+  position: absolute;
+  left: var(--s-2); right: var(--s-2); top: -3px;
+  height: 2px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform var(--dur-register) var(--ease-register);
+}
+[data-section="works"] .byobu__label { position: relative; }
+[data-section="works"] .byobu__label[aria-current="true"]::before { transform: none; }
+/* placed by the live view at each panel's projected foot (translate only) */
+[data-section="works"] .byobu__labels[data-placed] { display: block; padding: 0; inset: 0; }
+[data-section="works"] .byobu__labels[data-placed] .byobu__label { position: absolute; left: 0; top: 0; will-change: auto; }
+[data-section="works"] .byobu__labels[data-placed] .byobu__label[data-off] { opacity: 0; pointer-events: none; }
+[data-section="works"] .works__keys { display: none; }
+
+/* case items */
+[data-section="works"] .works__case { position: relative; }
+[data-section="works"] .works__leaf { display: none; }
+[data-section="works"] .works__n {
+  font-family: var(--kanji-label);
+  font-size: var(--fs-small);
+  letter-spacing: .14em;
+  color: var(--accent-text);
+}
+:lang(zh-Hans) [data-section="works"] .works__n { font-weight: 900; }
+:lang(en) [data-section="works"] .works__n { font-family: var(--f-mono); font-size: var(--fs-caption); font-variant-caps: all-small-caps; letter-spacing: .06em; }
+[data-section="works"] .works__n.tate { line-height: 1.4; }
+[data-section="works"] .works__title {
+  font-size: clamp(22px, 1.1vw + 11px, 30px);
+  line-height: 1.25;
+  color: var(--ink);
+  justify-self: start;
+  --plate-inset: auto -2% -9px 0;
+}
+:lang(ja) [data-section="works"] .works__title { letter-spacing: .02em; }
+[data-section="works"] .works__meta {
+  margin-top: var(--s-2);
+  font-family: var(--f-chrome);
+  font-size: var(--fs-caption);
+  color: var(--ink-2);
+}
+[data-section="works"] .sep { color: var(--rule); }
+[data-section="works"] .num { font-family: var(--f-mono); font-variant-numeric: tabular-nums; font-variation-settings: "wdth" 87.5; letter-spacing: -.01em; }
+[data-section="works"] .works__qa { display: grid; gap: var(--s-2); margin-top: var(--s-4); }
+[data-section="works"] .works__qa > div { grid-template-columns: 2.4em minmax(0, 1fr); column-gap: var(--s-3); align-items: baseline; }
+:lang(en) [data-section="works"] .works__qa > div { grid-template-columns: 6.2em minmax(0, 1fr); }
+[data-section="works"] .works__qa dt {
+  font-family: var(--kanji-label);
+  font-size: 1.15em;
+  line-height: 1;
+  color: var(--accent-text);
+}
+:lang(zh-Hans) [data-section="works"] .works__qa dt { font-weight: 900; }
+:lang(en) [data-section="works"] .works__qa dt { font-family: var(--f-mono); font-size: var(--fs-caption); font-variant-caps: all-small-caps; letter-spacing: .06em; line-height: 1.6; }
+[data-section="works"] .works__qa dd { font-size: var(--fs-body); color: var(--ink); }
+:lang(ja) [data-section="works"] .works__qa dd { line-height: 1.75; }
+[data-section="works"] .works__a dd { font-weight: 500; }
+[data-section="works"] .works__a .num { font-size: 1.06em; }
+[data-section="works"] .works__foot {
+  display: flex; flex-wrap: wrap; align-items: baseline; column-gap: var(--s-5); row-gap: var(--s-1);
+  margin-top: var(--s-4);
+}
+[data-section="works"] .works__read { font-weight: 500; }
+[data-section="works"] .works__arrow { display: inline-block; margin-inline-start: .4em; text-decoration: none; transition: transform var(--dur-kyu) var(--ease-kyu); }
+[data-section="works"] .works__read:hover .works__arrow { transform: translateX(3px); }
+[data-section="works"] .works__art,
+[data-section="works"] .works__credit {
+  font-family: var(--f-chrome);
+  font-size: var(--fs-caption);
+  line-height: 1.5;
+  color: var(--ink-2);
+}
+[data-section="works"] .works__art-k { color: var(--accent-text); }
+
+/* ---------------------------------------------------------------- list (≥ 768 px, no dolly) */
+@media (min-width: 768px) {
+  [data-section="works"] .works__stage { display: block; height: auto; position: relative; }
+  [data-section="works"] .works__head { margin-bottom: var(--s-7); grid-template-columns: minmax(0, 1fr) auto auto; }
+  [data-section="works"] .works__head > .works__direction.tate { grid-column: 2; grid-row: 1 / span 3; }
+  [data-section="works"] .works__head > .stage-line.tate { grid-column: 3; grid-row: 1 / span 3; }
+  [data-section="works"] .works__frame {
+    height: var(--works-view-h);
+    margin-inline: calc(-1 * var(--artboard-pad));
+  }
+  [data-section="works"] .works__cases {
+    display: grid;
+    margin-top: var(--s-8);
+    border-top: 1px solid var(--rule);
+  }
+  [data-section="works"] .works__case {
+    display: grid;
+    grid-template-columns: 3em minmax(0, 5fr) minmax(0, 7fr);
+    column-gap: var(--gutter);
+    padding: var(--s-6) 0 var(--s-6);
+    border-bottom: 1px solid var(--rule);
+  }
+  [data-section="works"] .works__n { grid-column: 1; grid-row: 1 / span 2; justify-self: center; }
+  :lang(en) [data-section="works"] .works__n { justify-self: start; }
+  [data-section="works"] .works__body { grid-column: 2 / -1; display: grid; grid-template-columns: subgrid; grid-template-rows: auto auto auto 1fr; align-items: start; }
+  [data-section="works"] .works__body > .works__title { grid-column: 1; grid-row: 1; }
+  [data-section="works"] .works__body > .works__meta { grid-column: 1; grid-row: 2; }
+  [data-section="works"] .works__body > .works__qa { grid-column: 2; grid-row: 1 / -1; margin-top: 0; }
+  [data-section="works"] .works__body > .works__foot { grid-column: 1; grid-row: 3; flex-direction: column; align-items: flex-start; }
+}
+
+/* ---------------------------------------------------------------- dolly (the main experience) */
+@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="works"] {
+    --works-view-h: min(62lvh, calc(100lvh - var(--chrome-top) - 19.5rem));
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="works"] > .works__run {
+    display: block;
+    position: absolute;
+    top: 0; left: 0;
+    width: 1px;
+    height: 120vh;
+    visibility: hidden;
+    pointer-events: none;
+  }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="works"] .works__anchor {
+    position: absolute;
+    left: 0;
+    top: calc(var(--s) * 120vh + 72px);     /* hash jumps land after scroll-padding-top on the panel's hold */
+    width: 1px; height: 1px;
+  }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="works"] > .works__after { display: block; height: 120vh; }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="works"] > .ma { margin-top: 0; }
+
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="works"] .works__stage {
+    position: sticky;
+    top: 0;
+    height: 100lvh;
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    grid-template-rows: var(--chrome-top) var(--works-view-h) minmax(0, 1fr);
+    column-gap: var(--gutter);
+  }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="works"] .works__frame {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    height: auto;
+    margin-inline: calc(-1 * var(--artboard-pad));
+  }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="works"] .works__keys {
+    display: block;
+    position: absolute;
+    right: var(--artboard-pad);
+    top: 0;
+    font-family: var(--f-chrome);
+    font-size: var(--fs-chrome);
+    letter-spacing: .04em;
+    color: var(--ink-2);
+  }
+  /* the header sits lower right, like a 題簽 beside the screen; the case column lower left */
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="works"] .works__head {
+    grid-column: 8 / -1;
+    grid-row: 3;
+    align-self: start;
+    margin: 0;
+    padding-top: var(--s-6);
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    column-gap: var(--s-5);
+    row-gap: var(--s-3);
+  }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="works"] .works__head > .artboard__title { grid-column: 1; font-size: clamp(28px, 1.6vw + 14px, 44px); line-height: 1.2; }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="works"] .works__head > .takeaway { grid-column: 1; font-size: var(--fs-body); max-width: 30em; color: var(--ink-2); }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="works"] .works__head > .stage-line.tate { grid-column: 3; grid-row: 1 / span 3; max-height: none; font-size: 13px; line-height: 1.6; }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="works"] .works__head > .works__direction.tate { grid-column: 2; grid-row: 1 / span 3; max-height: none; font-size: 13px; line-height: 1.6; }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="works"] .works__head > .works__direction:not(.tate) { grid-column: 1; }
+  html.js:not([data-motion="off"]):not([data-proof]):lang(en) [data-section="works"] .works__head > .stage-line { grid-column: 1; grid-row: auto; order: -1; }
+
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="works"] .works__cases {
+    grid-column: 1 / span 7;
+    grid-row: 3;
+    align-self: start;
+    display: grid;
+    margin: 0;
+    padding-top: var(--s-6);
+    border: 0;
+  }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="works"] .works__case {
+    grid-area: 1 / 1;
+    display: grid;
+    grid-template-columns: 2.2em minmax(0, 1fr);
+    column-gap: var(--s-4);
+    padding: 0;
+    border: 0;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity var(--dur-kyu) var(--ease-kyu), visibility 0s linear var(--dur-kyu);
+  }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="works"] .works__case.is-focus {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity var(--dur-kyu) var(--ease-kyu) 60ms, visibility 0s;
+  }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="works"] .works__case > .works__n { grid-column: 1; grid-row: 1; justify-self: start; }
+  html.js:not([data-motion="off"]):not([data-proof]):lang(en) [data-section="works"] .works__case { grid-template-columns: minmax(0, 1fr); }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="works"] .works__body { grid-column: 2; display: block; }
+  html.js:not([data-motion="off"]):not([data-proof]):lang(en) [data-section="works"] .works__body { grid-column: 1; }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="works"] .works__qa { gap: var(--s-1); margin-top: var(--s-3); }
+  /* keep the reading measure on wide screens (ja/zh ≈ 38 字, en ≈ 66 ch) */
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="works"] .works__qa dd { max-width: 38em; }
+  html.js:not([data-motion="off"]):not([data-proof]):lang(en) [data-section="works"] .works__qa dd { max-width: 66ch; }
+  html.js:not([data-motion="off"]):not([data-proof]):lang(ja) [data-section="works"] .works__qa dd { line-height: 1.7; }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="works"] .works__foot { margin-top: var(--s-3); }
+  /* the plate band under the focused title snaps into register (摺る) each time its panel comes into focus */
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="works"] .works__title[data-print]::before { animation: none; opacity: 0; }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="works"] .works__case.is-focus .works__title[data-print]::before {
+    animation: works-snap var(--dur-register) var(--ease-register) 80ms both;
+  }
+  html.js:not([data-motion="off"]):not([data-proof]) [data-section="works"] .works__case.is-resnap .works__title[data-print]::before { animation-name: works-snap-b; }
+}
+@keyframes works-snap { from { opacity: 0; transform: translate(var(--mx, 4px), var(--my, -3px)) rotate(var(--mr, .2deg)); } to { opacity: .92; transform: none; } }
+@keyframes works-snap-b { from { opacity: 0; transform: translate(calc(-1 * var(--mx, 4px)), var(--my, -3px)) rotate(var(--mr, .2deg)); } to { opacity: .92; transform: none; } }
+
+/* ---------------------------------------------------------------- mobile (< 768 px): no WebGL */
+@media (max-width: 767px) {
+  [data-section="works"] .works__frame { display: none; }
+  [data-section="works"] .works__stage { position: relative; height: auto; display: block; }
+  [data-section="works"] .works__head { margin-bottom: var(--s-7); }
+  [data-section="works"] .works__cases { display: grid; gap: var(--s-9); }
+  [data-section="works"] .works__case {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: var(--s-4);
+    perspective: 900px;
+  }
+  [data-section="works"] .works__leaf { display: block; grid-column: 1 / -1; margin-bottom: var(--s-5); }
+  [data-section="works"] .works__n { grid-column: 2; grid-row: 2; align-self: start; }
+  :lang(en) [data-section="works"] .works__n { grid-column: 1; grid-row: 2; margin-bottom: var(--s-2); }
+  [data-section="works"] .works__body { grid-column: 1; grid-row: 2; }
+  :lang(en) [data-section="works"] .works__body { grid-row: 3; grid-column: 1 / -1; }
+  [data-section="works"] .works__qa > div { display: grid; }
+  /* en labels are words, not one glyph: on a phone they sit above their text so the text keeps the width */
+  :lang(en) [data-section="works"] .works__qa > div { grid-template-columns: minmax(0, 1fr); row-gap: 0; }
+  [data-section="works"] .works__art { display: none; }      /* the panel's own caption carries the credit */
+}
+/* the mobile panel: lacquered top and bottom rails, a margin of gold leaf with its 箔足 seams, the art crop */
+[data-section="works"] .works__leaf-mount {
+  position: relative;
+  padding: 7% 8.5%;
+  border-block: 7px solid var(--sumi);
+  background-color: var(--accent-works);
+  --leaf: 32px;            /* one 3寸6分 leaf; the gold-leaf tile carries 10 × 10 leaves */
+  background-image:
+    /* daylight lying across the metal: a broad pale band, the way a gold ground brightens towards the window */
+    linear-gradient(112deg, transparent 16%, color-mix(in srgb, var(--paper-print) 34%, transparent) 38%, color-mix(in srgb, var(--paper-print) 10%, transparent) 52%, transparent 70%),
+    repeating-linear-gradient(90deg, color-mix(in srgb, var(--bengara) 20%, transparent) 0 1px, transparent 1px var(--leaf)),
+    repeating-linear-gradient(0deg, color-mix(in srgb, var(--bengara) 16%, transparent) 0 1px, transparent 1px var(--leaf)),
+    url("/img/gen/gold-leaf-1280.avif");
+  background-size: auto, auto, auto, calc(var(--leaf) * 10) calc(var(--leaf) * 10);
+  background-position: 0 0;
+  transform-origin: center;
+}
+[data-section="works"] .works__leaf-mount img { width: 100%; height: auto; aspect-ratio: 560 / 896; object-fit: cover; }
+[data-section="works"] .works__leaf-mount::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  /* the fold's light and shade (no tint: the painting keeps its own colours) */
+  background: linear-gradient(90deg,
+    color-mix(in srgb, var(--paper-print) 16%, transparent),
+    transparent 46%,
+    color-mix(in srgb, var(--sumi) 18%, transparent));
+  opacity: .6;
+}
+[data-section="works"] .works__leaf[data-panel="2"] .works__leaf-mount::after,
+[data-section="works"] .works__leaf[data-panel="4"] .works__leaf-mount::after,
+[data-section="works"] .works__leaf[data-panel="6"] .works__leaf-mount::after { transform: scaleX(-1); }
+[data-section="works"] .works__credit { margin-top: var(--s-3); }
+@supports (animation-timeline: view()) {
+  @media (max-width: 767px) and (prefers-reduced-motion: no-preference) {
+    html:not([data-motion="off"]) [data-section="works"] .works__leaf-mount {
+      animation: works-fold-odd linear both;
+      animation-timeline: view();
+      animation-range: entry 0% exit 100%;
+    }
+    html:not([data-motion="off"]) [data-section="works"] .works__leaf:is([data-panel="2"], [data-panel="4"], [data-panel="6"]) .works__leaf-mount { animation-name: works-fold-even; }
+    html:not([data-motion="off"]) [data-section="works"] .works__leaf-mount::after {
+      animation: works-sheen linear both;
+      animation-timeline: view();
+      animation-range: entry 0% exit 100%;
+    }
+  }
+}
+@keyframes works-fold-odd { from { transform: rotateY(8deg); } 50% { transform: rotateY(0deg); } to { transform: rotateY(-8deg); } }
+@keyframes works-fold-even { from { transform: rotateY(-8deg); } 50% { transform: rotateY(0deg); } to { transform: rotateY(8deg); } }
+@keyframes works-sheen { from { opacity: .85; } 50% { opacity: .25; } to { opacity: .85; } }
+
+/* =====================================================================================================
+   Case pages (DESIGN §6.4): a book page in a 匡郭 frame, sangaku order 問・術・答・省.
+   ===================================================================================================== */
+.case.artboard {
+  max-width: 1320px;
+  margin-inline: auto;
+  padding: var(--section-pad) var(--artboard-pad) var(--s-9);
+}
+@media (min-width: 1024px) { .case.artboard { margin-left: max(calc(var(--chrome-left) + var(--pb-x)), calc((100% - 1320px) / 2)); } }
+.case .case__book { position: relative; padding: var(--s-6) var(--s-5) var(--s-7); display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s-9); }
+/* grid items never widen the page: long titles wrap, wide tables and diagrams scroll inside their own box */
+.case :is(.case__book, .case__head, .case__lead, .case__part, .case__walk, .case__walk-head, .case__pillar, .case__nav) > * { min-width: 0; }
+@media (min-width: 1024px) { .case .case__book { padding: var(--s-7) var(--s-8) var(--s-8); } }
+
+/* running head, like a book's 柱 */
+.case .case__runhead {
+  display: flex; justify-content: space-between; align-items: baseline; gap: var(--s-4);
+  padding-bottom: var(--s-3);
+  border-bottom: 1px solid var(--rule);
+  font-family: var(--f-chrome);
+  font-size: var(--fs-caption);
+  color: var(--ink-2);
+}
+.case .case__back { color: var(--link); }
+.case .case__of { font-family: var(--kanji-label); letter-spacing: .08em; }
+:lang(en) .case .case__of { font-family: var(--f-mono); letter-spacing: .02em; }
+
+/* header spread: the lead and the screen, with a 版心 fold between */
+.case .case__head { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s-7); align-items: start; }
+@media (min-width: 1024px) {
+  .case .case__head { grid-template-columns: minmax(0, 5fr) 1px minmax(0, 7fr); column-gap: var(--s-7); }
+  .case .case__head::before {
+    content: "";
+    grid-column: 2; grid-row: 1;
+    align-self: stretch;
+    background: linear-gradient(var(--rule), var(--rule)) center / 1px 100% no-repeat;
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  }
+  .case .case__lead { grid-column: 1; grid-row: 1; }
+  .case .case__art { grid-column: 3; grid-row: 1; }
+}
+.case .case__lead { display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: var(--s-4); row-gap: var(--s-4); align-content: start; }
+.case .case__lead > :not(.case__panel) { grid-column: 2; }
+.case .case__panel {
+  grid-column: 1; grid-row: 1 / span 2;
+  font-family: var(--kanji-label);
+  font-size: var(--fs-lead);
+  letter-spacing: .16em;
+  color: var(--accent-text);
+}
+:lang(zh-Hans) .case .case__panel { font-weight: 900; }
+:lang(en) .case .case__panel { grid-column: 2; grid-row: auto; font-family: var(--f-mono); font-size: var(--fs-caption); font-variant-caps: all-small-caps; letter-spacing: .06em; }
+:lang(en) .case .case__lead { grid-template-columns: 0 minmax(0, 1fr); column-gap: 0; }
+.case .case__title {
+  font-size: clamp(28px, 2.6vw + 14px, 60px);
+  overflow-wrap: anywhere;
+  line-height: 1.12;
+  color: var(--ink);
+  justify-self: start;
+  --plate-inset: auto -1% -12px 0;
+}
+:lang(en) .case .case__title { font-size: clamp(40px, 3.6vw + 14px, 78px); line-height: 1.0; }
+:lang(zh-Hans) .case .case__title { line-height: 1.2; }
+/* titles break between phrases: ja uses auto-phrase (type.css); en balances its lines; zh keeps words whole
+   and breaks after the full-width colon, splitting inside a phrase only when a line would overflow */
+:is(.case .case__title, [data-section="works"] .works__title, .case .case__nav-t) { text-wrap: balance; }
+:lang(zh-Hans) :is(.case .case__title, [data-section="works"] .works__title, .case .case__nav-t) { word-break: keep-all; overflow-wrap: anywhere; }
+.case .case__meta { font-family: var(--f-chrome); font-size: var(--fs-caption); line-height: 1.7; color: var(--ink-2); }
+.case .case__result { font-weight: 500; color: var(--ink); max-width: 24em; }
+:lang(en) .case .case__result { max-width: 30ch; }
+.case .num { font-family: var(--f-mono); font-variant-numeric: tabular-nums; font-variation-settings: "wdth" 87.5; letter-spacing: -.01em; }
+.case .sep { color: var(--rule); }
+.case .case__figures { display: grid; gap: var(--s-4); margin-top: var(--s-2); }
+.case .case__figure { display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: var(--s-4); padding-top: var(--s-3); border-top: 1px solid var(--rule); }
+.case .case__figure dt { grid-column: 1 / -1; font-size: var(--fs-caption); color: var(--ink-2); }
+.case .case__figure-val { font-size: clamp(22px, 1.2vw + 11px, 30px); font-weight: 500; line-height: 1.25; color: var(--ink); }
+.case .case__figure-val .num { font-variation-settings: "wdth" 75; letter-spacing: -.02em; }
+.case .case__arrow { color: var(--accent-text); }
+.case .case__figure-period { align-self: end; font-size: var(--fs-caption); color: var(--ink-2); }
+
+/* the whole screen, with crop marks around the part mounted as this panel */
+.case .case__art-mat { padding: var(--s-4); }
+.case .case__art-img { position: relative; }
+.case .case__art-img img { width: 100%; height: auto; }
+.case .case__crop {
+  position: absolute;
+  left: var(--cx); top: var(--cy); width: var(--cw); height: var(--ch);
+  outline: 1px solid var(--select);
+  outline-offset: 0;
+  --tombo-color: var(--select);
+  --tombo-inset: -12px;
+  pointer-events: none;
+}
+.case .case__crop-label {
+  position: absolute;
+  left: 0; top: -1.9em;
+  padding: 0 var(--s-1);
+  font-family: var(--f-chrome);
+  font-size: var(--fs-chrome);
+  line-height: 1.6;
+  white-space: nowrap;
+  color: var(--paper-print);
+  background: var(--select);
+}
+.case .case__caption { display: grid; gap: var(--s-1); }
+.case .case__caption-k { color: var(--accent-text); }
+.case .case__why { color: var(--ink); font-family: var(--f-body-ja); font-size: var(--fs-small); }
+:lang(en) .case .case__why { font-family: var(--f-body-en); }
+:lang(zh-Hans) .case .case__why { font-family: var(--f-body-zh); }
+.case .art-meta { color: var(--ink-2); }
+
+/* 問・術・答・省 */
+.case .case__part { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s-5); align-items: start; }
+@media (min-width: 1024px) {
+  .case .case__part { grid-template-columns: minmax(0, 2fr) minmax(0, 6fr) minmax(0, 4fr); column-gap: var(--s-7); }
+  .case .case__label { grid-column: 1; grid-row: 1 / span 2; position: sticky; top: calc(var(--chrome-top) + var(--s-5)); }
+  .case .case__text { grid-column: 2; }
+  .case .case__aside { grid-column: 3; }
+  .case .case__diagram, .case .case__table-wrap { grid-column: 2 / -1; }
+}
+@media (min-width: 768px) and (max-width: 1023px) {
+  .case .case__part { grid-template-columns: minmax(0, 2fr) minmax(0, 8fr); column-gap: var(--s-6); }
+  .case .case__label { grid-column: 1; grid-row: 1 / span 3; }
+  .case .case__part > :not(.case__label) { grid-column: 2; }
+}
+.case .case__label { display: grid; justify-items: start; gap: var(--s-2); margin: 0; }
+.case .case__glyph {
+  font-family: var(--kanji-label);
+  font-size: clamp(64px, 5vw + 20px, 120px);
+  line-height: .9;
+  font-weight: 400;
+  color: var(--accent-text);
+}
+:lang(zh-Hans) .case .case__glyph { font-weight: 900; }
+:lang(en) .case .case__glyph { font-family: "Shippori Antique B1", var(--f-body-ja); font-size: 28px; line-height: 1; color: var(--accent-text); }
+.case .case__word { font-size: clamp(30px, 2vw + 14px, 48px); line-height: 1; color: var(--ink); }
+.case .case__text p { font-size: var(--fs-body); max-width: 36em; }
+:lang(en) .case .case__text p { max-width: 64ch; font-size: 17px; }
+.case .case__part--q .case__text p { font-size: var(--fs-lead); line-height: 1.75; }
+:lang(en) .case .case__part--q .case__text p { line-height: 1.5; }
+.case .case__facts { display: grid; gap: var(--s-3); font-size: var(--fs-small); }
+.case .case__facts > div { padding-top: var(--s-2); border-top: 1px solid var(--rule); grid-template-columns: 5.5em minmax(0, 1fr); }
+:lang(en) .case .case__facts > div { grid-template-columns: 7.5em minmax(0, 1fr); }
+.case .case__facts dt { font-family: var(--f-chrome); font-size: var(--fs-caption); color: var(--accent-text); }
+.case .case__facts ul { display: grid; gap: var(--s-1); }
+.case .case__facts li, .case .case__trade li { padding-left: 1.1em; position: relative; }
+.case .case__facts li::before, .case .case__trade li::before {
+  content: ""; position: absolute; left: 0; top: .78em; width: .55em; height: 1px; background: var(--rule);
+}
+.case .case__aside-h { font-family: var(--f-chrome); font-size: var(--fs-caption); font-weight: 400; color: var(--accent-text); padding-top: var(--s-2); border-top: 1px solid var(--rule); margin-bottom: var(--s-3); }
+.case .case__trade { display: grid; gap: var(--s-2); font-size: var(--fs-small); }
+
+/* the sangaku tablet */
+.case .case__diagram { margin-top: var(--s-4); }
+.case .case__diagram-scroll { background: var(--paper-print); padding: var(--s-5) var(--s-5) var(--s-4); border-top: 3px solid var(--rule); border-bottom: 1px solid var(--rule); }
+.case .case__diagram-cap { margin-top: var(--s-3); font-family: var(--f-chrome); font-size: var(--fs-caption); color: var(--ink-2); }
+.case .case__diagram-k { color: var(--accent-text); }
+@media (max-width: 767px) {
+  .case .case__diagram-scroll { overflow-x: auto; margin-inline: calc(-1 * var(--s-5)); padding-inline: var(--s-4); }
+  .case .case__diagram-scroll .dg { min-width: 640px; }
+}
+.case .dg { width: 100%; height: auto; overflow: visible; }
+/* strokes scale with the tablet (no non-scaling-stroke: it breaks pathLength-normalised dashes, so the
+   compass-order draw would stop short); widths are set for the usual 1.1–1.5× display scale */
+.case .dg-s { fill: none; stroke: var(--ink); stroke-width: 1.1; stroke-linecap: square; stroke-linejoin: miter; }
+.case .dg-c.dg-s { stroke: var(--guide); stroke-width: .65; opacity: .7; }
+.case .dg-heavy { stroke-width: 2; }
+.case .dg-dash { stroke-dasharray: 5 4; }
+.case .dg-warn { stroke: var(--instruct-text); }
+.case .dg-paper { fill: none; }
+.case .dg-fill { fill: var(--plate-fill, var(--plate-1)); fill-opacity: .34; stroke: none; }
+.case .dg-fill:is([data-plate="1"], [data-plate="6"], [data-plate="7"]) { fill-opacity: .16; }
+.case .dg-fill[data-plate="8"] { fill-opacity: var(--dg-gold-a, .42); }
+/* at night a thin gold over lapis turns olive: print it denser, as gold leaf would stand on a dark ground */
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .case { --dg-gold-a: .8; } }
+:root[data-theme="dark"] .case { --dg-gold-a: .8; }
+.case .dg-xmark { fill: none; stroke: var(--select); stroke-width: 1.2; }
+.case .dg-anchor { fill: var(--paper-print); stroke: var(--layer); stroke-width: .8; }
+.case .dg-handle { stroke: var(--layer); stroke-width: .65; }
+.case .dg-handle-end { fill: var(--layer); }
+.case .dg-arrowhead { fill: none; stroke: var(--ink); stroke: context-stroke; stroke-width: 1.4; stroke-linecap: square; }
+.case .dg-t { fill: var(--ink); font-size: 12.5px; font-family: var(--f-body-ja); }
+:lang(en) .case .dg-t { font-family: var(--f-body-en); }
+:lang(zh-Hans) .case .dg-t { font-family: var(--f-body-zh); }
+.case .dg-t--head { font-size: 14.5px; font-weight: 500; }
+.case .dg-t--small { font-size: 11.5px; fill: var(--ink-2); }
+.case .dg-t--num { font-family: var(--f-mono); font-size: 13px; letter-spacing: -.01em; }
+.case .dg-t--warn { fill: var(--instruct-text); font-size: 11.5px; }
+.case .dg-t--mag { fill: var(--select-text); font-family: var(--f-mono); font-size: 9px; letter-spacing: .02em; }
+/* text mask, as on a technical drawing: the tablet's own paper knocks the lines out behind a label */
+.case :is(.dg-t--halo, .dg-t--mag) { paint-order: stroke fill; stroke: var(--paper-print); stroke-width: 3.5px; stroke-linejoin: round; }
+/* 引く: strokes draw in compass-and-ruler order; fills, marks and dashed lines print in after them */
+html.js .case [data-draw].is-armed .dg-s:not(.dg-fade) { stroke-dasharray: 1 1; stroke-dashoffset: 1; }
+html.js .case [data-draw].is-armed .dg-fade { opacity: 0; }
+html.js .case [data-draw].is-drawn .dg-s:not(.dg-fade) {
+  stroke-dasharray: 1 1;
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 900ms var(--ease-jo) calc(var(--i) * 2600ms / var(--n));
+}
+html.js .case [data-draw].is-armed [marker-end] { marker-end: none; }
+html.js .case [data-draw].is-drawn [marker-end] { animation: dg-marker calc(var(--i) * 2600ms / var(--n) + 820ms) step-end; }
+@keyframes dg-marker { from, to { marker-end: none; } }
+html.js .case [data-draw].is-drawn .dg-fade { opacity: 1; transition: opacity 520ms var(--ease-jo) calc(var(--i) * 2600ms / var(--n)); }
+html.js .case [data-draw].is-drawn .dg-c.dg-s { opacity: .45; transition: stroke-dashoffset 900ms var(--ease-jo) calc(var(--i) * 2600ms / var(--n)), opacity 1200ms linear 3400ms; }
+.case [data-draw] .dg-fill.dg-fade { transition-duration: 700ms; }
+html[data-sep-off] .case .dg-fill { transition: none; }
+
+/* 吹抜屋台 walkthrough (resilience) */
+.case .case__walk { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s-6); }
+@media (min-width: 1024px) {
+  .case .case__walk { grid-template-columns: minmax(0, 2fr) minmax(0, 6fr) minmax(0, 4fr); column-gap: var(--s-7); }
+  .case .case__walk-head { grid-column: 2 / -1; display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 4fr); grid-template-rows: 1fr auto; column-gap: var(--s-7); align-items: end; }
+  .case .case__walk-head .case__kabuki { grid-column: 2; grid-row: 1 / span 2; }
+  .case .case__diagram--walk { grid-column: 1 / -1; }
+  .case .case__walk-parts { grid-column: 2 / span 1; }
+  .case .case__pillar { grid-column: 2 / -1; }
+}
+.case .case__walk-title { font-size: var(--fs-h2); line-height: 1.2; font-weight: 700; }
+:lang(ja) .case .case__walk-title { font-family: "IBM Plex Sans JP", var(--f-body-ja); }
+:lang(en) .case .case__walk-title { font-family: "Bricolage Grotesque", var(--f-body-en); font-variation-settings: "wdth" 75, "opsz" 96; }
+:lang(zh-Hans) .case .case__walk-title { font-family: "Noto Sans SC", var(--f-body-zh); font-weight: 700; }
+.case .case__walk-intro { color: var(--ink-2); max-width: 32em; margin-top: var(--s-3); }
+.case .case__walk-parts { display: grid; gap: var(--s-3); }
+/* one term column for all five rows, so the glosses start on one line */
+.case .case__walk-parts > div { padding-top: var(--s-3); border-top: 1px solid var(--rule); grid-template-columns: 9.5em minmax(0, 1fr); }
+:lang(en) .case .case__walk-parts > div { grid-template-columns: 12.5em minmax(0, 1fr); }
+@media (max-width: 479px) { .case .case__walk-parts > div, :lang(en) .case .case__walk-parts > div { grid-template-columns: minmax(0, 1fr); row-gap: var(--s-1); } }
+.case .case__walk-parts dt { font-weight: 500; color: var(--ink); font-size: var(--fs-small); }
+.case .case__walk-parts dd { font-size: var(--fs-small); }
+.case .case__pillar { display: grid; gap: var(--s-5); align-items: end; }
+@media (min-width: 768px) { .case .case__pillar { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); column-gap: var(--s-7); } }
+.case .case__pillar-note { max-width: 34em; color: var(--ink); }
+:lang(en) .case .case__pillar-note { max-width: 60ch; }
+
+/* 答: the results table */
+.case .case__table-wrap { overflow-x: auto; }
+.case .case__results { width: 100%; min-width: 560px; font-size: var(--fs-small); }
+.case .case__results thead th {
+  font-family: var(--f-chrome); font-size: var(--fs-caption); font-weight: 400; color: var(--ink-2);
+  padding: 0 var(--s-4) var(--s-2) 0; border-bottom: 3px solid var(--rule);
+}
+.case .case__results td, .case .case__results tbody th { padding: var(--s-3) var(--s-4) var(--s-3) 0; border-bottom: 1px solid var(--rule); vertical-align: baseline; text-align: start; }
+.case .case__results tbody th { font-weight: 500; }
+.case .case__ctx { display: block; margin-top: var(--s-1); font-weight: 400; color: var(--ink-2); font-size: var(--fs-caption); line-height: 1.5; }
+.case .case__results td.num { font-size: var(--fs-body); white-space: nowrap; }
+.case .case__after { color: var(--accent-text); font-weight: 500; }
+.case .case__src { color: var(--ink-2); font-size: var(--fs-caption); }
+/* phones: each result row stacks — metric, then before · after · period side by side, then the source —
+   so the "after" figure is never scrolled out of sight */
+@media (max-width: 599px) {
+  .case .case__table-wrap { overflow: visible; }
+  .case .case__results { min-width: 0; }
+  .case .case__results thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  .case .case__results tbody tr {
+    display: grid;
+    grid-template-columns: auto auto minmax(0, 1fr);
+    column-gap: var(--s-5);
+    row-gap: var(--s-2);
+    padding: var(--s-4) 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .case .case__results tbody tr:first-child { border-top: 3px solid var(--rule); }
+  .case .case__results tbody th, .case .case__results td { padding: 0; border: 0; }
+  .case .case__results tbody th { grid-column: 1 / -1; }
+  .case .case__results td[data-k]::before {
+    content: attr(data-k);
+    display: block;
+    font-family: var(--f-chrome);
+    font-size: var(--fs-chrome);
+    font-weight: 400;
+    letter-spacing: .04em;
+    color: var(--ink-2);
+  }
+  .case .case__results .case__src { grid-column: 1 / -1; }
+}
+
+/* 省: the reflection — vertical in ja on wide screens */
+.case .case__reflection p { font-size: var(--fs-lead); line-height: 1.8; }
+:lang(en) .case .case__reflection p { line-height: 1.5; }
+@media (min-width: 1024px) {
+  .case .case__reflection--tate { grid-column: 2 / -1; justify-self: start; }
+  .case .case__reflection--tate p {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    font-feature-settings: "vpal" 1;
+    line-height: 2;
+    max-height: 17em;
+    max-width: none;
+    letter-spacing: .04em;
+  }
+}
+
+/* panel navigation in screen order: ← next on the left, previous → on the right */
+.case .case__nav {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  gap: var(--s-5);
+  align-items: start;
+  padding-top: var(--s-5);
+  border-top: 3px solid var(--rule);
+}
+.case .case__nav a { text-decoration: none; display: grid; gap: var(--s-1); }
+.case .case__nav-next { justify-self: start; text-align: start; }
+.case .case__nav-prev { justify-self: end; text-align: end; }
+.case .case__nav-back { align-self: center; font-family: var(--f-chrome); font-size: var(--fs-caption); text-decoration: underline !important; }
+.case .case__nav-k { font-family: var(--f-chrome); font-size: var(--fs-caption); color: var(--ink-2); }
+.case .case__nav-t { font-family: var(--f-display); font-weight: var(--fw-display); font-variation-settings: var(--fvs-display); font-size: var(--fs-h3); line-height: 1.25; color: var(--ink); }
+.case .case__nav a:hover .case__nav-t { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: .2em; }
+.case .case__nav-n { font-family: var(--kanji-label); font-size: .62em; color: var(--accent-text); letter-spacing: .08em; vertical-align: .2em; }
+:lang(zh-Hans) .case .case__nav-n { font-weight: 900; }
+:lang(en) .case .case__nav-n { font-family: var(--f-mono); font-variant-caps: all-small-caps; }
+@media (max-width: 767px) {
+  .case .case__nav { grid-template-columns: 1fr; }
+  .case .case__nav-prev, .case .case__nav-next { justify-self: stretch; text-align: start; }
+  .case .case__nav-empty { display: none; }
+  .case .case__nav-back { order: 3; }
+}
+
+/* the theme's bokashi wipe is one root transition: the panel labels and case titles keep their
+   view-transition names for the label → title morph only */
+html.theme-wipe :is([data-section="works"] .byobu__label, .case .case__title) { view-transition-name: none !important; }
+
+/* Proof mode (校正刷り): text first — the screen and its labels step aside */
+html[data-proof] [data-section="works"] .works__frame { display: none; }

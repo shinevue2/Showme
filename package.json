@@ -1,0 +1,46 @@
+{
+  "name": "hachidozuri",
+  "version": "1.0.0",
+  "private": true,
+  "description": "八度摺 · Eight Impressions · 八版套印 — portfolio of Minato Segawa (fictional persona). See docs/DESIGN.md.",
+  "type": "module",
+  "engines": {
+    "node": ">=22.12"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build && node scripts/postbuild.mjs",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "fonts": "node scripts/fonts/fetch-fonts.mjs",
+    "images": "node scripts/images/build-images.mjs",
+    "film:plates": "python3 -I tools/film/plates.py",
+    "film:capture": "node tools/film/capture.mjs",
+    "film:encode": "bash tools/film/encode.sh",
+    "film:publish": "node tools/film/publish.mjs",
+    "capture:posters": "node scripts/capture-posters.mjs",
+    "cv": "node scripts/build-cv.mjs",
+    "check": "node scripts/check/index.mjs"
+  },
+  "dependencies": {
+    "gsap": "3.15.0",
+    "lenis": "1.3.27",
+    "mediabunny": "1.62.1",
+    "three": "0.186.1"
+  },
+  "devDependencies": {
+    "@types/node": "26.6.5",
+    "@types/three": "0.186.0",
+    "axe-core": "4.14.0",
+    "esbuild": "0.28.2",
+    "ffprobe-static": "3.1.0",
+    "playwright": "1.64.1",
+    "sharp": "0.35.5",
+    "tsx": "4.23.15",
+    "typescript": "7.0.2",
+    "vite": "8.3.4"
+  },
+  "allowScripts": {
+    "esbuild@0.28.2": true
+  }
+}
